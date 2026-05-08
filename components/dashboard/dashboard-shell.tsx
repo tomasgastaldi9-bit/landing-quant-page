@@ -154,6 +154,9 @@ export function DashboardShell({
             {equitySnapshot.source === "live-csv" ? "live CSV" : "mock fallback"}.
             {" "}
             {equitySnapshot.message}
+            {equitySnapshot.source === "mock-fallback"
+              ? " Place CSV at output/live_testnet_equity.csv to enable live equity display."
+              : ""}
           </div>
         </section>
 
