@@ -1,4 +1,5 @@
 import { BrandMark } from "@/components/brand-mark";
+import type { EquitySnapshot } from "@/lib/equity/types";
 
 const exposureMetrics = [
   { label: "Gross Exposure", value: "$1.24M", detail: "Demo notional" },
@@ -67,7 +68,38 @@ const alphaModules = [
   { name: "Volatility Filter", state: "Active", confidence: "High" },
 ];
 
-export function DashboardShell() {
+export function DashboardShell({
+  equitySnapshot,
+}: {
+  equitySnapshot: EquitySnapshot;
+}) {
+  const equityMetrics = [
+    {
+      label: "Current Equity",
+      value: formatCurrency(equitySnapshot.currentEquity),
+      detail:
+        equitySnapshot.source === "live-csv" ? "From live CSV" : "Mock fallback",
+    },
+    {
+      label: "Daily PnL",
+      value: formatSignedCurrency(equitySnapshot.dailyPnl),
+      detail: equitySnapshot.dailyPnl === null ? "Unavailable" : "Simple day delta",
+    },
+    {
+      label: "Last Update",
+      value: formatTime(equitySnapshot.lastUpdate),
+      detail: formatDate(equitySnapshot.lastUpdate),
+    },
+    {
+      label: "Data Source",
+      value: equitySnapshot.source === "live-csv" ? "CSV" : "Mock",
+      detail:
+        equitySnapshot.source === "live-csv"
+          ? "Read-only adapter"
+          : "Fallback mode",
+    },
+  ];
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#e2e2e2]">
       <header className="border-b border-[#243042] bg-[#0b0b0b]/90 backdrop-blur-xl">
@@ -83,7 +115,7 @@ export function DashboardShell() {
               Demo / Testnet
             </span>
             <span className="border border-[#63f7ff] bg-[#071314] px-3 py-2 text-[#63f7ff]">
-              Mock Data
+              {equitySnapshot.source === "live-csv" ? "Live CSV" : "Mock Data"}
             </span>
             <span className="border border-[#243042] px-3 py-2">
               Research Mode
@@ -113,18 +145,20 @@ export function DashboardShell() {
               </h1>
             </div>
             <p className="max-w-xl font-mono text-xs leading-6 text-[#8c90a1]">
-              Mock dashboard using demo data only. For research and
-              informational purposes. Performance is not guaranteed.
+              Equity panel reads local testnet CSV output when available.
+              Trading, risk, execution, and scheduler systems remain untouched.
             </p>
           </div>
           <div className="mt-5 border border-[#63f7ff]/70 bg-[#061719]/80 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-[#63f7ff]">
-            No real capital. Mock data for product demonstration. Demo/testnet
-            execution only.
+            Frontend read-only. Equity source:{" "}
+            {equitySnapshot.source === "live-csv" ? "live CSV" : "mock fallback"}.
+            {" "}
+            {equitySnapshot.message}
           </div>
         </section>
 
         <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {exposureMetrics.map((metric) => (
+          {equityMetrics.map((metric) => (
             <MetricCard key={metric.label} {...metric} />
           ))}
         </section>
@@ -132,10 +166,10 @@ export function DashboardShell() {
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1.35fr_0.65fr]">
           <Panel
             eyebrow="Equity Curve"
-            title="Demo Portfolio Equity"
-            action="Paper balance"
+            title="Testnet Equity"
+            action={equitySnapshot.source === "live-csv" ? "CSV loaded" : "Fallback"}
           >
-            <EquityChart />
+            <EquityChart points={equitySnapshot.points} />
           </Panel>
           <div className="grid gap-3">
             <RegimePanel />
@@ -144,6 +178,11 @@ export function DashboardShell() {
         </section>
 
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1fr_0.75fr]">
+          <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:col-span-2 xl:grid-cols-4">
+            {exposureMetrics.map((metric) => (
+              <MetricCard key={metric.label} {...metric} />
+            ))}
+          </section>
           <Panel eyebrow="Positions" title="Active Positions" action="Mock data">
             <PositionsTable />
           </Panel>
@@ -216,7 +255,10 @@ function MetricCard({
   );
 }
 
-function EquityChart() {
+function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
+  const chartPoints = toSvgPoints(points);
+  const areaPath = chartPoints ? `${chartPoints.area} L900 300 L0 300 Z` : "";
+
   return (
     <div className="h-[310px] border border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(180deg,#101010,#050505)] bg-[size:28px_28px] p-4">
       <svg
@@ -231,23 +273,17 @@ function EquityChart() {
             <stop offset="1" stopColor="#63f7ff" stopOpacity="0" />
           </linearGradient>
         </defs>
-        <path
-          d="M0 230 L80 218 L150 224 L225 194 L310 202 L390 164 L472 170 L548 132 L630 126 L710 96 L790 112 L900 74 L900 300 L0 300 Z"
-          fill="url(#equityFill)"
-        />
-        <polyline
-          fill="none"
-          points="0,230 80,218 150,224 225,194 310,202 390,164 472,170 548,132 630,126 710,96 790,112 900,74"
-          stroke="#63f7ff"
-          strokeWidth="4"
-        />
-        <polyline
-          fill="none"
-          points="0,248 80,242 150,238 225,230 310,222 390,210 472,205 548,190 630,176 710,160 790,152 900,138"
-          stroke="#9d79ff"
-          strokeDasharray="8 10"
-          strokeWidth="2"
-        />
+        {chartPoints ? (
+          <>
+            <path d={areaPath} fill="url(#equityFill)" />
+            <polyline
+              fill="none"
+              points={chartPoints.line}
+              stroke="#63f7ff"
+              strokeWidth="4"
+            />
+          </>
+        ) : null}
       </svg>
     </div>
   );
@@ -428,4 +464,60 @@ function ExecutionLogs() {
       ))}
     </div>
   );
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function formatSignedCurrency(value: number | null) {
+  if (value === null) return "--";
+  const formatted = formatCurrency(Math.abs(value));
+  return `${value >= 0 ? "+" : "-"}${formatted}`;
+}
+
+function formatTime(timestamp: string) {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return "--";
+
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(date);
+}
+
+function formatDate(timestamp: string) {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return "Timestamp unavailable";
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  }).format(date);
+}
+
+function toSvgPoints(points: EquitySnapshot["points"]) {
+  if (points.length === 0) return null;
+
+  const min = Math.min(...points.map((point) => point.equity));
+  const max = Math.max(...points.map((point) => point.equity));
+  const range = max - min || 1;
+  const denominator = Math.max(points.length - 1, 1);
+  const mapped = points.map((point, index) => {
+    const x = (index / denominator) * 900;
+    const y = 260 - ((point.equity - min) / range) * 200;
+    return `${x.toFixed(2)},${y.toFixed(2)}`;
+  });
+
+  return {
+    line: mapped.join(" "),
+    area: `M${mapped.join(" L")}`,
+  };
 }
