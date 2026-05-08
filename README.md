@@ -102,3 +102,38 @@ For research and informational purposes only. Not financial advice. Performance 
 npm run lint
 npm run build
 ```
+
+## Deploying to Vercel
+
+This app is ready for a standard Vercel deployment as a frontend-only Next.js project. No environment variables or secrets are required for the current mock/demo build.
+
+### Option 1: GitHub Import
+
+1. Push this repository to GitHub.
+2. In Vercel, choose **Add New Project**.
+3. Import the GitHub repository.
+4. Keep the framework preset as **Next.js**.
+5. Use the default commands:
+   - Install Command: `npm install`
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+6. Deploy.
+
+Vercel will create preview deployments for branches and production deployments from the configured production branch.
+
+### Option 2: Vercel CLI
+
+Install and deploy with the Vercel CLI only when you are ready to authenticate interactively:
+
+```bash
+npm install -g vercel
+vercel
+```
+
+For production:
+
+```bash
+vercel --prod
+```
+
+Do not commit `.vercel/`, tokens, or environment-specific secrets. The current project does not need environment variables.

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -13,9 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QuantBot | Quantitative Crypto Trading",
+  title: "QuantBot | Quant Research Terminal",
   description:
-    "Institutional-grade automated crypto trading platform for quantitative strategies.",
+    "Institutional-style frontend for demo quant research, testnet execution monitoring, and private beta access.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
