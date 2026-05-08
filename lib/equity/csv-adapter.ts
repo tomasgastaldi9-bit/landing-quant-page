@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { getFirstValue, normalizeTimestamp, parseCsv, parseNumber } from "@/lib/csv";
 import { getMockEquitySnapshot } from "./mock-equity";
 import type { EquityPoint, EquitySnapshot } from "./types";
 
@@ -48,27 +49,12 @@ function resolveEquityCsvPath() {
 }
 
 function parseEquityCsv(csv: string): EquityPoint[] {
-  const lines = csv
-    .split(/\r?\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
+  return parseCsv(csv)
+    .map((row) => {
+      const timestamp = getFirstValue(row, TIMESTAMP_COLUMNS);
+      const equity = parseNumber(getFirstValue(row, EQUITY_COLUMNS));
 
-  if (lines.length < 2) return [];
-
-  const headers = splitCsvLine(lines[0]).map(normalizeHeader);
-  const timestampIndex = findColumnIndex(headers, TIMESTAMP_COLUMNS);
-  const equityIndex = findColumnIndex(headers, EQUITY_COLUMNS);
-
-  if (timestampIndex === -1 || equityIndex === -1) return [];
-
-  return lines
-    .slice(1)
-    .map((line) => {
-      const cells = splitCsvLine(line);
-      const timestamp = cells[timestampIndex]?.trim();
-      const equity = Number.parseFloat(cells[equityIndex]?.replace(/[$,\s]/g, ""));
-
-      if (!timestamp || !Number.isFinite(equity)) return null;
+      if (!timestamp || equity === null) return null;
 
       return {
         timestamp: normalizeTimestamp(timestamp),
@@ -80,43 +66,6 @@ function parseEquityCsv(csv: string): EquityPoint[] {
       (left, right) =>
         new Date(left.timestamp).getTime() - new Date(right.timestamp).getTime(),
     );
-}
-
-function splitCsvLine(line: string) {
-  const cells: string[] = [];
-  let current = "";
-  let inQuotes = false;
-
-  for (const char of line) {
-    if (char === '"') {
-      inQuotes = !inQuotes;
-      continue;
-    }
-
-    if (char === "," && !inQuotes) {
-      cells.push(current);
-      current = "";
-      continue;
-    }
-
-    current += char;
-  }
-
-  cells.push(current);
-  return cells;
-}
-
-function normalizeHeader(header: string) {
-  return header.trim().toLowerCase().replace(/[\s-]+/g, "_");
-}
-
-function findColumnIndex(headers: string[], candidates: string[]) {
-  return headers.findIndex((header) => candidates.includes(header));
-}
-
-function normalizeTimestamp(timestamp: string) {
-  const parsed = new Date(timestamp);
-  return Number.isNaN(parsed.getTime()) ? timestamp : parsed.toISOString();
 }
 
 function findFirstPointForDay(points: EquityPoint[], timestamp: string) {
