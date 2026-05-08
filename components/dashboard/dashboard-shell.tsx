@@ -1,50 +1,12 @@
 import { BrandMark } from "@/components/brand-mark";
 import type { EquitySnapshot } from "@/lib/equity/types";
+import type { PositionRow, PositionsSnapshot } from "@/lib/positions/types";
 
 const exposureMetrics = [
   { label: "Gross Exposure", value: "$1.24M", detail: "Demo notional" },
   { label: "Net Exposure", value: "$182K", detail: "Long bias" },
   { label: "Leverage", value: "1.8x", detail: "Policy cap 3.0x" },
   { label: "Open Risk", value: "Low", detail: "Within limits" },
-];
-
-const positions = [
-  {
-    symbol: "BTC-PERP",
-    side: "Long",
-    size: "0.80",
-    entry: "64,120.00",
-    mark: "64,184.20",
-    pnl: "+$51.36",
-    risk: "0.42%",
-  },
-  {
-    symbol: "ETH-PERP",
-    side: "Short",
-    size: "6.40",
-    entry: "3,420.50",
-    mark: "3,412.80",
-    pnl: "+$49.28",
-    risk: "0.36%",
-  },
-  {
-    symbol: "SOL-PERP",
-    side: "Flat",
-    size: "0.00",
-    entry: "--",
-    mark: "148.12",
-    pnl: "$0.00",
-    risk: "0.00%",
-  },
-  {
-    symbol: "AVAX-PERP",
-    side: "Long",
-    size: "120.0",
-    entry: "36.80",
-    mark: "36.52",
-    pnl: "-$33.60",
-    risk: "0.21%",
-  },
 ];
 
 const logs = [
@@ -70,8 +32,10 @@ const alphaModules = [
 
 export function DashboardShell({
   equitySnapshot,
+  positionsSnapshot,
 }: {
   equitySnapshot: EquitySnapshot;
+  positionsSnapshot: PositionsSnapshot;
 }) {
   const equityMetrics = [
     {
@@ -115,7 +79,10 @@ export function DashboardShell({
               Demo / Testnet
             </span>
             <span className="border border-[#63f7ff] bg-[#071314] px-3 py-2 text-[#63f7ff]">
-              {equitySnapshot.source === "live-csv" ? "Live CSV" : "Mock Data"}
+              {equitySnapshot.source === "live-csv" ||
+              positionsSnapshot.source === "live-csv"
+                ? "Live Testnet Data"
+                : "Mock Data Fallback"}
             </span>
             <span className="border border-[#243042] px-3 py-2">
               Research Mode
@@ -157,6 +124,11 @@ export function DashboardShell({
             {equitySnapshot.source === "mock-fallback"
               ? " Place CSV at output/live_testnet_equity.csv to enable live equity display."
               : ""}
+            {" "}
+            Positions source:{" "}
+            {positionsSnapshot.source === "live-csv"
+              ? "live CSV"
+              : "mock fallback"}.
           </div>
         </section>
 
@@ -186,8 +158,25 @@ export function DashboardShell({
               <MetricCard key={metric.label} {...metric} />
             ))}
           </section>
-          <Panel eyebrow="Positions" title="Active Positions" action="Mock data">
-            <PositionsTable />
+          <Panel
+            eyebrow="Positions"
+            title="Active Positions"
+            action={
+              positionsSnapshot.source === "live-csv"
+                ? "LIVE TESTNET DATA"
+                : "MOCK DATA FALLBACK"
+            }
+          >
+            <PositionsTable positions={positionsSnapshot.positions} />
+            <div className="mt-3 border border-[#243042] bg-[#050505] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1]">
+              {positionsSnapshot.message}
+              {positionsSnapshot.lastUpdate
+                ? ` Last update: ${formatDateTime(positionsSnapshot.lastUpdate)}.`
+                : " Last update unavailable."}
+              {positionsSnapshot.source === "mock-fallback"
+                ? " Place CSV at output/live_testnet_positions.csv to enable live positions."
+                : ""}
+            </div>
           </Panel>
           <Panel eyebrow="Alpha" title="Engine Status" action="Research">
             <AlphaEngineStatus />
@@ -292,7 +281,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
   );
 }
 
-function PositionsTable() {
+function PositionsTable({ positions }: { positions: PositionRow[] }) {
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[720px] border-collapse font-mono text-xs">
@@ -303,8 +292,8 @@ function PositionsTable() {
             <th className="py-3 pr-4 font-medium">Size</th>
             <th className="py-3 pr-4 font-medium">Entry</th>
             <th className="py-3 pr-4 font-medium">Mark</th>
-            <th className="py-3 pr-4 font-medium">Demo PnL</th>
-            <th className="py-3 pr-4 font-medium">Risk</th>
+            <th className="py-3 pr-4 font-medium">Unrealized PnL</th>
+            <th className="py-3 pr-4 font-medium">Updated</th>
           </tr>
         </thead>
         <tbody>
@@ -315,19 +304,19 @@ function PositionsTable() {
             >
               <td className="py-3 pr-4 text-[#63f7ff]">{position.symbol}</td>
               <td className="py-3 pr-4">{position.side}</td>
-              <td className="py-3 pr-4">{position.size}</td>
-              <td className="py-3 pr-4">{position.entry}</td>
-              <td className="py-3 pr-4">{position.mark}</td>
+              <td className="py-3 pr-4">{formatNumber(position.size)}</td>
+              <td className="py-3 pr-4">{formatOptionalCurrency(position.entry)}</td>
+              <td className="py-3 pr-4">{formatOptionalCurrency(position.mark)}</td>
               <td
                 className={`py-3 pr-4 ${
-                  position.pnl.startsWith("-")
+                  (position.unrealizedPnl ?? 0) < 0
                     ? "text-[#ffb4ab]"
                     : "text-[#63f7ff]"
                 }`}
               >
-                {position.pnl}
+                {formatSignedCurrency(position.unrealizedPnl)}
               </td>
-              <td className="py-3 pr-4">{position.risk}</td>
+              <td className="py-3 pr-4">{formatTime(position.timestamp)}</td>
             </tr>
           ))}
         </tbody>
@@ -477,10 +466,21 @@ function formatCurrency(value: number) {
   }).format(value);
 }
 
+function formatOptionalCurrency(value: number | null) {
+  return value === null ? "--" : formatCurrency(value);
+}
+
 function formatSignedCurrency(value: number | null) {
   if (value === null) return "--";
   const formatted = formatCurrency(Math.abs(value));
   return `${value >= 0 ? "+" : "-"}${formatted}`;
+}
+
+function formatNumber(value: number | null) {
+  if (value === null) return "--";
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 8,
+  }).format(value);
 }
 
 function formatTime(timestamp: string) {
@@ -503,6 +503,20 @@ function formatDate(timestamp: string) {
     month: "short",
     day: "2-digit",
     year: "numeric",
+  }).format(date);
+}
+
+function formatDateTime(timestamp: string) {
+  const date = new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return "timestamp unavailable";
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
   }).format(date);
 }
 
