@@ -255,9 +255,12 @@ function MetricCard({
 function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
   const chartPoints = toSvgPoints(points);
   const areaPath = chartPoints ? `${chartPoints.area} L900 300 L0 300 Z` : "";
+  const lastPoint = chartPoints?.coordinates.at(-1);
+  const firstEquity = points[0]?.equity;
+  const lastEquity = points.at(-1)?.equity;
 
   return (
-    <div className="h-[310px] border border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(180deg,#101010,#050505)] bg-[size:28px_28px] p-4">
+    <div className="h-[330px] border border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(180deg,#101010,#050505)] bg-[size:28px_28px] p-4">
       <svg
         aria-label="Mock equity curve"
         className="h-full w-full"
@@ -266,19 +269,90 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
       >
         <defs>
           <linearGradient id="equityFill" x1="0" x2="0" y1="0" y2="1">
-            <stop stopColor="#63f7ff" stopOpacity="0.22" />
+            <stop stopColor="#63f7ff" stopOpacity="0.2" />
             <stop offset="1" stopColor="#63f7ff" stopOpacity="0" />
           </linearGradient>
+          <linearGradient id="equityStroke" x1="0" x2="1" y1="0" y2="0">
+            <stop stopColor="#568dff" />
+            <stop offset="1" stopColor="#63f7ff" />
+          </linearGradient>
         </defs>
+        {[60, 110, 160, 210, 260].map((y) => (
+          <line
+            key={y}
+            x1="0"
+            x2="900"
+            y1={y}
+            y2={y}
+            stroke="#243042"
+            strokeDasharray="4 10"
+            strokeWidth="1"
+          />
+        ))}
+        {[0, 225, 450, 675, 900].map((x) => (
+          <line
+            key={x}
+            x1={x}
+            x2={x}
+            y1="35"
+            y2="270"
+            stroke="#141b26"
+            strokeWidth="1"
+          />
+        ))}
         {chartPoints ? (
           <>
             <path d={areaPath} fill="url(#equityFill)" />
             <polyline
               fill="none"
+              points={chartPoints.baseline}
+              stroke="#9d79ff"
+              strokeDasharray="8 10"
+              strokeOpacity="0.58"
+              strokeWidth="2"
+            />
+            <polyline
+              fill="none"
               points={chartPoints.line}
-              stroke="#63f7ff"
+              stroke="url(#equityStroke)"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               strokeWidth="4"
             />
+            {lastPoint ? (
+              <>
+                <circle
+                  cx={lastPoint.x}
+                  cy={lastPoint.y}
+                  fill="#050505"
+                  r="7"
+                  stroke="#63f7ff"
+                  strokeWidth="3"
+                />
+                <line
+                  x1={lastPoint.x}
+                  x2={lastPoint.x}
+                  y1="35"
+                  y2="270"
+                  stroke="#63f7ff"
+                  strokeDasharray="3 8"
+                  strokeOpacity="0.35"
+                />
+              </>
+            ) : null}
+            <text fill="#8c90a1" fontFamily="monospace" fontSize="12" x="8" y="24">
+              START {firstEquity ? formatCurrency(firstEquity) : "--"}
+            </text>
+            <text
+              fill="#63f7ff"
+              fontFamily="monospace"
+              fontSize="12"
+              textAnchor="end"
+              x="892"
+              y="24"
+            >
+              LAST {lastEquity ? formatCurrency(lastEquity) : "--"}
+            </text>
           </>
         ) : null}
       </svg>
@@ -532,14 +606,23 @@ function toSvgPoints(points: EquitySnapshot["points"]) {
   const max = Math.max(...points.map((point) => point.equity));
   const range = max - min || 1;
   const denominator = Math.max(points.length - 1, 1);
-  const mapped = points.map((point, index) => {
+  const coordinates = points.map((point, index) => {
     const x = (index / denominator) * 900;
     const y = 260 - ((point.equity - min) / range) * 200;
-    return `${x.toFixed(2)},${y.toFixed(2)}`;
+    return { x, y };
+  });
+  const mapped = coordinates.map(
+    (point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`,
+  );
+  const baseline = coordinates.map((point, index) => {
+    const y = 248 - (index / denominator) * 94;
+    return `${point.x.toFixed(2)},${y.toFixed(2)}`;
   });
 
   return {
+    coordinates,
     line: mapped.join(" "),
+    baseline: baseline.join(" "),
     area: `M${mapped.join(" L")}`,
   };
 }
