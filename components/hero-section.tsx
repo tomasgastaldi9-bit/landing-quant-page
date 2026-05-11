@@ -1,6 +1,8 @@
+import Link from "next/link";
+
 const terminalMetrics = [
-  { label: "Mode", value: "Testnet" },
-  { label: "Signal State", value: "Research", accent: true },
+  { label: "Mode", value: "Testnet", href: "/demo-testnet" },
+  { label: "Signal State", value: "Research", accent: true, href: "/demo-testnet" },
 ];
 
 export function HeroSection() {
@@ -12,10 +14,13 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.96),rgba(5,5,5,0.8)_48%,rgba(5,5,5,0.93))]" />
       <div className="relative mx-auto grid min-h-[620px] max-w-7xl grid-cols-1 items-center gap-12 px-4 py-16 sm:px-8 sm:py-20 lg:grid-cols-[1.08fr_0.92fr] lg:py-24">
         <div className="max-w-3xl">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
+          <Link
+            href="/demo-testnet"
+            className="mb-6 inline-flex items-center gap-2 rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719]"
+          >
             <span className="size-1.5 bg-[#63f7ff]" />
             Sistema Online
-          </div>
+          </Link>
           <h1 className="max-w-3xl text-[42px] font-semibold leading-[1.04] tracking-normal text-white sm:text-6xl lg:text-[68px]">
             Plataforma Quant Research.{" "}
             <span className="text-[#63f7ff]">Demo Execution Terminal.</span>
@@ -82,9 +87,10 @@ export function HeroSection() {
             </div>
             <div className="mt-4 grid grid-cols-2 gap-3">
               {terminalMetrics.map((metric) => (
-                <div
+                <Link
                   key={metric.label}
-                  className="rounded-xl border border-[#424655] bg-[#050505] p-3 sm:p-4"
+                  href={metric.href}
+                  className="rounded-xl border border-[#424655] bg-[#050505] p-3 transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:bg-[#061719] sm:p-4"
                 >
                   <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#c2c6d8]">
                     {metric.label}
@@ -96,7 +102,7 @@ export function HeroSection() {
                   >
                     {metric.value}
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
             <a

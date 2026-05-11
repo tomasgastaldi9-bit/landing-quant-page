@@ -1,6 +1,7 @@
 import { BrandMark } from "@/components/brand-mark";
 import type { EquitySnapshot } from "@/lib/equity/types";
 import type { PositionRow, PositionsSnapshot } from "@/lib/positions/types";
+import Link from "next/link";
 
 const exposureMetrics = [
   { label: "Gross Exposure", value: "$1.24M", detail: "Demo notional" },
@@ -73,23 +74,29 @@ export function DashboardShell({
         <div className="mx-auto flex max-w-[1500px] flex-col gap-5 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-4">
             <BrandMark compact />
-            <div className="rounded-xl border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] lg:hidden">
+            <Link
+              href="/demo-testnet"
+              className="rounded-xl border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719] lg:hidden"
+            >
               Demo
-            </div>
+            </Link>
           </div>
           <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-[#c2c6d8]">
-            <span className={statusBadgeClass}>
+            <Link href="/demo-testnet" className={statusBadgeClass}>
               Demo / Testnet
-            </span>
-            <span className="rounded-xl border border-[#63f7ff]/60 bg-[#071314]/90 px-3 py-2 text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_10px_30px_rgba(0,0,0,0.18)]">
+            </Link>
+            <Link
+              href="/demo-testnet"
+              className="rounded-xl border border-[#63f7ff]/60 bg-[#071314]/90 px-3 py-2 text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_10px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[#63f7ff] hover:bg-[#061719]"
+            >
               {equitySnapshot.source === "live-csv" ||
               positionsSnapshot.source === "live-csv"
                 ? "Live Testnet Data"
                 : "Mock Data Fallback"}
-            </span>
-            <span className={statusBadgeClass}>
+            </Link>
+            <Link href="/demo-testnet" className={statusBadgeClass}>
               Research Mode
-            </span>
+            </Link>
             <span className={statusBadgeClass}>
               Not Financial Advice
             </span>

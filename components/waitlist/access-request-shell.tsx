@@ -2,7 +2,11 @@ import { BrandMark } from "@/components/brand-mark";
 import { AccessRequestForm } from "@/components/waitlist/access-request-form";
 import Link from "next/link";
 
-const badges = ["Demo", "Research", "Private Beta"];
+const badges = [
+  { label: "Demo", href: "/demo-testnet" },
+  { label: "Research", href: "/demo-testnet" },
+  { label: "Private Beta" },
+];
 
 export function AccessRequestShell() {
   return (
@@ -15,14 +19,24 @@ export function AccessRequestShell() {
               <BrandMark compact />
             </Link>
             <div className="mt-12 flex flex-wrap gap-2">
-              {badges.map((badge) => (
-                <span
-                  key={badge}
-                  className="border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]"
-                >
-                  {badge}
-                </span>
-              ))}
+              {badges.map((badge) =>
+                badge.href ? (
+                  <Link
+                    key={badge.label}
+                    href={badge.href}
+                    className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719]"
+                  >
+                    {badge.label}
+                  </Link>
+                ) : (
+                  <span
+                    key={badge.label}
+                    className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]"
+                  >
+                    {badge.label}
+                  </span>
+                ),
+              )}
             </div>
             <h1 className="mt-8 max-w-2xl text-[42px] font-semibold leading-[1.04] tracking-normal text-white sm:text-6xl">
               Request Private Beta Access
