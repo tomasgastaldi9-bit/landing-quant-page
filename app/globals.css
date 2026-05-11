@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@keyframes drawerIn {
+  from {
+    opacity: 0.78;
+    transform: translateX(-18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

@@ -62,7 +62,7 @@ export function Navbar() {
             aria-expanded={isOpen}
             aria-controls="primary-navigation-drawer"
             onClick={() => setIsOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#243042] bg-[#0e0e0e]/86 px-3 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff] sm:px-4"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#243042] bg-[linear-gradient(180deg,rgba(16,16,16,0.94),rgba(8,8,8,0.86))] px-3 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_12px_34px_rgba(0,0,0,0.2)] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff] sm:px-4"
           >
             <span className="flex size-4 flex-col justify-center gap-1">
               <span className="h-px w-full bg-current" />
@@ -85,14 +85,15 @@ export function Navbar() {
           <button
             type="button"
             aria-label="Close navigation overlay"
-            className="absolute inset-0 cursor-default bg-black/72 backdrop-blur-[2px]"
+            className="absolute inset-0 cursor-default bg-black/76 backdrop-blur-sm"
             onClick={closeMenu}
           />
           <aside
             id="primary-navigation-drawer"
             aria-label="Primary navigation"
-            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,420px)] flex-col border-r border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] p-5 shadow-[28px_0_80px_rgba(0,0,0,0.42)]"
+            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,430px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] p-5 shadow-[28px_0_80px_rgba(0,0,0,0.42)]"
           >
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(99,247,255,0.65),transparent)]" />
             <div className="flex items-center justify-between gap-4 border-b border-[#243042] pb-5">
               <Link href="/" aria-label="QuantBot home" onClick={closeMenu}>
                 <BrandMark compact />
@@ -101,7 +102,7 @@ export function Navbar() {
                 type="button"
                 aria-label="Close navigation menu"
                 onClick={closeMenu}
-                className="rounded-xl border border-[#243042] bg-[#050505]/90 px-3 py-2 font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8] transition duration-200 hover:border-[#63f7ff] hover:text-[#63f7ff]"
+                className="rounded-xl border border-[#243042] bg-[#050505]/90 px-3 py-2 font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff]"
               >
                 Close
               </button>
@@ -116,7 +117,7 @@ export function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={closeMenu}
-                  className="group rounded-2xl border border-[#1f1f1f] bg-[#0a0a0a]/78 p-4 transition duration-200 hover:-translate-y-px hover:border-[#63f7ff]/55 hover:bg-[#061719]/72"
+                  className="group rounded-2xl border border-[#1f1f1f] bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(7,7,7,0.78))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff]/55 hover:bg-[#061719]/72 hover:shadow-[inset_0_1px_0_rgba(99,247,255,0.06),0_16px_38px_rgba(0,0,0,0.26)]"
                 >
                   <span className="flex items-center justify-between gap-4">
                     <span className="font-mono text-sm uppercase tracking-[0.12em] text-white">
