@@ -30,6 +30,13 @@ const terminalData = [
   "Risk Layer",
 ];
 
+const safetyRows = [
+  ["Capital", "None"],
+  ["Execution", "Demo / Testnet"],
+  ["Access", "Read-only"],
+  ["Guarantee", "None"],
+];
+
 export function DemoTestnetShell() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#e2e2e2]">
@@ -78,14 +85,31 @@ export function DemoTestnetShell() {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.92),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_22px_65px_rgba(0,0,0,0.28)] backdrop-blur-sm">
-              <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#63f7ff]">
-                Environment Scope
+            <div className="relative overflow-hidden rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.94),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_22px_65px_rgba(0,0,0,0.28)] backdrop-blur-sm">
+              <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(99,247,255,0.65),transparent)]" />
+              <div className="flex items-center justify-between gap-4 border-b border-[#243042] pb-4">
+                <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#63f7ff]">
+                  Environment Scope
+                </div>
+                <div className="font-mono text-[11px] text-[#63f7ff]">{"///"}</div>
               </div>
               <div className="mt-5 space-y-3 font-mono text-xs leading-6 text-[#c2c6d8]">
                 <p>No real capital is deployed.</p>
                 <p>Demo/testnet data is used for product validation.</p>
                 <p>Risk and execution views are observational and read-only.</p>
+              </div>
+              <div className="mt-6 grid gap-2">
+                {safetyRows.map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="flex items-center justify-between rounded-xl border border-[#1f1f1f] bg-[#050505]/82 px-3 py-2 font-mono text-xs"
+                  >
+                    <span className="uppercase tracking-[0.14em] text-[#8c90a1]">
+                      {label}
+                    </span>
+                    <span className="text-[#63f7ff]">{value}</span>
+                  </div>
+                ))}
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Link
@@ -176,7 +200,7 @@ function InfoPanel({
   children: React.ReactNode;
 }) {
   return (
-    <article className="rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.22)] backdrop-blur-sm">
+    <article className="rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.22)] backdrop-blur-sm transition duration-200 hover:border-[#2f3b52] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_22px_65px_rgba(0,0,0,0.28)]">
       <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
         {eyebrow}
       </div>
