@@ -31,7 +31,7 @@ const alphaModules = [
 ];
 
 const statusBadgeClass =
-  "border border-[#243042] bg-[#0e0e0e]/88 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition-colors hover:border-[#424655]";
+  "rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[#424655]";
 
 export function DashboardShell({
   equitySnapshot,
@@ -69,11 +69,11 @@ export function DashboardShell({
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] bg-[size:32px_32px] text-[#e2e2e2]">
-      <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/92 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-[#243042]/80 bg-[#0b0b0b]/90 shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
         <div className="mx-auto flex max-w-[1500px] flex-col gap-5 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-4">
             <BrandMark compact />
-            <div className="border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] lg:hidden">
+            <div className="rounded-xl border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] lg:hidden">
               Demo
             </div>
           </div>
@@ -81,7 +81,7 @@ export function DashboardShell({
             <span className={statusBadgeClass}>
               Demo / Testnet
             </span>
-            <span className="border border-[#63f7ff]/80 bg-[#071314] px-3 py-2 text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08)]">
+            <span className="rounded-xl border border-[#63f7ff]/60 bg-[#071314]/90 px-3 py-2 text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_10px_30px_rgba(0,0,0,0.18)]">
               {equitySnapshot.source === "live-csv" ||
               positionsSnapshot.source === "live-csv"
                 ? "Live Testnet Data"
@@ -95,7 +95,7 @@ export function DashboardShell({
             </span>
             <a
               href="/request-access"
-              className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-2 text-white shadow-[0_0_16px_rgba(86,141,255,0.16)] transition hover:brightness-110"
+              className="rounded-xl border border-[#568dff]/90 bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-2 text-white shadow-[0_12px_28px_rgba(0,88,203,0.2)] transition duration-200 hover:-translate-y-px hover:brightness-110"
             >
               Request Access
             </a>
@@ -119,7 +119,7 @@ export function DashboardShell({
               Trading, risk, execution, and scheduler systems remain untouched.
             </p>
           </div>
-          <div className="mt-5 border border-[#63f7ff]/50 bg-[#061719]/70 px-4 py-3 font-mono text-[11px] uppercase leading-5 tracking-[0.12em] text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08)]">
+          <div className="mt-5 rounded-2xl border border-[#63f7ff]/35 bg-[linear-gradient(135deg,rgba(6,23,25,0.86),rgba(10,10,10,0.72))] px-4 py-3 font-mono text-[11px] uppercase leading-5 tracking-[0.12em] text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_18px_50px_rgba(0,0,0,0.22)]">
             Frontend read-only. Equity source:{" "}
             {equitySnapshot.source === "live-csv" ? "live CSV" : "mock fallback"}.
             {" "}
@@ -211,8 +211,8 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <article className="group border border-[#1f1f1f] bg-[#0a0a0a]/86 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] backdrop-blur transition-colors duration-200 hover:border-[#2f3b52]">
-      <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f] bg-[#0e0e0e]/48 px-4 py-3">
+    <article className="group overflow-hidden rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-all duration-200 hover:border-[#2f3b52] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_22px_65px_rgba(0,0,0,0.3)]">
+      <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f]/80 bg-[#0e0e0e]/44 px-4 py-3">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
             {eyebrow}
@@ -221,7 +221,7 @@ function Panel({
             {title}
           </h2>
         </div>
-        <div className="hidden border border-[#243042] bg-[#050505] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] transition-colors group-hover:border-[#424655] sm:block">
+        <div className="hidden rounded-lg border border-[#243042] bg-[#050505]/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] transition-colors group-hover:border-[#424655] sm:block">
           {action}
         </div>
       </div>
@@ -240,7 +240,7 @@ function MetricCard({
   detail: string;
 }) {
   return (
-    <article className="border border-[#1f1f1f] bg-[#0a0a0a]/86 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition-colors duration-200 hover:border-[#2f3b52]">
+    <article className="rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(14,14,14,0.92),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_16px_45px_rgba(0,0,0,0.22)] transition-all duration-200 hover:-translate-y-px hover:border-[#2f3b52]">
       <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c2c6d8]">
         {label}
       </div>
@@ -260,7 +260,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
   const lastEquity = points.at(-1)?.equity;
 
   return (
-    <div className="h-[330px] border border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(180deg,#101010,#050505)] bg-[size:28px_28px] p-4">
+    <div className="h-[330px] rounded-xl border border-[#243042]/90 bg-[linear-gradient(rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(180deg,#101010,#050505)] bg-[size:28px_28px] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
       <svg
         aria-label="Mock equity curve"
         className="h-full w-full"
@@ -408,7 +408,7 @@ function RegimePanel() {
   return (
     <Panel eyebrow="Regime" title="Market State" action="Demo classifier">
       <div className="grid gap-3">
-        <div className="border border-[#424655] bg-[#050505] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+        <div className="rounded-xl border border-[#424655] bg-[#050505]/92 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#8c90a1]">
             Current Regime
           </div>
@@ -423,7 +423,7 @@ function RegimePanel() {
           {["Trend", "Range", "Stress"].map((item, index) => (
             <div
               key={item}
-              className={`border p-3 transition-colors ${
+              className={`rounded-lg border p-3 transition-colors ${
                 index === 1
                   ? "border-[#63f7ff] text-[#63f7ff]"
                   : "border-[#243042] text-[#8c90a1]"
@@ -454,7 +454,7 @@ function RiskMonitor() {
               <span className="text-[#c2c6d8]">{limit.label}</span>
               <span className="text-[#63f7ff]">{limit.value}</span>
             </div>
-            <div className="h-2 border border-[#243042] bg-[#050505]">
+            <div className="h-2 overflow-hidden rounded-full border border-[#243042] bg-[#050505]">
               <div
                 className="h-full bg-[linear-gradient(90deg,#568dff,#63f7ff)] transition-[width] duration-500"
                 style={{ width: limit.width }}
@@ -473,7 +473,7 @@ function AlphaEngineStatus() {
       {alphaModules.map((module) => (
         <div
           key={module.name}
-          className="grid grid-cols-[1fr_auto] gap-3 border border-[#243042] bg-[#050505] p-4 transition-colors hover:border-[#424655]"
+          className="grid grid-cols-[1fr_auto] gap-3 rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors hover:border-[#424655]"
         >
           <div>
             <div className="font-mono text-sm text-white">{module.name}</div>
@@ -500,7 +500,7 @@ function SystemHealth() {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {health.map((item) => (
-        <div key={item.label} className="border border-[#243042] bg-[#050505] p-4 transition-colors hover:border-[#424655]">
+        <div key={item.label} className="rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors hover:border-[#424655]">
           <div className="flex items-center justify-between gap-3">
             <div className="font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8]">
               {item.label}
@@ -526,7 +526,7 @@ function ExecutionLogs() {
       {logs.map((log) => (
         <div
           key={`${log.time}-${log.message}`}
-          className="grid grid-cols-[76px_64px_1fr] gap-3 border border-[#1f1f1f] bg-[#050505] px-3 py-2 font-mono text-xs transition-colors hover:border-[#243042] hover:bg-[#101820]"
+          className="grid grid-cols-[76px_64px_1fr] gap-3 rounded-lg border border-[#1f1f1f] bg-[#050505]/92 px-3 py-2 font-mono text-xs transition-colors hover:border-[#243042] hover:bg-[#101820]"
         >
           <span className="text-[#8c90a1]">{log.time}</span>
           <span className="uppercase text-[#63f7ff]">{log.type}</span>
