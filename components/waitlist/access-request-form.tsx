@@ -23,7 +23,7 @@ const initialState: FormState = {
 };
 
 const terminalInput =
-  "w-full border border-[#243042] bg-[#050505] px-4 py-3 font-mono text-sm text-white outline-none transition placeholder:text-[#424655] focus:border-[#63f7ff]";
+  "w-full rounded-xl border border-[#243042] bg-[#050505]/92 px-4 py-3 font-mono text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition placeholder:text-[#424655] focus:border-[#63f7ff]";
 
 export function AccessRequestForm() {
   const [form, setForm] = useState<FormState>(initialState);
@@ -70,8 +70,8 @@ export function AccessRequestForm() {
 
   if (success) {
     return (
-      <section className="border border-[#424655] bg-[#0a0a0a]/88 p-5 shadow-[0_0_30px_rgba(99,247,255,0.08)] backdrop-blur-xl sm:p-7">
-        <div className="border border-[#63f7ff] bg-[#061719]/80 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
+      <section className="rounded-2xl border border-[#424655] bg-[#0a0a0a]/88 p-5 shadow-[0_22px_70px_rgba(0,0,0,0.34)] backdrop-blur-sm sm:p-7">
+        <div className="rounded-xl border border-[#63f7ff] bg-[#061719]/80 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
           Request queued
         </div>
         <h2 className="mt-7 text-3xl font-semibold text-white">
@@ -81,7 +81,7 @@ export function AccessRequestForm() {
           Your private beta request has been captured locally for this product
           demo. No backend submission was performed.
         </p>
-        <div className="mt-6 border border-[#243042] bg-[#050505] p-4 font-mono text-xs leading-6 text-[#8c90a1]">
+        <div className="mt-6 rounded-xl border border-[#243042] bg-[#050505] p-4 font-mono text-xs leading-6 text-[#8c90a1]">
           No live trading access is provided. For research and informational
           purposes only.
         </div>
@@ -92,7 +92,7 @@ export function AccessRequestForm() {
             setSubmitted(false);
             setSuccess(false);
           }}
-          className="mt-6 w-full border border-[#424655] bg-[#0a0a0a] px-5 py-4 text-sm font-semibold text-[#e2e2e2] transition hover:border-[#63f7ff] hover:text-[#63f7ff]"
+          className="mt-6 w-full rounded-xl border border-[#424655] bg-[#0a0a0a] px-5 py-4 text-sm font-semibold text-[#e2e2e2] transition hover:border-[#63f7ff] hover:text-[#63f7ff]"
         >
           Submit Another Request
         </button>
@@ -104,7 +104,7 @@ export function AccessRequestForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="border border-[#424655] bg-[#0a0a0a]/88 p-5 shadow-[0_0_30px_rgba(99,247,255,0.08)] backdrop-blur-xl sm:p-7"
+      className="rounded-2xl border border-[#424655] bg-[#0a0a0a]/88 p-5 shadow-[0_22px_70px_rgba(0,0,0,0.34)] backdrop-blur-sm sm:p-7"
     >
       <div className="flex items-center justify-between gap-4 border-b border-[#243042] pb-5">
         <div>
@@ -115,7 +115,7 @@ export function AccessRequestForm() {
             Access Profile
           </h2>
         </div>
-        <span className="hidden border border-[#243042] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] sm:block">
+        <span className="hidden rounded-lg border border-[#243042] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] sm:block">
           Mock submit
         </span>
       </div>
@@ -178,7 +178,7 @@ export function AccessRequestForm() {
         </Field>
       </div>
 
-      <label className="mt-5 flex gap-3 border border-[#243042] bg-[#050505] p-4 font-mono text-xs leading-6 text-[#c2c6d8]">
+      <label className="mt-5 flex gap-3 rounded-xl border border-[#243042] bg-[#050505] p-4 font-mono text-xs leading-6 text-[#c2c6d8]">
         <input
           type="checkbox"
           checked={form.acknowledged}
@@ -198,7 +198,7 @@ export function AccessRequestForm() {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 w-full border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-sm font-semibold text-white shadow-[0_0_18px_rgba(86,141,255,0.28)] transition hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
+        className="mt-6 w-full rounded-xl border border-[#568dff]/90 bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-sm font-semibold text-white shadow-[0_14px_34px_rgba(0,88,203,0.22)] transition hover:-translate-y-px hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
       >
         {loading ? "Submitting Mock Request..." : "Submit Access Request"}
       </button>

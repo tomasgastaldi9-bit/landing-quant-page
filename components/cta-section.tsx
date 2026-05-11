@@ -29,13 +29,13 @@ export function CTASection() {
         <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
           <a
             href="/dashboard"
-            className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_0_18px_rgba(86,141,255,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
+            className="rounded-xl border border-[#568dff]/90 bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgba(0,88,203,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
           >
             Open Terminal Demo
           </a>
           <a
             href="/request-access"
-            className="border border-[#424655] bg-[#0a0a0a]/90 px-7 py-4 text-center text-sm font-semibold text-[#e2e2e2] backdrop-blur transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff]"
+            className="rounded-xl border border-[#424655] bg-[#0a0a0a]/90 px-7 py-4 text-center text-sm font-semibold text-[#e2e2e2] shadow-[0_14px_34px_rgba(0,0,0,0.18)] backdrop-blur-sm transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff]"
           >
             Request Access
           </a>
