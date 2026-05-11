@@ -26,6 +26,14 @@ export type InstitutionalExplainerProps = {
 const disclaimer =
   "For research and informational purposes only. Not financial advice. Performance is not guaranteed.";
 
+const routeLinks = [
+  ["Demo/Testnet", "/demo-testnet"],
+  ["Alpha Engine", "/alpha-engine"],
+  ["Risk Layer", "/risk-layer"],
+  ["Monitoring", "/monitoring"],
+  ["Methodology", "/methodology"],
+];
+
 export function InstitutionalExplainer({
   badges,
   eyebrow,
@@ -123,6 +131,17 @@ export function InstitutionalExplainer({
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
+        <nav className="mb-4 flex gap-2 overflow-x-auto pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#c2c6d8]">
+          {routeLinks.map(([label, href]) => (
+            <Link
+              key={href}
+              href={href}
+              className="shrink-0 rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-2 transition duration-200 hover:border-[#63f7ff] hover:text-[#63f7ff]"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
         <div className="grid gap-4">
           {sections.map((section) => (
             <article

@@ -16,12 +16,12 @@ export function Navbar() {
         <a className="min-w-0" href="#" aria-label="QuantBot home">
           <BrandMark />
         </a>
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-5 lg:flex xl:gap-7">
           {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#c2c6d8] transition-colors duration-200 hover:text-[#63f7ff]"
+              className="font-mono text-[11px] uppercase tracking-[0.08em] text-[#c2c6d8] transition-colors duration-200 hover:text-[#63f7ff] xl:text-[12px]"
             >
               {item.label}
             </a>
@@ -36,7 +36,7 @@ export function Navbar() {
           </a>
           <a
             href="/dashboard"
-            className="whitespace-nowrap border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-3 text-center text-xs font-semibold text-white shadow-[0_0_16px_rgba(86,141,255,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110 sm:px-5 sm:text-sm"
+            className="whitespace-nowrap rounded-xl border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-3 text-center text-xs font-semibold text-white shadow-[0_0_16px_rgba(86,141,255,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110 sm:px-5 sm:text-sm"
           >
             Launch Terminal
           </a>

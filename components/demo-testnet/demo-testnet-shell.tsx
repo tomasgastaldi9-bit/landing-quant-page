@@ -37,6 +37,14 @@ const safetyRows = [
   ["Guarantee", "None"],
 ];
 
+const routeLinks = [
+  ["Demo/Testnet", "/demo-testnet"],
+  ["Alpha Engine", "/alpha-engine"],
+  ["Risk Layer", "/risk-layer"],
+  ["Monitoring", "/monitoring"],
+  ["Methodology", "/methodology"],
+];
+
 export function DemoTestnetShell() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#e2e2e2]">
@@ -131,6 +139,17 @@ export function DemoTestnetShell() {
       </section>
 
       <section className="mx-auto grid max-w-7xl gap-4 px-4 py-12 sm:px-8 lg:grid-cols-[1fr_0.8fr]">
+        <nav className="flex gap-2 overflow-x-auto pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#c2c6d8] lg:col-span-2">
+          {routeLinks.map(([label, href]) => (
+            <Link
+              key={href}
+              href={href}
+              className="shrink-0 rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-2 transition duration-200 hover:border-[#63f7ff] hover:text-[#63f7ff]"
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
         <InfoPanel eyebrow="What is validated" title="Execution, risk, and observability">
           <div className="grid gap-3 sm:grid-cols-2">
             {validationItems.map((item) => (
