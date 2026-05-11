@@ -1,36 +1,58 @@
+import Link from "next/link";
+
 const metrics = [
-  { label: "Execution Mode", value: "Demo", detail: "Testnet / Paper" },
+  {
+    label: "Execution Mode",
+    value: "Demo",
+    detail: "Testnet / Paper",
+    href: "/demo-testnet",
+  },
   {
     label: "Risk Layer",
     value: "Active",
     detail: "Policy Controls",
+    href: "/risk-layer",
   },
-  { label: "Monitoring", value: "Live", detail: "System Telemetry" },
-  { label: "Alpha Engine", value: "Multi", detail: "Research Signals" },
+  {
+    label: "Monitoring",
+    value: "Live",
+    detail: "System Telemetry",
+    href: "/monitoring",
+  },
+  {
+    label: "Alpha Engine",
+    value: "Multi",
+    detail: "Research Signals",
+    href: "/alpha-engine",
+  },
 ];
 
 const architecture = [
   {
     title: "Motor Multi-Alpha",
-    body: "Combinacion de multiples modelos estadisticos descorrelacionados para generar retornos consistentes en cualquier regimen de mercado.",
+    body: "Arquitectura de investigacion para organizar modelos estadisticos, sleeves y senales por regimen sin prometer performance futura.",
     wide: true,
     icon: "++",
+    href: "/alpha-engine",
   },
   {
     title: "Controles de Riesgo",
     body: "Gestion de exposicion dinamica y limites estrictos por posicion en tiempo real.",
     icon: "[]",
+    href: "/risk-layer",
   },
   {
-    title: "Integracion Directa",
-    body: "Conexion FIX/REST de baja latencia con Binance Futures y exchanges Tier-1.",
+    title: "Observabilidad Operativa",
+    body: "Superficie read-only para equity, posiciones, logs, alertas y salud del sistema en demo/testnet.",
     icon: "<>",
+    href: "/monitoring",
   },
   {
-    title: "Deteccion de Regimen",
-    body: "Modelos de Machine Learning adaptan la ponderacion del portfolio segun volatilidad y tendencia actual.",
+    title: "Disciplina Metodologica",
+    body: "Workflow research-first con backtesting, walk-forward, validacion paper/demo y revisiones de despliegue.",
     wide: true,
     icon: "//",
+    href: "/methodology",
   },
 ];
 
@@ -51,8 +73,9 @@ export function MetricsSection() {
         </div>
         <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {metrics.map((metric) => (
-            <article
+            <Link
               key={metric.label}
+              href={metric.href}
               className="border border-[#1f1f1f] bg-[#0a0a0a]/82 p-5 backdrop-blur transition hover:border-[#424655] sm:p-6"
             >
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#c2c6d8]">
@@ -66,7 +89,7 @@ export function MetricsSection() {
               >
                 {metric.detail}
               </div>
-            </article>
+            </Link>
           ))}
         </div>
 
@@ -82,8 +105,9 @@ export function MetricsSection() {
           </div>
           <div className="mt-9 grid grid-cols-1 gap-3 lg:grid-cols-3">
             {architecture.map((item) => (
-              <article
+              <Link
                 key={item.title}
+                href={item.href}
                 className={`border border-[#1f1f1f] bg-[#0a0a0a]/78 p-5 backdrop-blur transition hover:border-[#63f7ff]/50 sm:p-6 ${
                   item.wide ? "lg:col-span-2" : ""
                 }`}
@@ -97,7 +121,7 @@ export function MetricsSection() {
                 <p className="mt-3 max-w-2xl text-sm leading-6 text-[#c2c6d8]">
                   {item.body}
                 </p>
-              </article>
+              </Link>
             ))}
           </div>
         </div>

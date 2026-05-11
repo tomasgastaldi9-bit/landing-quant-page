@@ -4,10 +4,30 @@ import type { PositionRow, PositionsSnapshot } from "@/lib/positions/types";
 import Link from "next/link";
 
 const exposureMetrics = [
-  { label: "Gross Exposure", value: "$1.24M", detail: "Demo notional" },
-  { label: "Net Exposure", value: "$182K", detail: "Long bias" },
-  { label: "Leverage", value: "1.8x", detail: "Policy cap 3.0x" },
-  { label: "Open Risk", value: "Low", detail: "Within limits" },
+  {
+    label: "Gross Exposure",
+    value: "$1.24M",
+    detail: "Demo notional",
+    href: "/risk-layer",
+  },
+  {
+    label: "Net Exposure",
+    value: "$182K",
+    detail: "Long bias",
+    href: "/risk-layer",
+  },
+  {
+    label: "Leverage",
+    value: "1.8x",
+    detail: "Policy cap 3.0x",
+    href: "/risk-layer",
+  },
+  {
+    label: "Open Risk",
+    value: "Low",
+    detail: "Within limits",
+    href: "/risk-layer",
+  },
 ];
 
 const logs = [
@@ -241,12 +261,14 @@ function MetricCard({
   label,
   value,
   detail,
+  href,
 }: {
   label: string;
   value: string;
   detail: string;
+  href?: string;
 }) {
-  return (
+  const card = (
     <article className="rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(14,14,14,0.92),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_16px_45px_rgba(0,0,0,0.22)] transition-all duration-200 hover:-translate-y-px hover:border-[#2f3b52]">
       <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c2c6d8]">
         {label}
@@ -256,6 +278,14 @@ function MetricCard({
       </div>
       <div className="mt-2 font-mono text-xs text-[#63f7ff]">{detail}</div>
     </article>
+  );
+
+  if (!href) return card;
+
+  return (
+    <Link href={href} className="block">
+      {card}
+    </Link>
   );
 }
 

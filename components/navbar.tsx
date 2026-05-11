@@ -1,9 +1,11 @@
 import { BrandMark } from "./brand-mark";
 
 const navItems = [
-  { label: "Platform", href: "#platform" },
-  { label: "Strategies", href: "#strategies" },
-  { label: "Risk Controls", href: "#risk-controls" },
+  { label: "Demo/Testnet", href: "/demo-testnet" },
+  { label: "Alpha Engine", href: "/alpha-engine" },
+  { label: "Risk Layer", href: "/risk-layer" },
+  { label: "Monitoring", href: "/monitoring" },
+  { label: "Methodology", href: "/methodology" },
   { label: "Terminal Demo", href: "/dashboard" },
 ];
 
@@ -15,15 +17,11 @@ export function Navbar() {
           <BrandMark />
         </a>
         <nav className="hidden items-center gap-8 lg:flex">
-          {navItems.map((item, index) => (
+          {navItems.map((item) => (
             <a
               key={item.label}
               href={item.href}
-              className={`font-mono text-[12px] uppercase tracking-[0.08em] transition-colors duration-200 hover:text-[#63f7ff] ${
-                index === 0
-                  ? "border-b border-[#63f7ff] pb-2 text-[#63f7ff]"
-                  : "text-[#c2c6d8]"
-              }`}
+              className="font-mono text-[12px] uppercase tracking-[0.08em] text-[#c2c6d8] transition-colors duration-200 hover:text-[#63f7ff]"
             >
               {item.label}
             </a>
