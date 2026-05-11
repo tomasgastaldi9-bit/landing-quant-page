@@ -30,6 +30,9 @@ const alphaModules = [
   { name: "Volatility Filter", state: "Active", confidence: "High" },
 ];
 
+const statusBadgeClass =
+  "border border-[#243042] bg-[#0e0e0e]/88 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition-colors hover:border-[#424655]";
+
 export function DashboardShell({
   equitySnapshot,
   positionsSnapshot,
@@ -65,34 +68,34 @@ export function DashboardShell({
   ];
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#e2e2e2]">
-      <header className="border-b border-[#243042] bg-[#0b0b0b]/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-[1500px] flex-col gap-5 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+    <main className="min-h-screen overflow-x-hidden bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] bg-[size:32px_32px] text-[#e2e2e2]">
+      <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/92 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-[1500px] flex-col gap-5 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-4">
             <BrandMark compact />
-            <div className="border border-[#424655] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] lg:hidden">
+            <div className="border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] lg:hidden">
               Demo
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-[#c2c6d8]">
-            <span className="border border-[#424655] bg-[#0e0e0e] px-3 py-2 text-[#63f7ff]">
+            <span className={statusBadgeClass}>
               Demo / Testnet
             </span>
-            <span className="border border-[#63f7ff] bg-[#071314] px-3 py-2 text-[#63f7ff]">
+            <span className="border border-[#63f7ff]/80 bg-[#071314] px-3 py-2 text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08)]">
               {equitySnapshot.source === "live-csv" ||
               positionsSnapshot.source === "live-csv"
                 ? "Live Testnet Data"
                 : "Mock Data Fallback"}
             </span>
-            <span className="border border-[#243042] px-3 py-2">
+            <span className={statusBadgeClass}>
               Research Mode
             </span>
-            <span className="border border-[#243042] px-3 py-2">
+            <span className={statusBadgeClass}>
               Not Financial Advice
             </span>
             <a
               href="/request-access"
-              className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-2 text-white transition hover:brightness-110"
+              className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-2 text-white shadow-[0_0_16px_rgba(86,141,255,0.16)] transition hover:brightness-110"
             >
               Request Access
             </a>
@@ -100,14 +103,14 @@ export function DashboardShell({
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:py-8">
-        <section className="mb-6">
-          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+      <div className="mx-auto max-w-[1500px] px-4 py-5 sm:px-6 lg:py-7">
+        <section className="mb-5">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#63f7ff]">
                 Execution / Risk Monitoring
               </div>
-              <h1 className="mt-3 text-3xl font-semibold tracking-normal text-white sm:text-5xl">
+              <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-normal text-white sm:text-5xl">
                 Institutional Quant Terminal
               </h1>
             </div>
@@ -116,7 +119,7 @@ export function DashboardShell({
               Trading, risk, execution, and scheduler systems remain untouched.
             </p>
           </div>
-          <div className="mt-5 border border-[#63f7ff]/70 bg-[#061719]/80 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-[#63f7ff]">
+          <div className="mt-5 border border-[#63f7ff]/50 bg-[#061719]/70 px-4 py-3 font-mono text-[11px] uppercase leading-5 tracking-[0.12em] text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08)]">
             Frontend read-only. Equity source:{" "}
             {equitySnapshot.source === "live-csv" ? "live CSV" : "mock fallback"}.
             {" "}
@@ -208,15 +211,17 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <article className="border border-[#1f1f1f] bg-[#0a0a0a]/84 backdrop-blur">
-      <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f] px-4 py-3">
+    <article className="group border border-[#1f1f1f] bg-[#0a0a0a]/86 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] backdrop-blur transition-colors duration-200 hover:border-[#2f3b52]">
+      <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f] bg-[#0e0e0e]/48 px-4 py-3">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
             {eyebrow}
           </div>
-          <h2 className="mt-1 text-lg font-semibold text-white">{title}</h2>
+          <h2 className="mt-1 text-lg font-semibold leading-tight text-white">
+            {title}
+          </h2>
         </div>
-        <div className="hidden border border-[#243042] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] sm:block">
+        <div className="hidden border border-[#243042] bg-[#050505] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] transition-colors group-hover:border-[#424655] sm:block">
           {action}
         </div>
       </div>
@@ -235,11 +240,11 @@ function MetricCard({
   detail: string;
 }) {
   return (
-    <article className="border border-[#1f1f1f] bg-[#0a0a0a]/84 p-5">
+    <article className="border border-[#1f1f1f] bg-[#0a0a0a]/86 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition-colors duration-200 hover:border-[#2f3b52]">
       <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c2c6d8]">
         {label}
       </div>
-      <div className="mt-3 font-mono text-3xl font-semibold text-white">
+      <div className="mt-3 font-mono text-[30px] font-semibold leading-none text-white">
         {value}
       </div>
       <div className="mt-2 font-mono text-xs text-[#63f7ff]">{detail}</div>
@@ -284,31 +289,31 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
 function PositionsTable({ positions }: { positions: PositionRow[] }) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[720px] border-collapse font-mono text-xs">
+      <table className="w-full min-w-[760px] border-collapse font-mono text-xs">
         <thead>
-          <tr className="border-b border-[#243042] text-left uppercase tracking-[0.12em] text-[#8c90a1]">
-            <th className="py-3 pr-4 font-medium">Symbol</th>
-            <th className="py-3 pr-4 font-medium">Side</th>
-            <th className="py-3 pr-4 font-medium">Size</th>
-            <th className="py-3 pr-4 font-medium">Entry</th>
-            <th className="py-3 pr-4 font-medium">Mark</th>
-            <th className="py-3 pr-4 font-medium">Unrealized PnL</th>
-            <th className="py-3 pr-4 font-medium">Updated</th>
+          <tr className="border-b border-[#243042] bg-[#0e0e0e]/55 text-left uppercase tracking-[0.12em] text-[#8c90a1]">
+            <th className="px-3 py-3 font-medium">Symbol</th>
+            <th className="px-3 py-3 font-medium">Side</th>
+            <th className="px-3 py-3 text-right font-medium">Size</th>
+            <th className="px-3 py-3 text-right font-medium">Entry</th>
+            <th className="px-3 py-3 text-right font-medium">Mark</th>
+            <th className="px-3 py-3 text-right font-medium">Unrealized PnL</th>
+            <th className="px-3 py-3 text-right font-medium">Updated</th>
           </tr>
         </thead>
         <tbody>
           {positions.map((position) => (
             <tr
               key={position.symbol}
-              className="border-b border-[#1f1f1f] text-[#c2c6d8]"
+              className="border-b border-[#1f1f1f] text-[#c2c6d8] transition-colors hover:bg-[#101820]"
             >
-              <td className="py-3 pr-4 text-[#63f7ff]">{position.symbol}</td>
-              <td className="py-3 pr-4">{position.side}</td>
-              <td className="py-3 pr-4">{formatNumber(position.size)}</td>
-              <td className="py-3 pr-4">{formatOptionalCurrency(position.entry)}</td>
-              <td className="py-3 pr-4">{formatOptionalCurrency(position.mark)}</td>
+              <td className="px-3 py-3 text-[#63f7ff]">{position.symbol}</td>
+              <td className="px-3 py-3">{position.side}</td>
+              <td className="px-3 py-3 text-right">{formatNumber(position.size)}</td>
+              <td className="px-3 py-3 text-right">{formatOptionalCurrency(position.entry)}</td>
+              <td className="px-3 py-3 text-right">{formatOptionalCurrency(position.mark)}</td>
               <td
-                className={`py-3 pr-4 ${
+                className={`px-3 py-3 text-right ${
                   (position.unrealizedPnl ?? 0) < 0
                     ? "text-[#ffb4ab]"
                     : "text-[#63f7ff]"
@@ -316,7 +321,7 @@ function PositionsTable({ positions }: { positions: PositionRow[] }) {
               >
                 {formatSignedCurrency(position.unrealizedPnl)}
               </td>
-              <td className="py-3 pr-4">{formatTime(position.timestamp)}</td>
+              <td className="px-3 py-3 text-right text-[#8c90a1]">{formatTime(position.timestamp)}</td>
             </tr>
           ))}
         </tbody>
@@ -329,7 +334,7 @@ function RegimePanel() {
   return (
     <Panel eyebrow="Regime" title="Market State" action="Demo classifier">
       <div className="grid gap-3">
-        <div className="border border-[#424655] bg-[#050505] p-4">
+        <div className="border border-[#424655] bg-[#050505] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#8c90a1]">
             Current Regime
           </div>
@@ -344,7 +349,7 @@ function RegimePanel() {
           {["Trend", "Range", "Stress"].map((item, index) => (
             <div
               key={item}
-              className={`border p-3 ${
+              className={`border p-3 transition-colors ${
                 index === 1
                   ? "border-[#63f7ff] text-[#63f7ff]"
                   : "border-[#243042] text-[#8c90a1]"
@@ -377,7 +382,7 @@ function RiskMonitor() {
             </div>
             <div className="h-2 border border-[#243042] bg-[#050505]">
               <div
-                className="h-full bg-[#63f7ff]"
+                className="h-full bg-[linear-gradient(90deg,#568dff,#63f7ff)] transition-[width] duration-500"
                 style={{ width: limit.width }}
               />
             </div>
@@ -394,7 +399,7 @@ function AlphaEngineStatus() {
       {alphaModules.map((module) => (
         <div
           key={module.name}
-          className="grid grid-cols-[1fr_auto] gap-3 border border-[#243042] bg-[#050505] p-4"
+          className="grid grid-cols-[1fr_auto] gap-3 border border-[#243042] bg-[#050505] p-4 transition-colors hover:border-[#424655]"
         >
           <div>
             <div className="font-mono text-sm text-white">{module.name}</div>
@@ -421,7 +426,7 @@ function SystemHealth() {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {health.map((item) => (
-        <div key={item.label} className="border border-[#243042] bg-[#050505] p-4">
+        <div key={item.label} className="border border-[#243042] bg-[#050505] p-4 transition-colors hover:border-[#424655]">
           <div className="flex items-center justify-between gap-3">
             <div className="font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8]">
               {item.label}
@@ -447,7 +452,7 @@ function ExecutionLogs() {
       {logs.map((log) => (
         <div
           key={`${log.time}-${log.message}`}
-          className="grid grid-cols-[76px_64px_1fr] gap-3 border border-[#1f1f1f] bg-[#050505] px-3 py-2 font-mono text-xs"
+          className="grid grid-cols-[76px_64px_1fr] gap-3 border border-[#1f1f1f] bg-[#050505] px-3 py-2 font-mono text-xs transition-colors hover:border-[#243042] hover:bg-[#101820]"
         >
           <span className="text-[#8c90a1]">{log.time}</span>
           <span className="uppercase text-[#63f7ff]">{log.type}</span>
