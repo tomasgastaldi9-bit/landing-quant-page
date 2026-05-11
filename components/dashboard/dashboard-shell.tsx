@@ -303,17 +303,17 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
         {chartPoints ? (
           <>
             <path d={areaPath} fill="url(#equityFill)" />
-            <polyline
+            <path
+              d={chartPoints.baseline}
               fill="none"
-              points={chartPoints.baseline}
               stroke="#9d79ff"
               strokeDasharray="8 10"
               strokeOpacity="0.58"
               strokeWidth="2"
             />
-            <polyline
+            <path
+              d={chartPoints.line}
               fill="none"
-              points={chartPoints.line}
               stroke="url(#equityStroke)"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -324,10 +324,17 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
                 <circle
                   cx={lastPoint.x}
                   cy={lastPoint.y}
-                  fill="#050505"
-                  r="7"
+                  fill="rgba(99,247,255,0.12)"
+                  r="11"
                   stroke="#63f7ff"
-                  strokeWidth="3"
+                  strokeOpacity="0.32"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx={lastPoint.x}
+                  cy={lastPoint.y}
+                  fill="#63f7ff"
+                  r="4"
                 />
                 <line
                   x1={lastPoint.x}
@@ -611,18 +618,36 @@ function toSvgPoints(points: EquitySnapshot["points"]) {
     const y = 260 - ((point.equity - min) / range) * 200;
     return { x, y };
   });
-  const mapped = coordinates.map(
-    (point) => `${point.x.toFixed(2)},${point.y.toFixed(2)}`,
-  );
+  const mapped = coordinates.map((point) => ({
+    x: Number(point.x.toFixed(2)),
+    y: Number(point.y.toFixed(2)),
+  }));
   const baseline = coordinates.map((point, index) => {
     const y = 248 - (index / denominator) * 94;
-    return `${point.x.toFixed(2)},${y.toFixed(2)}`;
+    return {
+      x: Number(point.x.toFixed(2)),
+      y: Number(y.toFixed(2)),
+    };
   });
 
   return {
     coordinates,
-    line: mapped.join(" "),
-    baseline: baseline.join(" "),
-    area: `M${mapped.join(" L")}`,
+    line: toSmoothPath(mapped),
+    baseline: toSmoothPath(baseline),
+    area: toSmoothPath(mapped),
   };
+}
+
+function toSmoothPath(points: Array<{ x: number; y: number }>) {
+  if (points.length === 0) return "";
+  if (points.length === 1) return `M${points[0].x},${points[0].y}`;
+
+  return points.reduce((path, point, index) => {
+    if (index === 0) return `M${point.x},${point.y}`;
+
+    const previous = points[index - 1];
+    const controlX = (previous.x + point.x) / 2;
+
+    return `${path} C${controlX},${previous.y} ${controlX},${point.y} ${point.x},${point.y}`;
+  }, "");
 }
