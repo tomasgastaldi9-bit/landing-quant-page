@@ -4,7 +4,7 @@ export function CTASection() {
       id="contact"
       className="border-b border-[#243042] bg-[#111] bg-[linear-gradient(90deg,rgba(86,141,255,0.12),transparent_38%,rgba(99,247,255,0.08))]"
     >
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1fr_auto] lg:items-center">
+      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-8 sm:py-[72px] lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
           <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#63f7ff]">
             Private Beta
@@ -29,13 +29,13 @@ export function CTASection() {
         <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
           <a
             href="/dashboard"
-            className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_0_18px_rgba(86,141,255,0.28)] transition hover:brightness-110"
+            className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_0_18px_rgba(86,141,255,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
           >
             Open Terminal Demo
           </a>
           <a
             href="/request-access"
-            className="border border-[#424655] bg-[#0a0a0a]/90 px-7 py-4 text-center text-sm font-semibold text-[#e2e2e2] backdrop-blur transition hover:border-[#63f7ff] hover:text-[#63f7ff]"
+            className="border border-[#424655] bg-[#0a0a0a]/90 px-7 py-4 text-center text-sm font-semibold text-[#e2e2e2] backdrop-blur transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff]"
           >
             Request Access
           </a>

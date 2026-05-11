@@ -27,13 +27,13 @@ export function HeroSection() {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a
               href="/dashboard"
-              className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_0_18px_rgba(86,141,255,0.35)] transition hover:brightness-110"
+              className="border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_0_18px_rgba(86,141,255,0.24)] transition duration-200 hover:-translate-y-px hover:brightness-110"
             >
               Open Terminal Demo
             </a>
             <a
               href="/request-access"
-              className="border border-[#1f1f1f] bg-[#0a0a0a]/82 px-7 py-4 text-center text-sm font-semibold text-white backdrop-blur-xl transition hover:border-[#63f7ff] hover:text-[#63f7ff]"
+              className="border border-[#1f1f1f] bg-[#0a0a0a]/82 px-7 py-4 text-center text-sm font-semibold text-white backdrop-blur-xl transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff]"
             >
               Request Access
             </a>
@@ -101,7 +101,7 @@ export function HeroSection() {
             </div>
             <a
               href="/dashboard"
-              className="mt-4 block border border-[#243042] bg-[#050505] px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-[#63f7ff] transition hover:border-[#63f7ff]"
+              className="mt-4 block border border-[#243042] bg-[#050505] px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719]"
             >
               Terminal Demo
             </a>
