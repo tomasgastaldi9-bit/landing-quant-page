@@ -150,7 +150,7 @@ export function Navbar() {
             <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-[#63f7ff]">
               Testnet Workspace
             </div>
-            <div className="mt-4 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+            <div className="mt-4 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_16px_42px_rgba(0,0,0,0.22)]">
               <div className="flex items-center gap-3">
                 <div className="grid size-11 place-items-center rounded-xl border border-[#63f7ff]/45 bg-[#061719] font-mono text-sm font-semibold text-[#63f7ff]">
                   DO
@@ -170,6 +170,9 @@ export function Navbar() {
                 </span>
                 <span className="rounded-lg border border-[#63f7ff]/40 bg-[#061719] px-2 py-1 text-[#63f7ff]">
                   Testnet Workspace
+                </span>
+                <span className="rounded-lg border border-[#424655] bg-[#050505]/82 px-2 py-1 text-[#8c90a1]">
+                  Mock User
                 </span>
               </div>
             </div>
@@ -219,8 +222,9 @@ export function Navbar() {
                     </Link>
                   ))}
                 </div>
-                <p className="mt-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#6f7485]">
+                <p className="mt-3 rounded-xl border border-[#1f1f1f] bg-[#050505]/70 p-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#6f7485]">
                   Account controls are visual placeholders for future auth.
+                  No session is created.
                 </p>
               </div>
 
