@@ -4,6 +4,7 @@ import {
   StatusLed,
   TerminalPanel,
 } from "@/components/dashboard/terminal-ui";
+import { alphaCandidates } from "@/lib/alpha-lab/candidates";
 import Link from "next/link";
 
 const overviewMetrics = [
@@ -38,63 +39,6 @@ const regimes = [
   { label: "Low", value: "Stable", state: "standby", width: "44%" },
   { label: "Mid", value: "Current", state: "online", width: "68%" },
   { label: "High", value: "Watch", state: "standby", width: "22%" },
-];
-
-const alphaRegistry = [
-  {
-    name: "Strategy A Baseline",
-    family: "Baseline / Control",
-    status: "Reference",
-    stage: "Walk-forward",
-    readiness: "Medium",
-    stability: "High",
-    activity: "Control sleeve",
-  },
-  {
-    name: "Strategy G 3.0",
-    family: "Regime / Signal Stack",
-    status: "Review",
-    stage: "Paper/Testnet",
-    readiness: "Medium",
-    stability: "Medium",
-    activity: "Monitored",
-  },
-  {
-    name: "Strategy G 4.0",
-    family: "Regime / Iteration",
-    status: "Active Research",
-    stage: "Walk-forward",
-    readiness: "Medium",
-    stability: "Review",
-    activity: "Candidate",
-  },
-  {
-    name: "Low Dispersion Sleeve",
-    family: "Dispersion Filter",
-    status: "Active Research",
-    stage: "Research",
-    readiness: "Low",
-    stability: "High",
-    activity: "Low regime focus",
-  },
-  {
-    name: "Mid Dispersion Sleeve",
-    family: "Dispersion Filter",
-    status: "Review",
-    stage: "Paper/Testnet",
-    readiness: "Medium",
-    stability: "Medium",
-    activity: "Current regime focus",
-  },
-  {
-    name: "Watchlist Candidate",
-    family: "Experimental Sleeve",
-    status: "Watchlist",
-    stage: "Backtest",
-    readiness: "Low",
-    stability: "Unknown",
-    activity: "Isolated",
-  },
 ];
 
 const pipelineStages = [
@@ -265,9 +209,10 @@ function RegimeMonitor() {
 function AlphaRegistry() {
   return (
     <div className="grid gap-3 md:grid-cols-2">
-      {alphaRegistry.map((alpha) => (
-        <article
+      {alphaCandidates.map((alpha) => (
+        <Link
           className="rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(8,8,8,0.92),rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/45"
+          href={`/alpha-lab/${alpha.slug}`}
           key={alpha.name}
         >
           <div className="flex items-start justify-between gap-4">
@@ -290,7 +235,7 @@ function AlphaRegistry() {
           <div className="mt-3 rounded-xl border border-[#1f1f1f] bg-[#050505]/72 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1]">
             Activity: <span className="text-[var(--accent-primary)]">{alpha.activity}</span>
           </div>
-        </article>
+        </Link>
       ))}
     </div>
   );
