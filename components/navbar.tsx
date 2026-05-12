@@ -4,49 +4,82 @@ import { BrandMark } from "./brand-mark";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const navItems = [
+const navGroups = [
   {
-    label: "Dashboard / Terminal",
-    href: "/dashboard",
-    description: "Open the read-only institutional dashboard demo.",
+    label: "Terminal",
+    items: [
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+        description: "Operator workspace and read-only terminal demo.",
+      },
+      {
+        label: "Positions",
+        href: "/dashboard",
+        description: "Active positions, exposure, and testnet state.",
+      },
+      {
+        label: "Monitoring",
+        href: "/monitoring",
+        description: "Equity, logs, alerts, and system health.",
+      },
+    ],
   },
   {
-    label: "Demo/Testnet",
-    href: "/demo-testnet",
-    description: "No real capital, testnet execution, and validation scope.",
+    label: "Research",
+    items: [
+      {
+        label: "Alpha Engine",
+        href: "/alpha-engine",
+        description: "Multi-alpha sleeves, regimes, and research pipeline.",
+      },
+      {
+        label: "Methodology",
+        href: "/methodology",
+        description: "Research-first validation and deployment discipline.",
+      },
+    ],
   },
   {
-    label: "Alpha Engine",
-    href: "/alpha-engine",
-    description: "Multi-alpha sleeves, regimes, and research pipeline.",
+    label: "Risk & Monitoring",
+    items: [
+      {
+        label: "Risk Layer",
+        href: "/risk-layer",
+        description: "Position sizing, exposure controls, and execution safety.",
+      },
+      {
+        label: "Execution",
+        href: "/demo-testnet",
+        description: "No real capital, testnet execution, and validation scope.",
+      },
+    ],
   },
   {
-    label: "Risk Layer",
-    href: "/risk-layer",
-    description: "Position sizing, exposure controls, and execution safety.",
+    label: "Account",
+    items: [
+      {
+        label: "Login",
+        href: "/login",
+        description: "Authentication preview. No account is created.",
+      },
+      {
+        label: "Register",
+        href: "/register",
+        description: "Private beta registration preview.",
+      },
+      {
+        label: "Settings",
+        href: "/settings",
+        description: "Mock workspace preferences and controls.",
+      },
+      {
+        label: "Request Access",
+        href: "/request-access",
+        description: "Join the private beta research waitlist.",
+      },
+    ],
   },
-  {
-    label: "Monitoring",
-    href: "/monitoring",
-    description: "Equity, positions, logs, alerts, and system health.",
-  },
-  {
-    label: "Methodology",
-    href: "/methodology",
-    description: "Research-first validation and deployment discipline.",
-  },
-  {
-    label: "Request Access",
-    href: "/request-access",
-    description: "Join the private beta research waitlist.",
-  },
-];
-
-const accountItems = [
-  { label: "Profile", href: "/profile" },
-  { label: "Settings", href: "/settings" },
-  { label: "Billing", href: "/billing" },
-  { label: "Log out", href: "/login" },
 ];
 
 export function Navbar() {
@@ -180,72 +213,40 @@ export function Navbar() {
             </div>
 
             <nav className="mt-4 grid gap-5 overflow-y-auto overscroll-contain rounded-2xl pr-1">
-              <div>
-                <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
-                  Main
-                </div>
-                <div className="grid gap-2">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="group rounded-2xl border border-[#1f1f1f] bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(7,7,7,0.78))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/55 hover:bg-[var(--accent-soft)]/72 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06),0_16px_38px_rgba(0,0,0,0.26)]"
-                    >
-                      <span className="flex items-center justify-between gap-4">
-                        <span className="font-mono text-sm uppercase tracking-[0.12em] text-white">
-                          {item.label}
+              {navGroups.map((group) => (
+                <div key={group.label}>
+                  <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
+                    {group.label}
+                  </div>
+                  <div className="grid gap-2">
+                    {group.items.map((item) => (
+                      <Link
+                        key={`${group.label}-${item.label}`}
+                        href={item.href}
+                        onClick={closeMenu}
+                        className="group rounded-2xl border border-[#1f1f1f] bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(7,7,7,0.78))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/55 hover:bg-[var(--accent-soft)]/72 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06),0_16px_38px_rgba(0,0,0,0.26)]"
+                      >
+                        <span className="flex items-center justify-between gap-4">
+                          <span className="font-mono text-sm uppercase tracking-[0.12em] text-white">
+                            {item.label}
+                          </span>
+                          <span className="font-mono text-xs text-[var(--accent-primary)] transition-transform duration-200 group-hover:translate-x-1">
+                            -&gt;
+                          </span>
                         </span>
-                        <span className="font-mono text-xs text-[var(--accent-primary)] transition-transform duration-200 group-hover:translate-x-1">
-                          -&gt;
+                        <span className="mt-3 block text-sm leading-6 text-[#8c90a1]">
+                          {item.description}
                         </span>
-                      </span>
-                      <span className="mt-3 block text-sm leading-6 text-[#8c90a1]">
-                        {item.description}
-                      </span>
-                    </Link>
-                  ))}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              ))}
 
-              <div>
-                <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
-                  Account
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {accountItems.map((item) => (
-                    <Link
-                      key={item.href + item.label}
-                      href={item.href}
-                      onClick={closeMenu}
-                      className="rounded-xl border border-[#243042] bg-[#050505]/82 px-3 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-                <p className="mt-3 rounded-xl border border-[#1f1f1f] bg-[#050505]/70 p-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#6f7485]">
-                  Account controls are visual placeholders for future auth.
-                  No session is created.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 border-t border-[#243042] pt-4">
-                <Link
-                  href="/login"
-                  onClick={closeMenu}
-                  className="rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition duration-200 hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/register"
-                  onClick={closeMenu}
-                  className="rounded-xl border border-[var(--accent-secondary)]/70 bg-[var(--accent-soft)] px-3 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[var(--accent-muted)] transition duration-200 hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
-                >
-                  Register
-                </Link>
-              </div>
+              <p className="rounded-xl border border-[#1f1f1f] bg-[#050505]/70 p-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#6f7485]">
+                Account controls are visual placeholders for future auth. No
+                session is created.
+              </p>
             </nav>
           </aside>
         </div>

@@ -1,3 +1,10 @@
+import {
+  DataModeBadge,
+  MetricTile,
+  StatusBadge,
+  StatusLed,
+  TerminalPanel,
+} from "@/components/dashboard/terminal-ui";
 import type { EquitySnapshot } from "@/lib/equity/types";
 import type { PositionRow, PositionsSnapshot } from "@/lib/positions/types";
 import Link from "next/link";
@@ -50,9 +57,6 @@ const alphaModules = [
   { name: "Volatility Filter", state: "Active", confidence: "High" },
 ];
 
-const statusBadgeClass =
-  "rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[#424655]";
-
 export function DashboardShell({
   equitySnapshot,
   positionsSnapshot,
@@ -86,6 +90,11 @@ export function DashboardShell({
           : "Fallback mode",
     },
   ];
+  const openPositions = positionsSnapshot.positions.filter(
+    (position) => position.side !== "FLAT",
+  ).length;
+  const liveSource =
+    equitySnapshot.source === "live-csv" || positionsSnapshot.source === "live-csv";
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] bg-[size:32px_32px] text-[#e2e2e2]">
@@ -108,24 +117,10 @@ export function DashboardShell({
             </Link>
           </div>
           <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-[#c2c6d8]">
-            <Link href="/demo-testnet" className={statusBadgeClass}>
-              Demo / Testnet
-            </Link>
-            <Link
-              href="/demo-testnet"
-              className="rounded-xl border border-[var(--accent-primary)]/60 bg-[var(--accent-surface)]/90 px-3 py-2 text-[var(--accent-primary)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_10px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
-            >
-              {equitySnapshot.source === "live-csv" ||
-              positionsSnapshot.source === "live-csv"
-                ? "Live Testnet Data"
-                : "Mock Data Fallback"}
-            </Link>
-            <Link href="/demo-testnet" className={statusBadgeClass}>
-              Research Mode
-            </Link>
-            <span className={statusBadgeClass}>
-              Not Financial Advice
-            </span>
+            <Link href="/demo-testnet"><StatusBadge>Demo / Testnet</StatusBadge></Link>
+            <DataModeBadge source={liveSource ? "live-csv" : "mock-fallback"} />
+            <Link href="/demo-testnet"><StatusBadge>Research Mode</StatusBadge></Link>
+            <StatusBadge>Not Financial Advice</StatusBadge>
             <a
               href="/request-access"
               className="rounded-xl border border-[var(--accent-secondary)]/90 bg-[linear-gradient(135deg,var(--accent-secondary),var(--accent-strong))] px-3 py-2 text-white shadow-[0_12px_28px_rgb(var(--accent-secondary-rgb)/0.2)] transition duration-200 hover:-translate-y-px hover:brightness-110"
@@ -168,20 +163,41 @@ export function DashboardShell({
           </div>
         </section>
 
-        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
+          <MetricTile
+            label="Equity"
+            value={formatCurrency(equitySnapshot.currentEquity)}
+            detail={formatTime(equitySnapshot.lastUpdate)}
+            emphasis
+          />
+          <MetricTile
+            label="Data Mode"
+            value={liveSource ? "Live" : "Mock"}
+            detail={liveSource ? "Testnet CSV" : "Fallback"}
+          />
+          <MetricTile label="Risk State" value="Low" detail="Within limits" />
+          <MetricTile
+            label="Open Positions"
+            value={String(openPositions)}
+            detail={`${positionsSnapshot.positions.length} tracked`}
+          />
+          <MetricTile label="System Status" value="OK" detail="3 online / 1 idle" />
+        </section>
+
+        <section className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {equityMetrics.map((metric) => (
-            <MetricCard key={metric.label} {...metric} />
+            <MetricTile key={metric.label} {...metric} />
           ))}
         </section>
 
-        <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1.35fr_0.65fr]">
-          <Panel
+        <section className="mt-4 grid grid-cols-1 gap-3 xl:grid-cols-[1.45fr_0.55fr]">
+          <TerminalPanel
             eyebrow="Equity Curve"
             title="Testnet Equity"
             action={equitySnapshot.source === "live-csv" ? "CSV loaded" : "Fallback"}
           >
             <EquityChart points={equitySnapshot.points} />
-          </Panel>
+          </TerminalPanel>
           <div className="grid gap-3">
             <RegimePanel />
             <RiskMonitor />
@@ -191,10 +207,10 @@ export function DashboardShell({
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1fr_0.75fr]">
           <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:col-span-2 xl:grid-cols-4">
             {exposureMetrics.map((metric) => (
-              <MetricCard key={metric.label} {...metric} />
+              <MetricTile key={metric.label} {...metric} />
             ))}
           </section>
-          <Panel
+          <TerminalPanel
             eyebrow="Positions"
             title="Active Positions"
             action={
@@ -213,85 +229,22 @@ export function DashboardShell({
                 ? " Place CSV at output/live_testnet_positions.csv to enable live positions."
                 : ""}
             </div>
-          </Panel>
-          <Panel eyebrow="Alpha" title="Engine Status" action="Research">
+          </TerminalPanel>
+          <TerminalPanel eyebrow="Alpha" title="Engine Status" action="Research">
             <AlphaEngineStatus />
-          </Panel>
+          </TerminalPanel>
         </section>
 
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[0.9fr_1.1fr]">
-          <Panel eyebrow="System" title="Health Indicators" action="Live mock">
+          <TerminalPanel eyebrow="System" title="Health Indicators" action="Live mock">
             <SystemHealth />
-          </Panel>
-          <Panel eyebrow="Execution" title="Execution Logs" action="Testnet sim">
+          </TerminalPanel>
+          <TerminalPanel eyebrow="Execution" title="Execution Logs" action="Testnet sim">
             <ExecutionLogs />
-          </Panel>
+          </TerminalPanel>
         </section>
       </div>
     </main>
-  );
-}
-
-function Panel({
-  eyebrow,
-  title,
-  action,
-  children,
-}: {
-  eyebrow: string;
-  title: string;
-  action: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <article className="group overflow-hidden rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-all duration-200 hover:border-[#2f3b52] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_22px_65px_rgba(0,0,0,0.3)]">
-      <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f]/80 bg-[#0e0e0e]/44 px-4 py-3">
-        <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
-            {eyebrow}
-          </div>
-          <h2 className="mt-1 text-lg font-semibold leading-tight text-white">
-            {title}
-          </h2>
-        </div>
-        <div className="hidden rounded-lg border border-[#243042] bg-[#050505]/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] transition-colors group-hover:border-[#424655] sm:block">
-          {action}
-        </div>
-      </div>
-      <div className="p-4">{children}</div>
-    </article>
-  );
-}
-
-function MetricCard({
-  label,
-  value,
-  detail,
-  href,
-}: {
-  label: string;
-  value: string;
-  detail: string;
-  href?: string;
-}) {
-  const card = (
-    <article className="rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(14,14,14,0.92),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_16px_45px_rgba(0,0,0,0.22)] transition-all duration-200 hover:-translate-y-px hover:border-[#2f3b52]">
-      <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c2c6d8]">
-        {label}
-      </div>
-      <div className="mt-3 font-mono text-[30px] font-semibold leading-none text-white">
-        {value}
-      </div>
-      <div className="mt-2 font-mono text-xs text-[var(--accent-primary)]">{detail}</div>
-    </article>
-  );
-
-  if (!href) return card;
-
-  return (
-    <Link href={href} className="block">
-      {card}
-    </Link>
   );
 }
 
@@ -469,7 +422,7 @@ function getPnlToneClass(value: number | null) {
 
 function RegimePanel() {
   return (
-    <Panel eyebrow="Regime" title="Market State" action="Demo classifier">
+    <TerminalPanel eyebrow="Regime" title="Market State" action="Demo classifier">
       <div className="grid gap-3">
         <div className="rounded-xl border border-[#424655] bg-[#050505]/92 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#8c90a1]">
@@ -497,7 +450,7 @@ function RegimePanel() {
           ))}
         </div>
       </div>
-    </Panel>
+    </TerminalPanel>
   );
 }
 
@@ -509,7 +462,7 @@ function RiskMonitor() {
   ];
 
   return (
-    <Panel eyebrow="Risk" title="Policy Monitor" action="Controls">
+    <TerminalPanel eyebrow="Risk" title="Policy Monitor" action="Controls">
       <div className="space-y-4">
         {limits.map((limit) => (
           <div key={limit.label}>
@@ -526,7 +479,7 @@ function RiskMonitor() {
           </div>
         ))}
       </div>
-    </Panel>
+    </TerminalPanel>
   );
 }
 
@@ -568,13 +521,7 @@ function SystemHealth() {
             <div className="font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8]">
               {item.label}
             </div>
-            <span
-              className={`relative size-3 rounded-full ${
-                item.state === "online"
-                  ? "bg-emerald-300/80 shadow-[0_0_0_3px_rgba(110,231,183,0.08),0_0_16px_rgba(110,231,183,0.22)]"
-                  : "bg-[#8c90a1]/70 shadow-[0_0_0_3px_rgba(140,144,161,0.08),0_0_12px_rgba(140,144,161,0.12)]"
-              } before:absolute before:inset-[3px] before:rounded-full before:bg-white/35`}
-            />
+            <StatusLed state={item.state as "online" | "standby"} />
           </div>
           <div className="mt-3 font-mono text-2xl font-semibold text-white">
             {item.value}
