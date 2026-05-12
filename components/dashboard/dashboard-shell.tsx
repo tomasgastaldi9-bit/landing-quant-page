@@ -420,32 +420,45 @@ function PositionsTable({ positions }: { positions: PositionRow[] }) {
           </tr>
         </thead>
         <tbody>
-          {positions.map((position) => (
-            <tr
-              key={position.symbol}
-              className="border-b border-[#1f1f1f] text-[#c2c6d8] transition-colors hover:bg-[#101820]"
-            >
-              <td className="px-3 py-3 text-[var(--accent-primary)]">{position.symbol}</td>
-              <td className="px-3 py-3">{position.side}</td>
-              <td className="px-3 py-3 text-right">{formatNumber(position.size)}</td>
-              <td className="px-3 py-3 text-right">{formatOptionalCurrency(position.entry)}</td>
-              <td className="px-3 py-3 text-right">{formatOptionalCurrency(position.mark)}</td>
-              <td
-                className={`px-3 py-3 text-right ${
-                  (position.unrealizedPnl ?? 0) < 0
-                    ? "text-[#ffb4ab]"
-                    : "text-[var(--accent-primary)]"
-                }`}
+          {positions.map((position) => {
+            const symbolClass = getSideToneClass(position.side);
+            const pnlClass = getPnlToneClass(position.unrealizedPnl);
+
+            return (
+              <tr
+                key={position.symbol}
+                className="border-b border-[#1f1f1f] text-[#c2c6d8] transition-colors hover:bg-[#101820]"
               >
-                {formatSignedCurrency(position.unrealizedPnl)}
-              </td>
-              <td className="px-3 py-3 text-right text-[#8c90a1]">{formatTime(position.timestamp)}</td>
-            </tr>
-          ))}
+                <td className={`px-3 py-3 font-semibold ${symbolClass}`}>
+                  {position.symbol}
+                </td>
+                <td className={`px-3 py-3 ${symbolClass}`}>{position.side}</td>
+                <td className="px-3 py-3 text-right">{formatNumber(position.size)}</td>
+                <td className="px-3 py-3 text-right">{formatOptionalCurrency(position.entry)}</td>
+                <td className="px-3 py-3 text-right">{formatOptionalCurrency(position.mark)}</td>
+                <td className={`px-3 py-3 text-right font-semibold ${pnlClass}`}>
+                  {formatSignedCurrency(position.unrealizedPnl)}
+                </td>
+                <td className="px-3 py-3 text-right text-[#8c90a1]">{formatTime(position.timestamp)}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
   );
+}
+
+function getSideToneClass(side: PositionRow["side"]) {
+  if (side === "LONG") return "text-emerald-300";
+  if (side === "SHORT") return "text-rose-300";
+  return "text-[#c2c6d8]";
+}
+
+function getPnlToneClass(value: number | null) {
+  if (value === null || value === 0) return "text-[#8c90a1]";
+  if (value > 0) return "text-emerald-300";
+  return "text-rose-300";
 }
 
 function RegimePanel() {
