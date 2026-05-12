@@ -79,7 +79,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/90 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl">
       <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between gap-3 px-3 sm:h-24 sm:px-8">
-        <Link className="min-w-0" href="/" aria-label="Quant Terminal home">
+        <Link className="min-w-0" href="/" aria-label="QuantBot home">
           <BrandMark />
         </Link>
 
@@ -136,7 +136,7 @@ export function Navbar() {
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.65),transparent)]" />
             <div className="flex items-center justify-between gap-3 border-b border-[#243042] pb-5">
-              <Link href="/" aria-label="Quant Terminal home" onClick={closeMenu}>
+              <Link href="/" aria-label="QuantBot home" onClick={closeMenu}>
                 <BrandMark size="drawer" />
               </Link>
               <button

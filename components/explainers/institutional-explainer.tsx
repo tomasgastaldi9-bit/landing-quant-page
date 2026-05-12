@@ -48,7 +48,7 @@ export function InstitutionalExplainer({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_16%,rgb(var(--accent-secondary-rgb)/0.12),transparent_29%),linear-gradient(90deg,rgba(5,5,5,0.99),rgba(5,5,5,0.82)_54%,rgba(5,5,5,0.96))]" />
         <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:py-8">
           <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <Link href="/" aria-label="Quant Terminal home">
+            <Link href="/" aria-label="QuantBot home">
               <BrandMark />
             </Link>
             <nav className="flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-[#c2c6d8]">

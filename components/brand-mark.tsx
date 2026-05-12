@@ -17,7 +17,7 @@ export function BrandMark({
       <div className="relative h-11 w-12 shrink-0">
         <Image
           src="/branding/quant-terminal-icon-transparent.png"
-          alt="Quant Terminal"
+          alt="QuantBot"
           fill
           sizes="44px"
           className="object-contain"
@@ -28,8 +28,8 @@ export function BrandMark({
 
   const wordmarkSize =
     size === "drawer"
-      ? "text-[15px] sm:text-[19px]"
-      : "text-[14px] sm:text-[24px]";
+      ? "text-[17px] sm:text-[22px]"
+      : "text-[18px] sm:text-[28px]";
 
   return (
     <div className="flex min-w-0 shrink-0 items-center gap-3 sm:gap-3.5">
@@ -44,10 +44,10 @@ export function BrandMark({
         />
       </div>
       <span
-        aria-label="Quant Terminal"
-        className={`whitespace-nowrap font-mono font-semibold uppercase leading-none tracking-[0.16em] text-[#f3f4f6] [text-shadow:0_0_18px_rgb(var(--accent-primary-rgb)/0.12)] sm:tracking-[0.28em] ${wordmarkSize}`}
+        aria-label="QuantBot"
+        className={`whitespace-nowrap font-mono font-semibold leading-none tracking-[0.08em] text-[#f3f4f6] [text-shadow:0_0_18px_rgb(var(--accent-primary-rgb)/0.12)] sm:tracking-[0.16em] ${wordmarkSize}`}
       >
-        Quant <span className="text-[var(--accent-primary)]">Terminal</span>
+        Quant<span className="text-[var(--accent-primary)]">Bot</span>
       </span>
     </div>
   );

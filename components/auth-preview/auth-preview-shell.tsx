@@ -26,7 +26,7 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgb(var(--accent-secondary-rgb)/0.13),transparent_30%),linear-gradient(90deg,rgba(5,5,5,0.99),rgba(5,5,5,0.82))]" />
         <div className="relative mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-10 px-4 py-6 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-10">
           <div>
-            <Link href="/" aria-label="Quant Terminal home">
+            <Link href="/" aria-label="QuantBot home">
               <BrandMark />
             </Link>
             <div className="mt-12 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-[0.18em]">
