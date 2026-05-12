@@ -563,9 +563,11 @@ function SystemHealth() {
               {item.label}
             </div>
             <span
-              className={`size-2 ${
-                item.state === "online" ? "bg-[var(--accent-primary)]" : "bg-[#8c90a1]"
-              }`}
+              className={`relative size-3 rounded-full ${
+                item.state === "online"
+                  ? "bg-emerald-300/80 shadow-[0_0_0_3px_rgba(110,231,183,0.08),0_0_16px_rgba(110,231,183,0.22)]"
+                  : "bg-[#8c90a1]/70 shadow-[0_0_0_3px_rgba(140,144,161,0.08),0_0_12px_rgba(140,144,161,0.12)]"
+              } before:absolute before:inset-[3px] before:rounded-full before:bg-white/35`}
             />
           </div>
           <div className="mt-3 font-mono text-2xl font-semibold text-white">
