@@ -30,6 +30,11 @@ const navGroups = [
     label: "Research",
     items: [
       {
+        label: "Alpha Lab",
+        href: "/alpha-lab",
+        description: "Research workspace for candidates, regimes, and validation.",
+      },
+      {
         label: "Alpha Engine",
         href: "/alpha-engine",
         description: "Multi-alpha sleeves, regimes, and research pipeline.",
