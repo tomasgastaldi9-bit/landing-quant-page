@@ -124,12 +124,14 @@ export function Navbar() {
           <button
             type="button"
             aria-label="Close navigation overlay"
-            className="absolute inset-0 cursor-default bg-black/76 backdrop-blur-sm"
+            className="absolute inset-0 cursor-default bg-[radial-gradient(circle_at_12%_18%,rgba(99,247,255,0.08),transparent_28%),rgba(0,0,0,0.78)] backdrop-blur-sm transition-opacity duration-200"
             onClick={closeMenu}
           />
           <aside
             id="primary-navigation-drawer"
             aria-label="Primary navigation"
+            role="dialog"
+            aria-modal="true"
             className="absolute left-0 top-0 flex h-dvh w-[min(92vw,430px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] p-5 shadow-[28px_0_80px_rgba(0,0,0,0.42)]"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(99,247,255,0.65),transparent)]" />
@@ -177,7 +179,7 @@ export function Navbar() {
               </div>
             </div>
 
-            <nav className="mt-4 grid gap-5 overflow-y-auto pr-1">
+            <nav className="mt-4 grid gap-5 overflow-y-auto overscroll-contain rounded-2xl pr-1">
               <div>
                 <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
                   Main

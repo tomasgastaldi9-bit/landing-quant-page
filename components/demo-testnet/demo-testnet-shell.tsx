@@ -139,7 +139,7 @@ export function DemoTestnetShell() {
       </section>
 
       <section className="mx-auto grid max-w-7xl gap-4 px-4 py-12 sm:px-8 lg:grid-cols-[1fr_0.8fr]">
-        <nav className="flex gap-2 overflow-x-auto pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#c2c6d8] lg:col-span-2">
+        <nav className="flex gap-2 overflow-x-auto rounded-2xl border border-[#1f1f1f] bg-[#050505]/50 p-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#c2c6d8] lg:col-span-2">
           {routeLinks.map(([label, href]) => (
             <Link
               key={href}

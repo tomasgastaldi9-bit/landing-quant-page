@@ -131,7 +131,7 @@ export function InstitutionalExplainer({
       </section>
 
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-8">
-        <nav className="mb-4 flex gap-2 overflow-x-auto pb-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#c2c6d8]">
+        <nav className="mb-4 flex gap-2 overflow-x-auto rounded-2xl border border-[#1f1f1f] bg-[#050505]/50 p-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#c2c6d8]">
           {routeLinks.map(([label, href]) => (
             <Link
               key={href}

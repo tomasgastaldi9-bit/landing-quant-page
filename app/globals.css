@@ -90,3 +90,13 @@ select,
 textarea {
   color-scheme: dark;
 }
+
+select option {
+  background: #050505;
+  color: #e2e2e2;
+}
+
+select option:checked {
+  background: #061719;
+  color: #63f7ff;
+}
