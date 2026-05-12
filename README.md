@@ -1,6 +1,6 @@
-# QuantBot Website
+# Quant Terminal Website
 
-QuantBot is a premium institutional-style frontend for a quantitative crypto research product. The current build includes a public landing page, a demo execution/risk monitoring dashboard, and a private beta access request flow.
+Quant Terminal is a premium institutional-style frontend for a quantitative research product. The current build includes a public landing page, explainer pages, a demo execution/risk monitoring dashboard, and private beta access previews.
 
 This repository is frontend-only. The dashboard and access request flow use mock/demo behavior and are not connected to live trading, authentication, payments, databases, or backend services.
 
@@ -14,9 +14,16 @@ This repository is frontend-only. The dashboard and access request flow use mock
 
 ## Routes
 
-- `/` - Landing page for QuantBot, including hero, platform capabilities, CTA, compliance-oriented copy, and links into the demo terminal and private beta request flow.
+- `/` - Landing page for Quant Terminal, including hero, platform capabilities, CTA, compliance-oriented copy, and links into the demo terminal and private beta request flow.
 - `/dashboard` - Mock institutional quant terminal for execution/risk monitoring. Uses static demo/testnet data only.
+- `/demo-testnet` - Explainer page for demo/testnet behavior and no-real-capital constraints.
+- `/alpha-engine` - Explainer page for multi-alpha research architecture.
+- `/risk-layer` - Explainer page for risk controls and execution safeguards.
+- `/monitoring` - Explainer page for observability surfaces.
+- `/methodology` - Explainer page for research-first validation workflow.
 - `/request-access` - Client-side mock private beta waitlist/onboarding form. Submits locally in the browser and shows a success state without sending data to a server.
+- `/login` and `/register` - Authentication UI preview only. No account is created.
+- `/profile`, `/settings`, and `/billing` - Mock account pages for future SaaS UX.
 
 ## Navigation Flow
 
@@ -61,7 +68,7 @@ app/
   request-access/page.tsx     # Waitlist route (/request-access)
 
 components/
-  brand-mark.tsx              # Shared QuantBot mark
+  brand-mark.tsx              # Shared Quant Terminal brand assets
   navbar.tsx                  # Landing navigation
   hero-section.tsx            # Landing hero and demo terminal preview
   metrics-section.tsx         # Landing capability cards and architecture copy
@@ -74,10 +81,8 @@ components/
     access-request-form.tsx   # Client-side mock form behavior
 
 public/
-  quantbot-logo.png
-  quantbot-symbol-light.png
-  quantbot-symbol-light-eyes.png
-  quantbot-symbol-light-eyes-v2.png
+  quant-terminal-logo-horizontal.png
+  quant-terminal-icon.png
 ```
 
 ## Demo Data Policy

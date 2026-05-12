@@ -14,7 +14,7 @@ export default function ProfilePage() {
         },
         {
           label: "Email",
-          value: "demo@quantbot.local",
+          value: "demo@quantterminal.local",
           detail: "Local demo address. No email verification is connected.",
         },
         {
