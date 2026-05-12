@@ -41,11 +41,48 @@ const exposureMetrics = [
 ];
 
 const logs = [
-  { time: "14:03:21", type: "risk", message: "Position policy check passed" },
-  { time: "14:03:09", type: "exec", message: "Demo order routed to testnet venue" },
-  { time: "14:02:48", type: "alpha", message: "Momentum signal weight reduced" },
-  { time: "14:02:17", type: "sys", message: "Market data heartbeat normal" },
-  { time: "14:01:54", type: "risk", message: "Exposure drift below alert threshold" },
+  {
+    time: "14:03:21.842",
+    type: "risk",
+    source: "risk-policy",
+    message: "Position policy check passed",
+  },
+  {
+    time: "14:03:09.118",
+    type: "exec",
+    source: "testnet-router",
+    message: "Demo order routed to testnet venue",
+  },
+  {
+    time: "14:02:48.504",
+    type: "alpha",
+    source: "alpha-engine",
+    message: "Momentum signal weight reduced",
+  },
+  {
+    time: "14:02:17.093",
+    type: "sys",
+    source: "market-data",
+    message: "Market data heartbeat normal",
+  },
+  {
+    time: "14:01:54.770",
+    type: "alert",
+    source: "exposure-watch",
+    message: "Exposure drift below alert threshold",
+  },
+  {
+    time: "14:01:22.611",
+    type: "risk",
+    source: "risk-policy",
+    message: "Reduce-only guard remains armed",
+  },
+  {
+    time: "14:00:58.406",
+    type: "exec",
+    source: "testnet-router",
+    message: "No live capital route available",
+  },
 ];
 
 const health = [
@@ -602,20 +639,139 @@ function SystemHealth() {
 }
 
 function ExecutionLogs() {
+  const filters = ["All", "Risk", "Exec", "Alpha", "Alerts"];
+
+  if (logs.length === 0) {
+    return (
+      <div className="rounded-2xl border border-[#243042] bg-[#050505]/78 p-5 font-mono text-[11px] uppercase tracking-[0.12em] text-[#8c90a1]">
+        No execution events available. Event stream is read-only and will render
+        mock/testnet entries when present.
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-2">
-      {logs.map((log) => (
-        <div
-          key={`${log.time}-${log.message}`}
-          className="grid grid-cols-[76px_64px_1fr] gap-3 rounded-lg border border-[#1f1f1f] bg-[#050505]/92 px-3 py-2 font-mono text-xs transition-colors hover:border-[#243042] hover:bg-[#101820]"
-        >
-          <span className="text-[#8c90a1]">{log.time}</span>
-          <span className="uppercase text-[var(--accent-primary)]">{log.type}</span>
-          <span className="text-[#c2c6d8]">{log.message}</span>
+    <div className="space-y-3">
+      <div className="flex flex-col gap-3 rounded-2xl border border-[#1f1f1f] bg-[#050505]/72 p-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--accent-primary)]">
+            Latest event
+          </div>
+          <div className="mt-1 font-mono text-xs text-[#c2c6d8]">
+            {logs[0].time} / {logs[0].source}
+          </div>
         </div>
-      ))}
+        <div className="rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1]">
+          Source: mock/testnet stream
+        </div>
+      </div>
+
+      <div className="flex gap-2 overflow-x-auto pb-1 font-mono text-[10px] uppercase tracking-[0.14em]">
+        {filters.map((filter, index) => (
+          <button
+            className={`shrink-0 rounded-xl border px-3 py-2 transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] ${
+              index === 0
+                ? "border-[var(--accent-primary)]/55 bg-[var(--accent-soft)] text-[var(--accent-primary)]"
+                : "border-[#243042] bg-[#050505]/82 text-[#8c90a1]"
+            }`}
+            key={filter}
+            type="button"
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+
+      <div className="space-y-2">
+        {logs.map((log, index) => {
+          const severity = getLogSeverity(log.type);
+          const isLatest = index === 0;
+
+          return (
+            <div
+              key={`${log.time}-${log.message}`}
+              className={`group grid grid-cols-[4px_84px_70px_1fr] gap-3 overflow-hidden rounded-xl border bg-[#050505]/92 pr-3 font-mono text-xs transition duration-200 hover:-translate-y-px hover:border-[#424655] hover:bg-[#101820] ${
+                isLatest
+                  ? "border-[var(--accent-primary)]/45 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)]"
+                  : "border-[#1f1f1f]"
+              }`}
+            >
+              <div className={`h-full min-h-14 ${severity.rail}`} />
+              <div className="py-3 text-[#8c90a1]">
+                <div className="text-[#c2c6d8]">{formatLogTime(log.time).main}</div>
+                <div className="mt-1 text-[10px] text-[#6f7485]">
+                  {formatLogTime(log.time).millis}
+                </div>
+              </div>
+              <div className="py-3">
+                <span
+                  className={`inline-flex rounded-lg border px-2 py-1 text-[10px] uppercase tracking-[0.14em] ${severity.badge}`}
+                >
+                  {log.type}
+                </span>
+              </div>
+              <div className="min-w-0 py-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  {isLatest ? (
+                    <span className="rounded-md border border-[var(--accent-primary)]/35 bg-[var(--accent-soft)] px-2 py-0.5 text-[9px] uppercase tracking-[0.14em] text-[var(--accent-primary)]">
+                      Latest
+                    </span>
+                  ) : null}
+                  <span className="text-[10px] uppercase tracking-[0.14em] text-[#6f7485]">
+                    {log.source}
+                  </span>
+                </div>
+                <div className="mt-1 text-[#c2c6d8]">{log.message}</div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
+}
+
+function getLogSeverity(type: string) {
+  const severityMap: Record<
+    string,
+    { badge: string; rail: string }
+  > = {
+    sys: {
+      badge: "border-[#424655] bg-[#0e0e0e] text-[#c2c6d8]",
+      rail: "bg-[#8c90a1]/70",
+    },
+    risk: {
+      badge: "border-amber-200/30 bg-amber-200/[0.06] text-amber-100",
+      rail: "bg-amber-200/70",
+    },
+    exec: {
+      badge:
+        "border-[var(--accent-primary)]/35 bg-[var(--accent-soft)] text-[var(--accent-primary)]",
+      rail: "bg-[var(--accent-primary)]",
+    },
+    alpha: {
+      badge: "border-indigo-300/30 bg-indigo-300/[0.06] text-indigo-200",
+      rail: "bg-indigo-300/70",
+    },
+    alert: {
+      badge: "border-rose-300/30 bg-rose-300/[0.06] text-rose-200",
+      rail: "bg-rose-300/70",
+    },
+    error: {
+      badge: "border-red-300/40 bg-red-300/[0.08] text-red-200",
+      rail: "bg-red-300",
+    },
+  };
+
+  return severityMap[type] ?? severityMap.sys;
+}
+
+function formatLogTime(time: string) {
+  const [main, millis] = time.split(".");
+  return {
+    main,
+    millis: millis ? `.${millis}` : ".000",
+  };
 }
 
 function formatCurrency(value: number) {
