@@ -23,7 +23,7 @@ const initialState: FormState = {
 };
 
 const terminalInput =
-  "w-full rounded-xl border border-[#243042] bg-[#050505]/92 px-4 py-3 font-mono text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition placeholder:text-[#424655] focus:border-[#63f7ff]";
+  "w-full rounded-xl border border-[#243042] bg-[#050505]/92 px-4 py-3 font-mono text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 placeholder:text-[#424655] hover:border-[#424655] focus:border-[#63f7ff] focus:bg-[#061719]/60 focus:shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_0_0_3px_rgba(99,247,255,0.08)]";
 
 export function AccessRequestForm() {
   const [form, setForm] = useState<FormState>(initialState);
@@ -156,7 +156,7 @@ export function AccessRequestForm() {
           <select
             value={form.userType}
             onChange={(event) => updateField("userType", event.target.value)}
-            className={terminalInput}
+            className={`${terminalInput} appearance-none bg-[linear-gradient(45deg,transparent_50%,#63f7ff_50%),linear-gradient(135deg,#63f7ff_50%,transparent_50%),linear-gradient(180deg,rgba(5,5,5,0.92),rgba(5,5,5,0.92))] bg-[length:6px_6px,6px_6px,100%_100%] bg-[position:calc(100%-18px)_calc(50%-3px),calc(100%-12px)_calc(50%-3px),0_0] bg-no-repeat pr-11`}
           >
             {userTypes.map((type) => (
               <option key={type} value={type}>
@@ -178,14 +178,14 @@ export function AccessRequestForm() {
         </Field>
       </div>
 
-      <label className="mt-5 flex gap-3 rounded-xl border border-[#243042] bg-[#050505] p-4 font-mono text-xs leading-6 text-[#c2c6d8]">
+      <label className="mt-5 flex gap-3 rounded-xl border border-[#243042] bg-[#050505] p-4 font-mono text-xs leading-6 text-[#c2c6d8] transition duration-200 hover:border-[#424655]">
         <input
           type="checkbox"
           checked={form.acknowledged}
           onChange={(event) =>
             updateField("acknowledged", event.target.checked)
           }
-          className="mt-1 size-4 accent-[#63f7ff]"
+          className="mt-1 size-4 rounded border border-[#243042] accent-[#63f7ff]"
         />
         <span>I understand this is a demo/research environment.</span>
       </label>

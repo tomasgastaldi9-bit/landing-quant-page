@@ -406,7 +406,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
 
 function PositionsTable({ positions }: { positions: PositionRow[] }) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-xl border border-[#1f1f1f] bg-[#050505]/60">
       <table className="w-full min-w-[760px] border-collapse font-mono text-xs">
         <thead>
           <tr className="border-b border-[#243042] bg-[#0e0e0e]/55 text-left uppercase tracking-[0.12em] text-[#8c90a1]">

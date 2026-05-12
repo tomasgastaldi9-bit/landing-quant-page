@@ -8,6 +8,9 @@ type AuthPreviewShellProps = {
   mode: "login" | "register";
 };
 
+const terminalInput =
+  "rounded-xl border border-[#243042] bg-[#050505]/90 px-4 py-3 text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 placeholder:text-[#424655] hover:border-[#424655] focus:border-[#63f7ff] focus:bg-[#061719]/60 focus:shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_0_0_3px_rgba(99,247,255,0.08)]";
+
 export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
   const [submitted, setSubmitted] = useState(false);
   const isRegister = mode === "register";
@@ -77,7 +80,7 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
                   </span>
                   <input
                     required
-                    className="rounded-xl border border-[#243042] bg-[#050505]/90 px-4 py-3 text-sm text-white outline-none transition focus:border-[#63f7ff]"
+                    className={terminalInput}
                     placeholder="Demo Operator"
                     type="text"
                   />
@@ -89,7 +92,7 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
                 </span>
                 <input
                   required
-                  className="rounded-xl border border-[#243042] bg-[#050505]/90 px-4 py-3 text-sm text-white outline-none transition focus:border-[#63f7ff]"
+                  className={terminalInput}
                   placeholder="demo@quantbot.local"
                   type="email"
                 />
@@ -100,7 +103,7 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
                 </span>
                 <input
                   required
-                  className="rounded-xl border border-[#243042] bg-[#050505]/90 px-4 py-3 text-sm text-white outline-none transition focus:border-[#63f7ff]"
+                  className={terminalInput}
                   placeholder="Preview only"
                   type="password"
                 />
@@ -111,7 +114,7 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
                     Organization
                   </span>
                   <input
-                    className="rounded-xl border border-[#243042] bg-[#050505]/90 px-4 py-3 text-sm text-white outline-none transition focus:border-[#63f7ff]"
+                    className={terminalInput}
                     placeholder="Research Desk"
                     type="text"
                   />
