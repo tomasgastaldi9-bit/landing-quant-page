@@ -33,7 +33,7 @@ export function BrandMark({
   return (
     <div className={`relative shrink-0 ${logoSize}`}>
       <Image
-        src="/branding/quant-terminal-logo-horizontal.png"
+        src="/branding/quant-terminal-logo-horizontal-v2.png"
         alt="Quant Terminal"
         fill
         priority

@@ -82,7 +82,7 @@ components/
 
 public/
   branding/
-    quant-terminal-logo-horizontal.png
+    quant-terminal-logo-horizontal-v2.png
   quant-terminal-icon.png
 ```
 
