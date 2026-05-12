@@ -1,29 +1,30 @@
 import Image from "next/image";
 
 export function BrandMark({ compact = false }: { compact?: boolean }) {
-  return (
-    <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
-      <div
-        className={`relative shrink-0 ${
-          compact ? "size-11" : "size-12 sm:size-[68px]"
-        }`}
-      >
+  if (compact) {
+    return (
+      <div className="relative size-11 shrink-0 overflow-hidden rounded-xl border border-[#243042] bg-[#050505] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
         <Image
-          src="/quantbot-symbol-light-eyes-v2.png"
-          alt=""
+          src="/quant-terminal-icon.png"
+          alt="Quant Terminal"
           fill
-          priority={!compact}
-          sizes={compact ? "44px" : "(min-width: 640px) 68px, 48px"}
-          className="object-contain"
+          sizes="44px"
+          className="object-cover"
         />
       </div>
-      <span
-        className={`truncate bg-gradient-to-r from-white via-[#b0c6ff] to-[#63f7ff] bg-clip-text font-semibold tracking-normal text-transparent ${
-          compact ? "text-xl" : "text-xl sm:text-[30px]"
-        }`}
-      >
-        QuantBot
-      </span>
+    );
+  }
+
+  return (
+    <div className="relative h-9 w-[190px] shrink-0 sm:h-12 sm:w-[270px]">
+      <Image
+        src="/quant-terminal-logo-horizontal.png"
+        alt="Quant Terminal"
+        fill
+        priority
+        sizes="(min-width: 640px) 270px, 190px"
+        className="object-contain object-left"
+      />
     </div>
   );
 }

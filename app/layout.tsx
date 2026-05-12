@@ -13,9 +13,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QuantBot | Quant Research Terminal",
+  title: "Quant Terminal | Institutional Quant Research Platform",
   description:
     "Institutional-style frontend for demo quant research, testnet execution monitoring, and private beta access.",
+  icons: {
+    icon: [
+      { url: "/quant-terminal-icon.png", type: "image/png", sizes: "any" },
+    ],
+    apple: [{ url: "/quant-terminal-icon.png", type: "image/png" }],
+  },
+  applicationName: "Quant Terminal",
 };
 
 export const viewport: Viewport = {
