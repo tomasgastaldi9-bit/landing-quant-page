@@ -219,15 +219,22 @@ export function DashboardShell({
         </section>
 
         <section className="mt-4 grid grid-cols-1 items-start gap-3 xl:grid-cols-[1.45fr_0.55fr]">
-          <TerminalPanel
-            eyebrow="Equity Curve"
-            title="Testnet Equity"
-            action={equitySnapshot.source === "live-csv" ? "CSV loaded" : "Fallback"}
-            className="self-start"
-            priority="primary"
-          >
-            <EquityChart points={equitySnapshot.points} />
-          </TerminalPanel>
+          <div className="grid gap-3">
+            <TerminalPanel
+              eyebrow="Equity Curve"
+              title="Testnet Equity"
+              action={equitySnapshot.source === "live-csv" ? "CSV loaded" : "Fallback"}
+              className="self-start"
+              priority="primary"
+            >
+              <EquityChart points={equitySnapshot.points} />
+            </TerminalPanel>
+            <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {exposureMetrics.map((metric) => (
+                <MetricTile key={metric.label} {...metric} />
+              ))}
+            </section>
+          </div>
           <div className="grid gap-3">
             <RegimePanel />
             <RiskMonitor />
@@ -235,11 +242,6 @@ export function DashboardShell({
         </section>
 
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1fr_0.75fr]">
-          <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:col-span-2 xl:grid-cols-4">
-            {exposureMetrics.map((metric) => (
-              <MetricTile key={metric.label} {...metric} />
-            ))}
-          </section>
           <TerminalPanel
             id="positions"
             eyebrow="Positions"
