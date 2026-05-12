@@ -1,6 +1,12 @@
 import Image from "next/image";
 
-export function BrandMark({ compact = false }: { compact?: boolean }) {
+export function BrandMark({
+  compact = false,
+  size = "default",
+}: {
+  compact?: boolean;
+  size?: "default" | "drawer";
+}) {
   if (compact) {
     return (
       <div className="relative size-11 shrink-0 overflow-hidden rounded-xl border border-[#243042] bg-[#050505] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
@@ -15,14 +21,21 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
     );
   }
 
+  const logoSize =
+    size === "drawer"
+      ? "h-9 w-[205px] sm:h-10 sm:w-[250px]"
+      : "h-10 w-[205px] sm:h-14 sm:w-[340px]";
+  const imageSizes =
+    size === "drawer" ? "(min-width: 640px) 250px, 205px" : "(min-width: 640px) 340px, 205px";
+
   return (
-    <div className="relative h-8 w-[150px] shrink-0 sm:h-12 sm:w-[270px]">
+    <div className={`relative shrink-0 ${logoSize}`}>
       <Image
         src="/quant-terminal-logo-horizontal.png"
         alt="Quant Terminal"
         fill
         priority
-        sizes="(min-width: 640px) 270px, 150px"
+        sizes={imageSizes}
         className="object-contain object-left"
       />
     </div>
