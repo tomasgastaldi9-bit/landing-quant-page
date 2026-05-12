@@ -2,7 +2,7 @@ export function CTASection() {
   return (
     <section
       id="contact"
-      className="border-b border-[#243042] bg-[#111] bg-[linear-gradient(90deg,rgb(var(--accent-secondary-rgb)/0.12),transparent_38%,rgb(var(--accent-primary-rgb)/0.08))]"
+      className="border-b border-[#243042] bg-[#0a0a0a] bg-[radial-gradient(circle_at_84%_12%,rgb(var(--accent-primary-rgb)/0.12),transparent_28%),linear-gradient(90deg,rgb(var(--accent-secondary-rgb)/0.12),transparent_38%,rgb(var(--accent-primary-rgb)/0.08))]"
     >
       <div className="mx-auto grid max-w-7xl gap-8 px-4 py-14 sm:px-8 sm:py-[72px] lg:grid-cols-[1fr_auto] lg:items-center">
         <div>
@@ -10,13 +10,13 @@ export function CTASection() {
             Private Beta
           </div>
           <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-normal text-white sm:text-4xl">
-            Explora estrategias sistematicas en un entorno private beta
-            orientado a research y testnet.
+            Move from research review to demo terminal monitoring in one
+            controlled workspace.
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-[#c2c6d8]">
-            Acceso inicial para operadores cuantitativos, research desks y
-            equipos que necesitan evaluacion de senales, controles de riesgo y
-            observabilidad antes de cualquier despliegue real.
+            Private beta access for quant operators, research desks, and teams
+            evaluating signal workflows, risk controls, and observability before
+            any live deployment discussion.
           </p>
           <p className="mt-5 max-w-2xl border-l border-[#424655] pl-4 font-mono text-xs leading-6 text-[#8c90a1]">
             For research and informational purposes. Not financial advice.
