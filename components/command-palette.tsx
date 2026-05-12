@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type CommandItem = {
-  group: "Navigation" | "Research" | "Risk" | "Monitoring" | "Candidates";
+  group:
+    | "Navigation"
+    | "Research"
+    | "Risk"
+    | "Monitoring"
+    | "Account"
+    | "Candidates";
   href: string;
   label: string;
   meta: string;
@@ -66,6 +72,13 @@ const baseCommands: CommandItem[] = [
     label: "Request Access",
     meta: "Private beta onboarding",
   },
+  {
+    group: "Account",
+    href: "/settings",
+    label: "Workspace Settings",
+    meta: "Mock preferences, data mode, and read-only access controls",
+    shortcut: "S",
+  },
 ];
 
 const candidateCommands: CommandItem[] = alphaCandidates.map((candidate) => ({
@@ -81,6 +94,7 @@ const groupOrder: CommandItem["group"][] = [
   "Research",
   "Risk",
   "Monitoring",
+  "Account",
   "Candidates",
 ];
 
