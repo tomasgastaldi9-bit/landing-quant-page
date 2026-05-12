@@ -16,16 +16,77 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Quant Terminal | Institutional Quant Research Platform",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://quantbot.ai",
+  ),
+  title: {
+    default: "QuantBot | Institutional Quant Research Terminal",
+    template: "%s | QuantBot",
+  },
   description:
-    "Institutional-style frontend for demo quant research, testnet execution monitoring, and private beta access.",
+    "QuantBot is a read-only institutional quant research terminal for demo/testnet monitoring, alpha research workflows, risk telemetry, and private beta access.",
+  keywords: [
+    "QuantBot",
+    "quant research",
+    "institutional trading terminal",
+    "testnet execution monitoring",
+    "alpha research",
+    "risk telemetry",
+  ],
   icons: {
     icon: [
-      { url: "/quant-terminal-icon.png", type: "image/png", sizes: "any" },
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
     ],
-    apple: [{ url: "/quant-terminal-icon.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "512x512" }],
   },
-  applicationName: "Quant Terminal",
+  applicationName: "QuantBot",
+  appleWebApp: {
+    capable: true,
+    title: "QuantBot",
+    statusBarStyle: "black-translucent",
+  },
+  openGraph: {
+    title: "QuantBot | Institutional Quant Research Terminal",
+    description:
+      "Read-only demo/testnet workspace for quant research, alpha validation, risk telemetry, and operator monitoring.",
+    url: "/",
+    siteName: "QuantBot",
+    images: [
+      {
+        url: "/branding/quantbot-og.png",
+        width: 1200,
+        height: 630,
+        alt: "QuantBot institutional quant research terminal preview",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "QuantBot | Institutional Quant Research Terminal",
+    description:
+      "Demo/testnet quant research terminal with read-only monitoring, risk telemetry, and private beta access.",
+    images: [
+      {
+        url: "/branding/quantbot-twitter.png",
+        alt: "QuantBot institutional quant research terminal preview",
+      },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  category: "technology",
 };
 
 export const viewport: Viewport = {

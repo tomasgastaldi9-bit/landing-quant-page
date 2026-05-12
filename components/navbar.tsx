@@ -186,7 +186,7 @@ export function Navbar() {
             aria-label="Primary navigation"
             role="dialog"
             aria-modal="true"
-            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,400px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] p-3 shadow-[24px_0_72px_rgba(0,0,0,0.42)] sm:w-[400px] sm:p-4"
+            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,360px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] p-3 shadow-[24px_0_72px_rgba(0,0,0,0.42)] sm:w-[360px] sm:px-3.5 sm:py-4"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.65),transparent)]" />
             <div className="flex items-center justify-between gap-3 border-b border-[#243042] pb-4">
@@ -206,9 +206,9 @@ export function Navbar() {
             <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
               Testnet Workspace
             </div>
-            <div className="mt-3 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_14px_34px_rgba(0,0,0,0.2)]">
-              <div className="flex items-center gap-3">
-                <div className="grid size-10 place-items-center rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] font-mono text-xs font-semibold text-[var(--accent-primary)]">
+            <div className="mt-2.5 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_12px_30px_rgba(0,0,0,0.2)]">
+              <div className="flex items-center gap-2.5">
+                <div className="grid size-9 place-items-center rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] font-mono text-xs font-semibold text-[var(--accent-primary)]">
                   DO
                 </div>
                 <div className="min-w-0">
@@ -220,7 +220,7 @@ export function Navbar() {
                   </div>
                 </div>
               </div>
-              <div className="mt-3 flex flex-wrap gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em]">
+              <div className="mt-2.5 flex flex-wrap gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em]">
                 <span className="rounded-lg border border-[var(--accent-secondary)]/55 bg-[var(--accent-soft)] px-2 py-1 text-[var(--accent-muted)]">
                   Private Beta
                 </span>
@@ -233,16 +233,16 @@ export function Navbar() {
               </div>
             </div>
 
-            <nav className="mt-3 grid gap-3 overflow-y-auto overscroll-contain rounded-2xl pr-1">
+            <nav className="mt-2.5 grid gap-2.5 overflow-y-auto overscroll-contain rounded-2xl pr-1">
               {navGroups.map((group) => (
                 <div
                   key={group.label}
-                  className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/42 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]"
+                  className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/42 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]"
                 >
                   <div className="px-2 pb-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
                     {group.label}
                   </div>
-                  <div className="grid gap-1.5">
+                  <div className="grid gap-1">
                     {group.items.map((item) => {
                       const routeHref = item.href.split("#")[0];
                       const isHashLink = item.href.includes("#");
@@ -257,7 +257,7 @@ export function Navbar() {
                           key={`${group.label}-${item.label}`}
                           href={item.href}
                           onClick={closeMenu}
-                          className={`group rounded-xl border px-3 py-2.5 transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/55 hover:bg-[var(--accent-soft)]/72 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06),0_14px_32px_rgba(0,0,0,0.2)] ${
+                          className={`group rounded-xl border px-2.5 py-2.5 transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/55 hover:bg-[var(--accent-soft)]/72 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06),0_14px_32px_rgba(0,0,0,0.2)] ${
                             isActive
                               ? "border-[var(--accent-primary)]/45 bg-[var(--accent-soft)]/70"
                               : "border-transparent bg-[linear-gradient(180deg,rgba(14,14,14,0.74),rgba(7,7,7,0.58))]"
