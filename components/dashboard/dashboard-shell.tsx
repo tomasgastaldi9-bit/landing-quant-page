@@ -301,7 +301,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
 
   return (
     <TerminalChartFrame
-      className="h-[320px]"
+      className="py-3"
       footer={
         <div className="grid gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1] sm:grid-cols-3">
           <span>Start: {firstEquity ? formatCurrency(firstEquity) : "--"}</span>
@@ -329,7 +329,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
     >
       <svg
         aria-label="Mock equity curve"
-        className="h-[238px] w-full"
+        className="h-[214px] w-full sm:h-[226px]"
         role="img"
         viewBox="0 0 900 300"
       >
