@@ -5,6 +5,10 @@ import {
   StatusLed,
   TerminalPanel,
 } from "@/components/dashboard/terminal-ui";
+import {
+  MiniBarMeter,
+  TerminalChartFrame,
+} from "@/components/charts/terminal-charts";
 import type { EquitySnapshot } from "@/lib/equity/types";
 import type { PositionRow, PositionsSnapshot } from "@/lib/positions/types";
 import Link from "next/link";
@@ -292,12 +296,38 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
   const lastPoint = chartPoints?.coordinates.at(-1);
   const firstEquity = points[0]?.equity;
   const lastEquity = points.at(-1)?.equity;
+  const midEquity =
+    firstEquity && lastEquity ? (firstEquity + lastEquity) / 2 : undefined;
 
   return (
-    <div className="h-[330px] rounded-xl border border-[#243042]/90 bg-[linear-gradient(rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.032)_1px,transparent_1px),linear-gradient(180deg,#101010,#050505)] bg-[size:28px_28px] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+    <TerminalChartFrame
+      className="h-[360px]"
+      footer={
+        <div className="grid gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1] sm:grid-cols-3">
+          <span>Start: {firstEquity ? formatCurrency(firstEquity) : "--"}</span>
+          <span>Reference: {midEquity ? formatCurrency(midEquity) : "--"}</span>
+          <span className="text-[var(--accent-primary)]">
+            Last: {lastEquity ? formatCurrency(lastEquity) : "--"}
+          </span>
+        </div>
+      }
+      legend={
+        <>
+          <span className="inline-flex items-center gap-2">
+            <span className="size-2 rounded-full bg-[var(--accent-primary)]" />
+            Equity
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <span className="h-px w-5 bg-[#9d79ff]" />
+            Reference
+          </span>
+        </>
+      }
+      title="Read-only equity curve"
+    >
       <svg
         aria-label="Mock equity curve"
-        className="h-full w-full"
+        className="h-[280px] w-full"
         role="img"
         viewBox="0 0 900 300"
       >
@@ -320,6 +350,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
             y2={y}
             stroke="#243042"
             strokeDasharray="4 10"
+            strokeOpacity="0.74"
             strokeWidth="1"
           />
         ))}
@@ -331,6 +362,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
             y1="35"
             y2="270"
             stroke="#141b26"
+            strokeOpacity="0.8"
             strokeWidth="1"
           />
         ))}
@@ -344,6 +376,15 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
               strokeDasharray="8 10"
               strokeOpacity="0.58"
               strokeWidth="2"
+            />
+            <line
+              x1="0"
+              x2="900"
+              y1="150"
+              y2="150"
+              stroke="#c2c6d8"
+              strokeDasharray="2 12"
+              strokeOpacity="0.18"
             />
             <path
               d={chartPoints.line}
@@ -395,9 +436,13 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
               LAST {lastEquity ? formatCurrency(lastEquity) : "--"}
             </text>
           </>
-        ) : null}
+        ) : (
+          <text fill="#8c90a1" fontFamily="monospace" fontSize="14" x="352" y="156">
+            NO EQUITY DATA
+          </text>
+        )}
       </svg>
-    </div>
+    </TerminalChartFrame>
   );
 }
 
@@ -503,18 +548,12 @@ function RiskMonitor() {
     <TerminalPanel eyebrow="Risk" title="Policy Monitor" action="Controls">
       <div className="space-y-4">
         {limits.map((limit) => (
-          <div key={limit.label}>
-            <div className="mb-2 flex justify-between font-mono text-xs">
-              <span className="text-[#c2c6d8]">{limit.label}</span>
-              <span className="text-[var(--accent-primary)]">{limit.value}</span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full border border-[#243042] bg-[#050505]">
-              <div
-                className="h-full bg-[linear-gradient(90deg,var(--accent-secondary),var(--accent-primary))] transition-[width] duration-500"
-                style={{ width: limit.width }}
-              />
-            </div>
-          </div>
+          <MiniBarMeter
+            key={limit.label}
+            label={limit.label}
+            value={limit.value}
+            width={limit.width}
+          />
         ))}
       </div>
     </TerminalPanel>

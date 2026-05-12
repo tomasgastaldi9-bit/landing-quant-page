@@ -5,6 +5,12 @@ import {
   TerminalPanel,
 } from "@/components/dashboard/terminal-ui";
 import {
+  RegimeScoreBar,
+  Sparkline,
+  TimelineProgress,
+  type ChartTone,
+} from "@/components/charts/terminal-charts";
+import {
   alphaCandidates,
   getAlphaCandidate,
   pipelineStages,
@@ -185,61 +191,20 @@ function ResearchSummary({ candidate }: { candidate: AlphaCandidate }) {
 function ValidationTimeline({ currentStage }: { currentStage: AlphaCandidate["stage"] }) {
   const currentIndex = pipelineStages.indexOf(currentStage);
 
-  return (
-    <div className="grid gap-3 lg:grid-cols-5">
-      {pipelineStages.map((stage, index) => {
-        const isComplete = index < currentIndex;
-        const isCurrent = index === currentIndex;
-
-        return (
-          <div
-            className={`rounded-2xl border p-4 ${
-              isCurrent
-                ? "border-[var(--accent-primary)]/55 bg-[var(--accent-soft)]/62"
-                : isComplete
-                  ? "border-emerald-300/24 bg-emerald-300/[0.035]"
-                  : "border-[#243042] bg-[#050505]/74"
-            }`}
-            key={stage}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8c90a1]">
-                Step {index + 1}
-              </div>
-              <StatusLed state={isCurrent || isComplete ? "online" : "standby"} />
-            </div>
-            <div className="mt-4 min-h-12 text-sm font-semibold text-white">
-              {stage}
-            </div>
-            <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--accent-primary)]">
-              {isCurrent ? "Current gate" : isComplete ? "Completed" : "Pending"}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
+  return <TimelineProgress currentIndex={currentIndex} stages={pipelineStages} />;
 }
 
 function RegimeCompatibility({ candidate }: { candidate: AlphaCandidate }) {
   return (
     <div className="grid gap-4">
       {candidate.regimeCompatibility.map((regime) => (
-        <div key={regime.label}>
-          <div className="mb-2 flex items-center justify-between gap-3 font-mono text-xs uppercase tracking-[0.12em]">
-            <span className="text-[#c2c6d8]">{regime.label} dispersion fit</span>
-            <span className="text-[var(--accent-primary)]">{regime.score}/100</span>
-          </div>
-          <div className="h-3 overflow-hidden rounded-full border border-[#243042] bg-[#050505]">
-            <div
-              className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent-secondary),var(--accent-primary))]"
-              style={{ width: `${regime.score}%` }}
-            />
-          </div>
-          <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1]">
-            {regime.note}
-          </div>
-        </div>
+        <RegimeScoreBar
+          key={regime.label}
+          label={`${regime.label} dispersion fit`}
+          note={regime.note}
+          score={regime.score}
+          tone={regime.score >= 70 ? "good" : regime.score <= 35 ? "risk" : "accent"}
+        />
       ))}
     </div>
   );
@@ -264,51 +229,16 @@ function ResearchTelemetry({ candidate }: { candidate: AlphaCandidate }) {
             </div>
             <StatusLed state="online" />
           </div>
-          <Sparkline values={panel.series} />
+          <Sparkline
+            ariaLabel={`${panel.label} telemetry`}
+            tone={getTelemetryTone(panel.value)}
+            values={panel.series}
+          />
           <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--accent-primary)]">
             {panel.detail}
           </div>
         </div>
       ))}
-    </div>
-  );
-}
-
-function Sparkline({ values }: { values: number[] }) {
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const range = max - min || 1;
-  const points = values
-    .map((value, index) => {
-      const x = (index / Math.max(values.length - 1, 1)) * 180;
-      const y = 54 - ((value - min) / range) * 42;
-      return `${Number(x.toFixed(2))},${Number(y.toFixed(2))}`;
-    })
-    .join(" ");
-
-  return (
-    <div className="mt-4 h-20 rounded-xl border border-[#1f1f1f] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,#101010,#050505)] bg-[size:18px_18px] p-3">
-      <svg
-        aria-label="Mock research telemetry sparkline"
-        className="h-full w-full"
-        role="img"
-        viewBox="0 0 180 60"
-      >
-        <polyline
-          fill="none"
-          points={points}
-          stroke="var(--accent-primary)"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="3"
-        />
-        <circle
-          cx={points.split(" ").at(-1)?.split(",")[0] ?? "0"}
-          cy={points.split(" ").at(-1)?.split(",")[1] ?? "0"}
-          fill="var(--accent-primary)"
-          r="3"
-        />
-      </svg>
     </div>
   );
 }
@@ -320,4 +250,13 @@ function HeaderCell({ label, value }: { label: string; value: string }) {
       <div className="mt-2 text-[#c2c6d8]">{value}</div>
     </div>
   );
+}
+
+function getTelemetryTone(value: string): ChartTone {
+  if (["High", "Balanced", "Controlled", "Active", "Strong"].includes(value)) {
+    return "good";
+  }
+  if (["Watch", "Review"].includes(value)) return "warning";
+  if (["Low", "Light"].includes(value)) return "neutral";
+  return "accent";
 }

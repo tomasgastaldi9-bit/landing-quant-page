@@ -4,6 +4,10 @@ import {
   StatusLed,
   TerminalPanel,
 } from "@/components/dashboard/terminal-ui";
+import {
+  MiniBarMeter,
+  TimelineProgress,
+} from "@/components/charts/terminal-charts";
 import { alphaCandidates } from "@/lib/alpha-lab/candidates";
 import Link from "next/link";
 
@@ -42,11 +46,11 @@ const regimes = [
 ];
 
 const pipelineStages = [
-  { label: "Research", state: "complete" },
-  { label: "Backtest", state: "complete" },
-  { label: "Walk-forward", state: "active" },
-  { label: "Paper/Testnet", state: "pending" },
-  { label: "Deployment Candidate", state: "pending" },
+  "Research",
+  "Backtest",
+  "Walk-forward",
+  "Paper/Testnet",
+  "Deployment Candidate",
 ];
 
 const signalHealth = [
@@ -185,21 +189,13 @@ function RegimeMonitor() {
       </div>
       <div className="grid gap-3">
         {regimes.map((regime) => (
-          <div key={regime.label}>
-            <div className="mb-2 flex items-center justify-between font-mono text-xs uppercase tracking-[0.12em]">
-              <span className="text-[#c2c6d8]">{regime.label} dispersion</span>
-              <span className="flex items-center gap-2 text-[var(--accent-primary)]">
-                <StatusLed state={regime.state as "online" | "standby"} />
-                {regime.value}
-              </span>
-            </div>
-            <div className="h-2 overflow-hidden rounded-full border border-[#243042] bg-[#050505]">
-              <div
-                className="h-full rounded-full bg-[linear-gradient(90deg,var(--accent-secondary),var(--accent-primary))]"
-                style={{ width: regime.width }}
-              />
-            </div>
-          </div>
+          <MiniBarMeter
+            key={regime.label}
+            label={`${regime.label} dispersion`}
+            tone={regime.state === "online" ? "good" : "accent"}
+            value={regime.value}
+            width={regime.width}
+          />
         ))}
       </div>
     </div>
@@ -242,40 +238,7 @@ function AlphaRegistry() {
 }
 
 function ValidationPipeline() {
-  return (
-    <div className="grid gap-3 lg:grid-cols-5">
-      {pipelineStages.map((stage, index) => {
-        const isActive = stage.state === "active";
-        const isComplete = stage.state === "complete";
-
-        return (
-          <div
-            className={`relative rounded-2xl border p-4 ${
-              isActive
-                ? "border-[var(--accent-primary)]/55 bg-[var(--accent-soft)]/58"
-                : isComplete
-                  ? "border-emerald-300/24 bg-emerald-300/[0.035]"
-                  : "border-[#243042] bg-[#050505]/74"
-            }`}
-            key={stage.label}
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#8c90a1]">
-                Step {index + 1}
-              </div>
-              <StatusLed state={isActive || isComplete ? "online" : "standby"} />
-            </div>
-            <div className="mt-4 min-h-12 text-sm font-semibold text-white">
-              {stage.label}
-            </div>
-            <div className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--accent-primary)]">
-              {isActive ? "Active gate" : isComplete ? "Reviewed" : "Pending"}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
+  return <TimelineProgress currentIndex={2} stages={pipelineStages} />;
 }
 
 function SignalHealth() {
