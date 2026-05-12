@@ -317,6 +317,7 @@ export function DashboardShell({
             <SystemHealth />
           </TerminalPanel>
           <TerminalPanel
+            id="execution-logs"
             eyebrow="Execution"
             title="Execution Logs"
             action="Read-only log"

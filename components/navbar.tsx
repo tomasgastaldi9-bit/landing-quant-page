@@ -116,6 +116,10 @@ export function Navbar() {
     setIsOpen(false);
   }
 
+  function openCommandPalette() {
+    window.dispatchEvent(new Event("quantbot:open-command-palette"));
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/90 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl">
       <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between gap-3 px-3 sm:h-24 sm:px-8">
@@ -124,6 +128,16 @@ export function Navbar() {
         </Link>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={openCommandPalette}
+            className="hidden items-center gap-3 rounded-xl border border-[#243042] bg-[#0e0e0e]/70 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] md:inline-flex"
+          >
+            <span>Search</span>
+            <kbd className="rounded-md border border-[#424655] bg-[#050505]/80 px-1.5 py-0.5 text-[9px] text-[#8c90a1]">
+              Ctrl K
+            </kbd>
+          </button>
           <button
             type="button"
             aria-expanded={isOpen}
