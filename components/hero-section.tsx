@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const terminalMetrics = [
   { label: "Mode", value: "Testnet", href: "/demo-testnet" },
-  { label: "Signal State", value: "Research", accent: true, href: "/demo-testnet" },
+  { label: "Signal State", value: "Research", accent: true, href: "/alpha-lab" },
 ];
 
 export function HeroSection() {

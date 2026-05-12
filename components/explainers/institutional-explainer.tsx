@@ -21,6 +21,10 @@ export type InstitutionalExplainerProps = {
   description: string;
   scope: Array<[string, string]>;
   sections: ExplainerSection[];
+  primaryCta?: {
+    label: string;
+    href: string;
+  };
 };
 
 const disclaimer =
@@ -28,6 +32,7 @@ const disclaimer =
 
 const routeLinks = [
   ["Demo/Testnet", "/demo-testnet"],
+  ["Alpha Lab", "/alpha-lab"],
   ["Alpha Engine", "/alpha-engine"],
   ["Risk Layer", "/risk-layer"],
   ["Monitoring", "/monitoring"],
@@ -41,6 +46,7 @@ export function InstitutionalExplainer({
   description,
   scope,
   sections,
+  primaryCta = { label: "Open Terminal Demo", href: "/dashboard" },
 }: InstitutionalExplainerProps) {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#e2e2e2]">
@@ -113,10 +119,10 @@ export function InstitutionalExplainer({
               </div>
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Link
-                  href="/dashboard"
+                  href={primaryCta.href}
                   className="rounded-xl border border-[var(--accent-secondary)]/90 bg-[linear-gradient(135deg,var(--accent-secondary),var(--accent-strong))] px-5 py-4 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgb(var(--accent-secondary-rgb)/0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
                 >
-                  Open Terminal Demo
+                  {primaryCta.label}
                 </Link>
                 <Link
                   href="/request-access"

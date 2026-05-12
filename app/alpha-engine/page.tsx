@@ -7,6 +7,7 @@ export default function AlphaEnginePage() {
       eyebrow="Research System"
       title="Alpha Engine"
       description="A research-first multi-alpha architecture for organizing signals, sleeves, regimes, and validation workflows before any production deployment."
+      primaryCta={{ label: "Open Alpha Lab", href: "/alpha-lab" }}
       scope={[
         ["Mode", "Research"],
         ["Signals", "Multi-sleeve"],

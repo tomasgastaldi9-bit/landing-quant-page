@@ -20,10 +20,10 @@ const metrics = [
     href: "/monitoring",
   },
   {
-    label: "Alpha Engine",
+    label: "Alpha Lab",
     value: "Multi",
     detail: "Research Signals",
-    href: "/alpha-engine",
+    href: "/alpha-lab",
   },
 ];
 
@@ -33,7 +33,7 @@ const architecture = [
     body: "Arquitectura de investigacion para organizar modelos estadisticos, sleeves y senales por regimen sin prometer performance futura.",
     wide: true,
     icon: "++",
-    href: "/alpha-engine",
+    href: "/alpha-lab",
   },
   {
     title: "Controles de Riesgo",
