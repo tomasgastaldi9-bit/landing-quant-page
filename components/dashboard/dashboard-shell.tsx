@@ -93,7 +93,7 @@ export function DashboardShell({
       <header className="sticky top-0 z-50 border-b border-[#243042]/80 bg-[#0b0b0b]/90 shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
         <div className="mx-auto flex max-w-[1500px] flex-col gap-5 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-4">
-            <BrandMark compact />
+            <BrandMark />
             <Link
               href="/demo-testnet"
               className="rounded-xl border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719] lg:hidden"

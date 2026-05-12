@@ -15,8 +15,8 @@ export function AccessRequestShell() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(99,247,255,0.12),transparent_28%),linear-gradient(90deg,rgba(5,5,5,0.98),rgba(5,5,5,0.82))]" />
         <div className="relative mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-10 px-4 py-6 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-10">
           <div>
-            <Link href="/" aria-label="QuantBot home">
-              <BrandMark compact />
+            <Link href="/" aria-label="Quant Terminal home">
+              <BrandMark />
             </Link>
             <div className="mt-12 flex flex-wrap gap-2">
               {badges.map((badge) =>
@@ -42,7 +42,7 @@ export function AccessRequestShell() {
               Request Private Beta Access
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-[#c2c6d8] sm:text-lg">
-              Join the institutional research waitlist for QuantBot&apos;s demo
+              Join the institutional research waitlist for Quant Terminal&apos;s demo
               execution terminal, alpha research workspace, and risk monitoring
               environment.
             </p>

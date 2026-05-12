@@ -24,8 +24,8 @@ export function AccountPreviewShell({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_18%,rgba(99,247,255,0.11),transparent_28%),linear-gradient(90deg,rgba(5,5,5,0.99),rgba(5,5,5,0.82))]" />
         <div className="relative mx-auto max-w-7xl px-4 py-6 sm:px-8 lg:py-8">
           <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <Link href="/" aria-label="QuantBot home">
-              <BrandMark compact />
+            <Link href="/" aria-label="Quant Terminal home">
+              <BrandMark />
             </Link>
             <div className="flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-[0.16em]">
               <Link
@@ -77,7 +77,7 @@ export function AccountPreviewShell({
                     Demo Operator
                   </div>
                   <div className="font-mono text-xs text-[#8c90a1]">
-                    demo@quantbot.local
+                    demo@quantterminal.local
                   </div>
                 </div>
               </div>

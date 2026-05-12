@@ -7,7 +7,7 @@ export function Footer() {
     <footer className="bg-[#131313]">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-14 sm:px-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-          <BrandMark compact />
+          <BrandMark />
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             {footerLinks.map((link) => (
               <a
@@ -20,7 +20,7 @@ export function Footer() {
             ))}
           </div>
           <div className="font-mono text-xs uppercase text-[#c2c6d8]">
-            (c) 2026 QuantBot. Private beta research terminal.
+            (c) 2026 Quant Terminal. Private beta research terminal.
           </div>
         </div>
         <div className="border-t border-[#243042] pt-6 font-mono text-xs leading-6 text-[#8c90a1]">

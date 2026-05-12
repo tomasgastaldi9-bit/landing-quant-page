@@ -16,13 +16,13 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <div className="relative h-9 w-[190px] shrink-0 sm:h-12 sm:w-[270px]">
+    <div className="relative h-8 w-[150px] shrink-0 sm:h-12 sm:w-[270px]">
       <Image
         src="/quant-terminal-logo-horizontal.png"
         alt="Quant Terminal"
         fill
         priority
-        sizes="(min-width: 640px) 270px, 190px"
+        sizes="(min-width: 640px) 270px, 150px"
         className="object-contain object-left"
       />
     </div>
