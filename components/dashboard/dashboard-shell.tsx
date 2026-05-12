@@ -1,4 +1,3 @@
-import { BrandMark } from "@/components/brand-mark";
 import type { EquitySnapshot } from "@/lib/equity/types";
 import type { PositionRow, PositionsSnapshot } from "@/lib/positions/types";
 import Link from "next/link";
@@ -90,10 +89,17 @@ export function DashboardShell({
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] bg-[size:32px_32px] text-[#e2e2e2]">
-      <header className="sticky top-0 z-50 border-b border-[#243042]/80 bg-[#0b0b0b]/90 shadow-[0_12px_40px_rgba(0,0,0,0.22)] backdrop-blur-md">
+      <header className="border-b border-[#243042]/80 bg-[#0b0b0b]/72 shadow-[0_12px_40px_rgba(0,0,0,0.18)] backdrop-blur-md">
         <div className="mx-auto flex max-w-[1500px] flex-col gap-5 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center justify-between gap-4">
-            <BrandMark />
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
+                Quant Terminal
+              </div>
+              <div className="mt-1 text-lg font-semibold text-white">
+                Dashboard / Terminal
+              </div>
+            </div>
             <Link
               href="/demo-testnet"
               className="rounded-xl border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)] transition duration-200 hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)] lg:hidden"
