@@ -23,7 +23,7 @@ const initialState: FormState = {
 };
 
 const terminalInput =
-  "w-full rounded-xl border border-[#243042] bg-[#050505]/92 px-4 py-3 font-mono text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 placeholder:text-[#424655] hover:border-[#424655] focus:border-[#63f7ff] focus:bg-[#061719]/60 focus:shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_0_0_3px_rgba(99,247,255,0.08)]";
+  "w-full rounded-xl border border-[#243042] bg-[#050505]/92 px-4 py-3 font-mono text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 placeholder:text-[#424655] hover:border-[#424655] focus:border-[var(--accent-primary)] focus:bg-[var(--accent-soft)]/60 focus:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_0_0_3px_rgb(var(--accent-primary-rgb)/0.08)]";
 
 export function AccessRequestForm() {
   const [form, setForm] = useState<FormState>(initialState);
@@ -71,7 +71,7 @@ export function AccessRequestForm() {
   if (success) {
     return (
       <section className="rounded-2xl border border-[#424655] bg-[#0a0a0a]/88 p-5 shadow-[0_22px_70px_rgba(0,0,0,0.34)] backdrop-blur-sm sm:p-7">
-        <div className="rounded-xl border border-[#63f7ff] bg-[#061719]/80 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
+        <div className="rounded-xl border border-[var(--accent-primary)] bg-[var(--accent-soft)]/80 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
           Request queued
         </div>
         <h2 className="mt-7 text-3xl font-semibold text-white">
@@ -92,7 +92,7 @@ export function AccessRequestForm() {
             setSubmitted(false);
             setSuccess(false);
           }}
-          className="mt-6 w-full rounded-xl border border-[#424655] bg-[#0a0a0a] px-5 py-4 text-sm font-semibold text-[#e2e2e2] transition hover:border-[#63f7ff] hover:text-[#63f7ff]"
+          className="mt-6 w-full rounded-xl border border-[#424655] bg-[#0a0a0a] px-5 py-4 text-sm font-semibold text-[#e2e2e2] transition hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
         >
           Submit Another Request
         </button>
@@ -108,7 +108,7 @@ export function AccessRequestForm() {
     >
       <div className="flex items-center justify-between gap-4 border-b border-[#243042] pb-5">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
             Institutional Waitlist
           </div>
           <h2 className="mt-2 text-2xl font-semibold text-white">
@@ -156,7 +156,7 @@ export function AccessRequestForm() {
           <select
             value={form.userType}
             onChange={(event) => updateField("userType", event.target.value)}
-            className={`${terminalInput} appearance-none bg-[linear-gradient(45deg,transparent_50%,#63f7ff_50%),linear-gradient(135deg,#63f7ff_50%,transparent_50%),linear-gradient(180deg,rgba(5,5,5,0.92),rgba(5,5,5,0.92))] bg-[length:6px_6px,6px_6px,100%_100%] bg-[position:calc(100%-18px)_calc(50%-3px),calc(100%-12px)_calc(50%-3px),0_0] bg-no-repeat pr-11`}
+            className={`${terminalInput} appearance-none bg-[linear-gradient(45deg,transparent_50%,var(--accent-primary)_50%),linear-gradient(135deg,var(--accent-primary)_50%,transparent_50%),linear-gradient(180deg,rgba(5,5,5,0.92),rgba(5,5,5,0.92))] bg-[length:6px_6px,6px_6px,100%_100%] bg-[position:calc(100%-18px)_calc(50%-3px),calc(100%-12px)_calc(50%-3px),0_0] bg-no-repeat pr-11`}
           >
             {userTypes.map((type) => (
               <option key={type} value={type}>
@@ -185,7 +185,7 @@ export function AccessRequestForm() {
           onChange={(event) =>
             updateField("acknowledged", event.target.checked)
           }
-          className="mt-1 size-4 rounded border border-[#243042] accent-[#63f7ff]"
+          className="mt-1 size-4 rounded border border-[#243042] accent-[var(--accent-primary)]"
         />
         <span>I understand this is a demo/research environment.</span>
       </label>
@@ -198,7 +198,7 @@ export function AccessRequestForm() {
       <button
         type="submit"
         disabled={loading}
-        className="mt-6 w-full rounded-xl border border-[#568dff]/90 bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-sm font-semibold text-white shadow-[0_14px_34px_rgba(0,88,203,0.22)] transition hover:-translate-y-px hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
+        className="mt-6 w-full rounded-xl border border-[var(--accent-secondary)]/90 bg-[linear-gradient(135deg,var(--accent-secondary),var(--accent-strong))] px-7 py-4 text-sm font-semibold text-white shadow-[0_14px_34px_rgb(var(--accent-secondary-rgb)/0.22)] transition hover:-translate-y-px hover:brightness-110 disabled:cursor-wait disabled:opacity-70"
       >
         {loading ? "Submitting Mock Request..." : "Submit Access Request"}
       </button>

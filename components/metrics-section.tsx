@@ -65,7 +65,7 @@ export function MetricsSection() {
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:py-24">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#63f7ff]">
+            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
               Platform Layer
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white">
@@ -81,16 +81,16 @@ export function MetricsSection() {
             <Link
               key={metric.label}
               href={metric.href}
-              className="group relative overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.018)_42%,rgba(5,5,5,0.72))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[#63f7ff]/45 hover:shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_24px_70px_rgba(0,0,0,0.3)] sm:p-6"
+              className="group relative overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.018)_42%,rgba(5,5,5,0.72))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_24px_70px_rgba(0,0,0,0.3)] sm:p-6"
             >
-              <div className="absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(99,247,255,0.42),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
+              <div className="absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.42),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#c2c6d8]">
                 {metric.label}
               </div>
               <div className="mt-3 font-mono text-[34px] font-semibold leading-none tracking-normal text-white sm:text-[42px]">
                 {metric.value}
               </div>
-              <div className="mt-5 inline-flex rounded-full border border-[#63f7ff]/25 bg-[#061719]/70 px-3 py-1.5 font-mono text-xs text-[#63f7ff] transition-colors group-hover:border-[#63f7ff]/55">
+              <div className="mt-5 inline-flex rounded-full border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/70 px-3 py-1.5 font-mono text-xs text-[var(--accent-primary)] transition-colors group-hover:border-[var(--accent-primary)]/55">
                 {metric.detail}
               </div>
             </Link>
@@ -99,7 +99,7 @@ export function MetricsSection() {
 
         <div id="risk-controls" className="mt-16 sm:mt-24">
           <div className="max-w-3xl rounded-2xl border border-[#1f1f1f]/80 bg-[#050505]/48 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] sm:p-6">
-            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[#63f7ff]">
+            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
               Institutional Stack
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white">
@@ -115,15 +115,15 @@ export function MetricsSection() {
               <Link
                 key={item.title}
                 href={item.href}
-                className={`group relative min-h-[230px] overflow-hidden rounded-2xl border border-[#243042]/70 bg-[radial-gradient(circle_at_18%_0%,rgba(99,247,255,0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.74))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.2)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[#63f7ff]/45 hover:shadow-[inset_0_1px_0_rgba(99,247,255,0.07),0_24px_70px_rgba(0,0,0,0.3)] sm:p-6 ${
+                className={`group relative min-h-[230px] overflow-hidden rounded-2xl border border-[#243042]/70 bg-[radial-gradient(circle_at_18%_0%,rgb(var(--accent-primary-rgb)/0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.74))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.2)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.07),0_24px_70px_rgba(0,0,0,0.3)] sm:p-6 ${
                   item.wide ? "lg:col-span-2" : ""
                 }`}
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div className="rounded-xl border border-[#63f7ff]/25 bg-[#061719]/65 px-3 py-2 font-mono text-xl text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08)]">
+                  <div className="rounded-xl border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/65 px-3 py-2 font-mono text-xl text-[var(--accent-primary)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)]">
                     {item.icon}
                   </div>
-                  <div className="mt-1 h-px flex-1 bg-[linear-gradient(90deg,rgba(99,247,255,0.34),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
+                  <div className="mt-1 h-px flex-1 bg-[linear-gradient(90deg,rgb(var(--accent-primary-rgb)/0.34),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
                 </div>
                 <h3 className="mt-8 text-xl font-semibold text-white">
                   {item.title}

@@ -16,14 +16,14 @@ export function HeroSection() {
         <div className="max-w-3xl">
           <Link
             href="/demo-testnet"
-            className="mb-6 inline-flex items-center gap-2 rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719]"
+            className="mb-6 inline-flex items-center gap-2 rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)] transition duration-200 hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
           >
-            <span className="size-1.5 bg-[#63f7ff]" />
+            <span className="size-1.5 bg-[var(--accent-primary)]" />
             Sistema Online
           </Link>
           <h1 className="max-w-3xl text-[42px] font-semibold leading-[1.04] tracking-normal text-white sm:text-6xl lg:text-[68px]">
             Plataforma Quant Research.{" "}
-            <span className="text-[#63f7ff]">Demo Execution Terminal.</span>
+            <span className="text-[var(--accent-primary)]">Demo Execution Terminal.</span>
           </h1>
           <p className="mt-7 max-w-2xl text-base leading-7 text-[#c2c6d8] sm:text-xl sm:leading-8">
             Private beta para investigacion multi-alpha, ejecucion demo/testnet
@@ -32,13 +32,13 @@ export function HeroSection() {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <a
               href="/dashboard"
-              className="rounded-xl border border-[#568dff]/90 bg-[linear-gradient(135deg,#568dff,#0058cb)] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgba(0,88,203,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
+              className="rounded-xl border border-[var(--accent-secondary)]/90 bg-[linear-gradient(135deg,var(--accent-secondary),var(--accent-strong))] px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgb(var(--accent-secondary-rgb)/0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
             >
               Open Terminal Demo
             </a>
             <a
               href="/request-access"
-              className="rounded-xl border border-[#1f1f1f] bg-[#0a0a0a]/82 px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgba(0,0,0,0.18)] backdrop-blur-sm transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff]"
+              className="rounded-xl border border-[#1f1f1f] bg-[#0a0a0a]/82 px-7 py-4 text-center text-sm font-semibold text-white shadow-[0_14px_34px_rgba(0,0,0,0.18)] backdrop-blur-sm transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
             >
               Request Access
             </a>
@@ -52,13 +52,13 @@ export function HeroSection() {
               <span className="font-mono text-xs uppercase tracking-[0.16em] text-[#e2e2e2]">
                 Q-Terminal Demo
               </span>
-              <span className="font-mono text-sm text-[#63f7ff]">
+              <span className="font-mono text-sm text-[var(--accent-primary)]">
                 {"///"}
               </span>
             </div>
             <div className="mt-6 flex items-center justify-between font-mono text-sm">
               <span className="uppercase text-[#e2e2e2]">TESTNET-PERP</span>
-              <span className="text-[#63f7ff]">Monitoring</span>
+              <span className="text-[var(--accent-primary)]">Monitoring</span>
             </div>
             <div className="mt-4 h-28 rounded-xl border border-[#424655] bg-[linear-gradient(180deg,#242424,#151515)] p-3">
               <svg
@@ -69,8 +69,8 @@ export function HeroSection() {
               >
                 <defs>
                   <linearGradient id="lineFill" x1="0" x2="0" y1="0" y2="1">
-                    <stop stopColor="#63f7ff" stopOpacity="0.28" />
-                    <stop offset="1" stopColor="#63f7ff" stopOpacity="0" />
+                    <stop stopColor="var(--accent-primary)" stopOpacity="0.28" />
+                    <stop offset="1" stopColor="var(--accent-primary)" stopOpacity="0" />
                   </linearGradient>
                 </defs>
                 <path
@@ -80,7 +80,7 @@ export function HeroSection() {
                 <polyline
                   fill="none"
                   points="0,102 82,78 168,90 252,46 336,58 420,20"
-                  stroke="#63f7ff"
+                  stroke="var(--accent-primary)"
                   strokeWidth="4"
                 />
               </svg>
@@ -90,14 +90,14 @@ export function HeroSection() {
                 <Link
                   key={metric.label}
                   href={metric.href}
-                  className="rounded-xl border border-[#424655] bg-[#050505] p-3 transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:bg-[#061719] sm:p-4"
+                  className="rounded-xl border border-[#424655] bg-[#050505] p-3 transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)] sm:p-4"
                 >
                   <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#c2c6d8]">
                     {metric.label}
                   </div>
                   <div
                     className={`mt-2 font-mono text-base uppercase sm:text-lg ${
-                      metric.accent ? "text-[#63f7ff]" : "text-white"
+                      metric.accent ? "text-[var(--accent-primary)]" : "text-white"
                     }`}
                   >
                     {metric.value}
@@ -107,7 +107,7 @@ export function HeroSection() {
             </div>
             <a
               href="/dashboard"
-              className="mt-4 block rounded-xl border border-[#243042] bg-[#050505] px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719]"
+              className="mt-4 block rounded-xl border border-[#243042] bg-[#050505] px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--accent-primary)] transition duration-200 hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
             >
               Terminal Demo
             </a>

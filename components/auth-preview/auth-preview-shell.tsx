@@ -9,7 +9,7 @@ type AuthPreviewShellProps = {
 };
 
 const terminalInput =
-  "rounded-xl border border-[#243042] bg-[#050505]/90 px-4 py-3 text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 placeholder:text-[#424655] hover:border-[#424655] focus:border-[#63f7ff] focus:bg-[#061719]/60 focus:shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_0_0_3px_rgba(99,247,255,0.08)]";
+  "rounded-xl border border-[#243042] bg-[#050505]/90 px-4 py-3 text-sm text-white outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 placeholder:text-[#424655] hover:border-[#424655] focus:border-[var(--accent-primary)] focus:bg-[var(--accent-soft)]/60 focus:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_0_0_3px_rgb(var(--accent-primary-rgb)/0.08)]";
 
 export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
   const [submitted, setSubmitted] = useState(false);
@@ -23,17 +23,17 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#e2e2e2]">
       <section className="relative min-h-screen border-b border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:32px_32px]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(86,141,255,0.13),transparent_30%),linear-gradient(90deg,rgba(5,5,5,0.99),rgba(5,5,5,0.82))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgb(var(--accent-secondary-rgb)/0.13),transparent_30%),linear-gradient(90deg,rgba(5,5,5,0.99),rgba(5,5,5,0.82))]" />
         <div className="relative mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-10 px-4 py-6 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-10">
           <div>
             <Link href="/" aria-label="Quant Terminal home">
               <BrandMark />
             </Link>
             <div className="mt-12 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-[0.18em]">
-              <span className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 text-[#63f7ff]">
+              <span className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 text-[var(--accent-primary)]">
                 Mock
               </span>
-              <span className="rounded-xl border border-[#568dff]/60 bg-[#07101f] px-3 py-2 text-[#9dbaff]">
+              <span className="rounded-xl border border-[var(--accent-secondary)]/60 bg-[var(--accent-soft)] px-3 py-2 text-[var(--accent-muted)]">
                 Private Beta
               </span>
               <span className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 text-[#c2c6d8]">
@@ -60,14 +60,14 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
           >
             <div className="flex items-center justify-between gap-4 border-b border-[#243042] pb-4">
               <div>
-                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
+                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
                   {isRegister ? "Register Preview" : "Login Preview"}
                 </div>
                 <h2 className="mt-2 text-2xl font-semibold text-white">
                   {isRegister ? "Private Beta Request" : "Demo Workspace"}
                 </h2>
               </div>
-              <div className="grid size-11 place-items-center rounded-xl border border-[#63f7ff]/45 bg-[#061719] font-mono text-sm font-semibold text-[#63f7ff]">
+              <div className="grid size-11 place-items-center rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] font-mono text-sm font-semibold text-[var(--accent-primary)]">
                 DO
               </div>
             </div>
@@ -124,13 +124,13 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
 
             <button
               type="submit"
-              className="mt-6 w-full rounded-xl border border-[#568dff]/90 bg-[linear-gradient(135deg,#568dff,#0058cb)] px-5 py-4 text-sm font-semibold text-white shadow-[0_14px_34px_rgba(0,88,203,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
+              className="mt-6 w-full rounded-xl border border-[var(--accent-secondary)]/90 bg-[linear-gradient(135deg,var(--accent-secondary),var(--accent-strong))] px-5 py-4 text-sm font-semibold text-white shadow-[0_14px_34px_rgb(var(--accent-secondary-rgb)/0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110"
             >
               {isRegister ? "Preview Registration" : "Preview Login"}
             </button>
 
             {submitted ? (
-              <div className="mt-4 rounded-xl border border-[#63f7ff]/35 bg-[#061719]/70 p-4 font-mono text-xs leading-6 text-[#63f7ff]">
+              <div className="mt-4 rounded-xl border border-[var(--accent-primary)]/35 bg-[var(--accent-soft)]/70 p-4 font-mono text-xs leading-6 text-[var(--accent-primary)]">
                 Authentication UI preview only. No account is created.
               </div>
             ) : null}
@@ -138,13 +138,13 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/dashboard"
-                className="flex-1 rounded-xl border border-[#243042] bg-[#050505]/88 px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition hover:border-[#63f7ff] hover:text-[#63f7ff]"
+                className="flex-1 rounded-xl border border-[#243042] bg-[#050505]/88 px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
               >
                 Terminal Demo
               </Link>
               <Link
                 href={isRegister ? "/login" : "/register"}
-                className="flex-1 rounded-xl border border-[#424655] bg-[#0e0e0e]/82 px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition hover:border-[#63f7ff] hover:text-[#63f7ff]"
+                className="flex-1 rounded-xl border border-[#424655] bg-[#0e0e0e]/82 px-4 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
               >
                 {isRegister ? "Login Preview" : "Register Preview"}
               </Link>

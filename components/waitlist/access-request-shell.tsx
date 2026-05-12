@@ -12,7 +12,7 @@ export function AccessRequestShell() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] text-[#e2e2e2]">
       <section className="relative min-h-screen border-b border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:32px_32px]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(99,247,255,0.12),transparent_28%),linear-gradient(90deg,rgba(5,5,5,0.98),rgba(5,5,5,0.82))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgb(var(--accent-primary-rgb)/0.12),transparent_28%),linear-gradient(90deg,rgba(5,5,5,0.98),rgba(5,5,5,0.82))]" />
         <div className="relative mx-auto grid min-h-screen max-w-7xl grid-cols-1 gap-10 px-4 py-6 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:py-10">
           <div>
             <Link href="/" aria-label="Quant Terminal home">
@@ -24,14 +24,14 @@ export function AccessRequestShell() {
                   <Link
                     key={badge.label}
                     href={badge.href}
-                    className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719]"
+                    className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)] transition duration-200 hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
                   >
                     {badge.label}
                   </Link>
                 ) : (
                   <span
                     key={badge.label}
-                    className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]"
+                    className="rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]"
                   >
                     {badge.label}
                   </span>

@@ -15,6 +15,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --accent-primary: #63f7ff;
+  --accent-primary-rgb: 99 247 255;
+  --accent-secondary: #568dff;
+  --accent-secondary-rgb: 86 141 255;
+  --accent-strong: #0058cb;
+  --accent-soft: #061719;
+  --accent-soft-rgb: 6 23 25;
+  --accent-surface: #071314;
+  --accent-border: rgb(var(--accent-primary-rgb) / 0.4);
+  --accent-glow: rgb(var(--accent-primary-rgb) / 0.12);
+  --accent-muted: #9dbaff;
 }
 
 @theme inline {
@@ -31,6 +42,43 @@
   }
 }
 
+/*
+Optional premium accent presets. Keep cyan active above by default.
+
+Institutional blue:
+--accent-primary: #7da7ff;
+--accent-primary-rgb: 125 167 255;
+--accent-secondary: #4f7dff;
+--accent-secondary-rgb: 79 125 255;
+--accent-strong: #214fd1;
+--accent-soft: #081225;
+--accent-soft-rgb: 8 18 37;
+--accent-surface: #071020;
+--accent-muted: #b7c9ff;
+
+Deep teal:
+--accent-primary: #55f0d4;
+--accent-primary-rgb: 85 240 212;
+--accent-secondary: #2faaa3;
+--accent-secondary-rgb: 47 170 163;
+--accent-strong: #13746f;
+--accent-soft: #061c1a;
+--accent-soft-rgb: 6 28 26;
+--accent-surface: #071816;
+--accent-muted: #a4efe3;
+
+Silver / ice:
+--accent-primary: #d8ecff;
+--accent-primary-rgb: 216 236 255;
+--accent-secondary: #98b9d6;
+--accent-secondary-rgb: 152 185 214;
+--accent-strong: #5f85aa;
+--accent-soft: #0d151c;
+--accent-soft-rgb: 13 21 28;
+--accent-surface: #0c141a;
+--accent-muted: #dce8f3;
+*/
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -39,7 +87,7 @@ body {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(99, 247, 255, 0.42) rgba(5, 5, 5, 0.86);
+  scrollbar-color: rgb(var(--accent-primary-rgb) / 0.42) rgba(5, 5, 5, 0.86);
 }
 
 *::-webkit-scrollbar {
@@ -54,13 +102,13 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, rgba(99, 247, 255, 0.44), rgba(86, 141, 255, 0.46));
+  background: linear-gradient(180deg, rgb(var(--accent-primary-rgb) / 0.44), rgb(var(--accent-secondary-rgb) / 0.46));
   border: 2px solid rgba(5, 5, 5, 0.92);
   border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, rgba(99, 247, 255, 0.64), rgba(86, 141, 255, 0.62));
+  background: linear-gradient(180deg, rgb(var(--accent-primary-rgb) / 0.64), rgb(var(--accent-secondary-rgb) / 0.62));
 }
 
 *::-webkit-scrollbar-corner {
@@ -68,12 +116,12 @@ body {
 }
 
 ::selection {
-  background: rgba(99, 247, 255, 0.2);
+  background: rgb(var(--accent-primary-rgb) / 0.2);
   color: #ffffff;
 }
 
 :focus-visible {
-  outline: 2px solid rgba(99, 247, 255, 0.72);
+  outline: 2px solid rgb(var(--accent-primary-rgb) / 0.72);
   outline-offset: 3px;
 }
 
@@ -97,6 +145,6 @@ select option {
 }
 
 select option:checked {
-  background: #061719;
-  color: #63f7ff;
+  background: var(--accent-soft);
+  color: var(--accent-primary);
 }

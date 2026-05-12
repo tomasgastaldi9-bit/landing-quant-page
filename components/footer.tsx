@@ -13,7 +13,7 @@ export function Footer() {
               <a
                 key={link}
                 href="#"
-                className="font-mono text-xs text-[#c2c6d8] transition hover:text-[#63f7ff]"
+                className="font-mono text-xs text-[#c2c6d8] transition hover:text-[var(--accent-primary)]"
               >
                 {link}
               </a>

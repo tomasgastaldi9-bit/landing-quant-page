@@ -45,9 +45,9 @@ export function BrandMark({
       </div>
       <span
         aria-label="Quant Terminal"
-        className={`whitespace-nowrap font-mono font-semibold uppercase leading-none tracking-[0.16em] text-[#f3f4f6] [text-shadow:0_0_18px_rgba(99,247,255,0.12)] sm:tracking-[0.28em] ${wordmarkSize}`}
+        className={`whitespace-nowrap font-mono font-semibold uppercase leading-none tracking-[0.16em] text-[#f3f4f6] [text-shadow:0_0_18px_rgb(var(--accent-primary-rgb)/0.12)] sm:tracking-[0.28em] ${wordmarkSize}`}
       >
-        Quant <span className="text-[#63f7ff]">Terminal</span>
+        Quant <span className="text-[var(--accent-primary)]">Terminal</span>
       </span>
     </div>
   );

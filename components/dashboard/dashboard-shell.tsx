@@ -96,7 +96,7 @@ export function DashboardShell({
             <BrandMark />
             <Link
               href="/demo-testnet"
-              className="rounded-xl border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff] transition duration-200 hover:border-[#63f7ff] hover:bg-[#061719] lg:hidden"
+              className="rounded-xl border border-[#424655] bg-[#0e0e0e] px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)] transition duration-200 hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)] lg:hidden"
             >
               Demo
             </Link>
@@ -107,7 +107,7 @@ export function DashboardShell({
             </Link>
             <Link
               href="/demo-testnet"
-              className="rounded-xl border border-[#63f7ff]/60 bg-[#071314]/90 px-3 py-2 text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_10px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[#63f7ff] hover:bg-[#061719]"
+              className="rounded-xl border border-[var(--accent-primary)]/60 bg-[var(--accent-surface)]/90 px-3 py-2 text-[var(--accent-primary)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_10px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
             >
               {equitySnapshot.source === "live-csv" ||
               positionsSnapshot.source === "live-csv"
@@ -122,7 +122,7 @@ export function DashboardShell({
             </span>
             <a
               href="/request-access"
-              className="rounded-xl border border-[#568dff]/90 bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-2 text-white shadow-[0_12px_28px_rgba(0,88,203,0.2)] transition duration-200 hover:-translate-y-px hover:brightness-110"
+              className="rounded-xl border border-[var(--accent-secondary)]/90 bg-[linear-gradient(135deg,var(--accent-secondary),var(--accent-strong))] px-3 py-2 text-white shadow-[0_12px_28px_rgb(var(--accent-secondary-rgb)/0.2)] transition duration-200 hover:-translate-y-px hover:brightness-110"
             >
               Request Access
             </a>
@@ -134,7 +134,7 @@ export function DashboardShell({
         <section className="mb-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-[#63f7ff]">
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
                 Execution / Risk Monitoring
               </div>
               <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-normal text-white sm:text-5xl">
@@ -146,7 +146,7 @@ export function DashboardShell({
               Trading, risk, execution, and scheduler systems remain untouched.
             </p>
           </div>
-          <div className="mt-5 rounded-2xl border border-[#63f7ff]/35 bg-[linear-gradient(135deg,rgba(6,23,25,0.86),rgba(10,10,10,0.72))] px-4 py-3 font-mono text-[11px] uppercase leading-5 tracking-[0.12em] text-[#63f7ff] shadow-[inset_0_1px_0_rgba(99,247,255,0.08),0_18px_50px_rgba(0,0,0,0.22)]">
+          <div className="mt-5 rounded-2xl border border-[var(--accent-primary)]/35 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.86),rgba(10,10,10,0.72))] px-4 py-3 font-mono text-[11px] uppercase leading-5 tracking-[0.12em] text-[var(--accent-primary)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_18px_50px_rgba(0,0,0,0.22)]">
             Frontend read-only. Equity source:{" "}
             {equitySnapshot.source === "live-csv" ? "live CSV" : "mock fallback"}.
             {" "}
@@ -241,7 +241,7 @@ function Panel({
     <article className="group overflow-hidden rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-all duration-200 hover:border-[#2f3b52] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_22px_65px_rgba(0,0,0,0.3)]">
       <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f]/80 bg-[#0e0e0e]/44 px-4 py-3">
         <div>
-          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#63f7ff]">
+          <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
             {eyebrow}
           </div>
           <h2 className="mt-1 text-lg font-semibold leading-tight text-white">
@@ -276,7 +276,7 @@ function MetricCard({
       <div className="mt-3 font-mono text-[30px] font-semibold leading-none text-white">
         {value}
       </div>
-      <div className="mt-2 font-mono text-xs text-[#63f7ff]">{detail}</div>
+      <div className="mt-2 font-mono text-xs text-[var(--accent-primary)]">{detail}</div>
     </article>
   );
 
@@ -306,12 +306,12 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
       >
         <defs>
           <linearGradient id="equityFill" x1="0" x2="0" y1="0" y2="1">
-            <stop stopColor="#63f7ff" stopOpacity="0.2" />
-            <stop offset="1" stopColor="#63f7ff" stopOpacity="0" />
+            <stop stopColor="var(--accent-primary)" stopOpacity="0.2" />
+            <stop offset="1" stopColor="var(--accent-primary)" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="equityStroke" x1="0" x2="1" y1="0" y2="0">
-            <stop stopColor="#568dff" />
-            <stop offset="1" stopColor="#63f7ff" />
+            <stop stopColor="var(--accent-secondary)" />
+            <stop offset="1" stopColor="var(--accent-primary)" />
           </linearGradient>
         </defs>
         {[60, 110, 160, 210, 260].map((y) => (
@@ -361,16 +361,16 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
                 <circle
                   cx={lastPoint.x}
                   cy={lastPoint.y}
-                  fill="rgba(99,247,255,0.12)"
+                  fill="rgb(var(--accent-primary-rgb)/0.12)"
                   r="11"
-                  stroke="#63f7ff"
+                  stroke="var(--accent-primary)"
                   strokeOpacity="0.32"
                   strokeWidth="2"
                 />
                 <circle
                   cx={lastPoint.x}
                   cy={lastPoint.y}
-                  fill="#63f7ff"
+                  fill="var(--accent-primary)"
                   r="4"
                 />
                 <line
@@ -378,7 +378,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
                   x2={lastPoint.x}
                   y1="35"
                   y2="270"
-                  stroke="#63f7ff"
+                  stroke="var(--accent-primary)"
                   strokeDasharray="3 8"
                   strokeOpacity="0.35"
                 />
@@ -388,7 +388,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
               START {firstEquity ? formatCurrency(firstEquity) : "--"}
             </text>
             <text
-              fill="#63f7ff"
+              fill="var(--accent-primary)"
               fontFamily="monospace"
               fontSize="12"
               textAnchor="end"
@@ -425,7 +425,7 @@ function PositionsTable({ positions }: { positions: PositionRow[] }) {
               key={position.symbol}
               className="border-b border-[#1f1f1f] text-[#c2c6d8] transition-colors hover:bg-[#101820]"
             >
-              <td className="px-3 py-3 text-[#63f7ff]">{position.symbol}</td>
+              <td className="px-3 py-3 text-[var(--accent-primary)]">{position.symbol}</td>
               <td className="px-3 py-3">{position.side}</td>
               <td className="px-3 py-3 text-right">{formatNumber(position.size)}</td>
               <td className="px-3 py-3 text-right">{formatOptionalCurrency(position.entry)}</td>
@@ -434,7 +434,7 @@ function PositionsTable({ positions }: { positions: PositionRow[] }) {
                 className={`px-3 py-3 text-right ${
                   (position.unrealizedPnl ?? 0) < 0
                     ? "text-[#ffb4ab]"
-                    : "text-[#63f7ff]"
+                    : "text-[var(--accent-primary)]"
                 }`}
               >
                 {formatSignedCurrency(position.unrealizedPnl)}
@@ -459,7 +459,7 @@ function RegimePanel() {
           <div className="mt-3 text-2xl font-semibold text-white">
             Range / Low Vol
           </div>
-          <div className="mt-2 font-mono text-xs text-[#63f7ff]">
+          <div className="mt-2 font-mono text-xs text-[var(--accent-primary)]">
             Demo classifier output
           </div>
         </div>
@@ -469,7 +469,7 @@ function RegimePanel() {
               key={item}
               className={`rounded-lg border p-3 transition-colors ${
                 index === 1
-                  ? "border-[#63f7ff] text-[#63f7ff]"
+                  ? "border-[var(--accent-primary)] text-[var(--accent-primary)]"
                   : "border-[#243042] text-[#8c90a1]"
               }`}
             >
@@ -496,11 +496,11 @@ function RiskMonitor() {
           <div key={limit.label}>
             <div className="mb-2 flex justify-between font-mono text-xs">
               <span className="text-[#c2c6d8]">{limit.label}</span>
-              <span className="text-[#63f7ff]">{limit.value}</span>
+              <span className="text-[var(--accent-primary)]">{limit.value}</span>
             </div>
             <div className="h-2 overflow-hidden rounded-full border border-[#243042] bg-[#050505]">
               <div
-                className="h-full bg-[linear-gradient(90deg,#568dff,#63f7ff)] transition-[width] duration-500"
+                className="h-full bg-[linear-gradient(90deg,var(--accent-secondary),var(--accent-primary))] transition-[width] duration-500"
                 style={{ width: limit.width }}
               />
             </div>
@@ -528,7 +528,7 @@ function AlphaEngineStatus() {
           <div
             className={`self-start border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] ${
               module.state === "Active"
-                ? "border-[#63f7ff] text-[#63f7ff]"
+                ? "border-[var(--accent-primary)] text-[var(--accent-primary)]"
                 : "border-[#424655] text-[#8c90a1]"
             }`}
           >
@@ -551,7 +551,7 @@ function SystemHealth() {
             </div>
             <span
               className={`size-2 ${
-                item.state === "online" ? "bg-[#63f7ff]" : "bg-[#8c90a1]"
+                item.state === "online" ? "bg-[var(--accent-primary)]" : "bg-[#8c90a1]"
               }`}
             />
           </div>
@@ -573,7 +573,7 @@ function ExecutionLogs() {
           className="grid grid-cols-[76px_64px_1fr] gap-3 rounded-lg border border-[#1f1f1f] bg-[#050505]/92 px-3 py-2 font-mono text-xs transition-colors hover:border-[#243042] hover:bg-[#101820]"
         >
           <span className="text-[#8c90a1]">{log.time}</span>
-          <span className="uppercase text-[#63f7ff]">{log.type}</span>
+          <span className="uppercase text-[var(--accent-primary)]">{log.type}</span>
           <span className="text-[#c2c6d8]">{log.message}</span>
         </div>
       ))}
