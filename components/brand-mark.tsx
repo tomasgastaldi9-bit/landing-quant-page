@@ -8,17 +8,19 @@ export function BrandMark({
   size?: "default" | "drawer";
 }) {
   const iconSize =
-    size === "drawer" ? "size-10 sm:size-11" : "size-10 sm:size-12";
+    size === "drawer"
+      ? "h-10 w-11 sm:h-11 sm:w-12"
+      : "h-10 w-11 sm:h-12 sm:w-[52px]";
 
   if (compact) {
     return (
-      <div className="relative size-11 shrink-0 overflow-hidden rounded-xl border border-[#243042] bg-[#050505] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+      <div className="relative h-11 w-12 shrink-0">
         <Image
-          src="/quant-terminal-icon.png"
+          src="/branding/quant-terminal-icon-transparent.png"
           alt="Quant Terminal"
           fill
           sizes="44px"
-          className="object-cover"
+          className="object-contain"
         />
       </div>
     );
@@ -31,16 +33,14 @@ export function BrandMark({
 
   return (
     <div className="flex min-w-0 shrink-0 items-center gap-3 sm:gap-3.5">
-      <div
-        className={`relative shrink-0 overflow-hidden rounded-xl border border-[#243042] bg-[#050505] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] ${iconSize}`}
-      >
+      <div className={`relative shrink-0 ${iconSize}`}>
         <Image
-          src="/quant-terminal-icon.png"
+          src="/branding/quant-terminal-icon-transparent.png"
           alt=""
           fill
           priority
           sizes={size === "drawer" ? "44px" : "(min-width: 640px) 48px, 40px"}
-          className="object-cover"
+          className="object-contain"
         />
       </div>
       <span
