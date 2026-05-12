@@ -23,15 +23,17 @@ export function BrandMark({
 
   const logoSize =
     size === "drawer"
-      ? "h-9 w-[205px] sm:h-10 sm:w-[250px]"
-      : "h-10 w-[205px] sm:h-14 sm:w-[340px]";
+      ? "h-10 w-[252px] sm:h-11 sm:w-[278px]"
+      : "h-11 w-[276px] sm:h-[52px] sm:w-[328px]";
   const imageSizes =
-    size === "drawer" ? "(min-width: 640px) 250px, 205px" : "(min-width: 640px) 340px, 205px";
+    size === "drawer"
+      ? "(min-width: 640px) 278px, 252px"
+      : "(min-width: 640px) 328px, 276px";
 
   return (
     <div className={`relative shrink-0 ${logoSize}`}>
       <Image
-        src="/quant-terminal-logo-horizontal.png"
+        src="/branding/quant-terminal-logo-horizontal.png"
         alt="Quant Terminal"
         fill
         priority

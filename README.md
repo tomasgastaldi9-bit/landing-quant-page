@@ -81,7 +81,8 @@ components/
     access-request-form.tsx   # Client-side mock form behavior
 
 public/
-  quant-terminal-logo-horizontal.png
+  branding/
+    quant-terminal-logo-horizontal.png
   quant-terminal-icon.png
 ```
 

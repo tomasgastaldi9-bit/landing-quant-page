@@ -78,12 +78,12 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/90 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl">
-      <div className="mx-auto flex h-[84px] max-w-7xl items-center justify-between gap-3 px-4 sm:h-24 sm:px-8">
+      <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between gap-3 px-3 sm:h-24 sm:px-8">
         <Link className="min-w-0" href="/" aria-label="Quant Terminal home">
           <BrandMark />
         </Link>
 
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <button
             type="button"
             aria-expanded={isOpen}
@@ -132,10 +132,10 @@ export function Navbar() {
             aria-label="Primary navigation"
             role="dialog"
             aria-modal="true"
-            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,430px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] p-5 shadow-[28px_0_80px_rgba(0,0,0,0.42)]"
+            className="absolute left-0 top-0 flex h-dvh w-[min(94vw,460px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] p-4 shadow-[28px_0_80px_rgba(0,0,0,0.42)] sm:p-5"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(99,247,255,0.65),transparent)]" />
-            <div className="flex items-center justify-between gap-4 border-b border-[#243042] pb-5">
+            <div className="flex items-center justify-between gap-3 border-b border-[#243042] pb-5">
               <Link href="/" aria-label="Quant Terminal home" onClick={closeMenu}>
                 <BrandMark size="drawer" />
               </Link>
