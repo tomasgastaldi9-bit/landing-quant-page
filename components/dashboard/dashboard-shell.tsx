@@ -218,11 +218,12 @@ export function DashboardShell({
           ))}
         </section>
 
-        <section className="mt-4 grid grid-cols-1 gap-3 xl:grid-cols-[1.45fr_0.55fr]">
+        <section className="mt-4 grid grid-cols-1 items-start gap-3 xl:grid-cols-[1.45fr_0.55fr]">
           <TerminalPanel
             eyebrow="Equity Curve"
             title="Testnet Equity"
             action={equitySnapshot.source === "live-csv" ? "CSV loaded" : "Fallback"}
+            className="self-start"
             priority="primary"
           >
             <EquityChart points={equitySnapshot.points} />
