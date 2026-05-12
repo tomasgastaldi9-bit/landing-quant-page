@@ -6,6 +6,11 @@ import { useEffect, useState } from "react";
 
 const navItems = [
   {
+    label: "Dashboard / Terminal",
+    href: "/dashboard",
+    description: "Open the read-only institutional dashboard demo.",
+  },
+  {
     label: "Demo/Testnet",
     href: "/demo-testnet",
     description: "No real capital, testnet execution, and validation scope.",
@@ -31,15 +36,17 @@ const navItems = [
     description: "Research-first validation and deployment discipline.",
   },
   {
-    label: "Terminal Demo",
-    href: "/dashboard",
-    description: "Open the read-only institutional dashboard demo.",
-  },
-  {
     label: "Request Access",
     href: "/request-access",
     description: "Join the private beta research waitlist.",
   },
+];
+
+const accountItems = [
+  { label: "Profile", href: "/profile" },
+  { label: "Settings", href: "/settings" },
+  { label: "Billing", href: "/billing" },
+  { label: "Log out", href: "/login" },
 ];
 
 export function Navbar() {
@@ -92,6 +99,18 @@ export function Navbar() {
             <span className="hidden sm:inline">Menu</span>
           </button>
           <Link
+            href="/login"
+            className="hidden rounded-xl border border-[#243042] bg-[#0e0e0e]/70 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-[#c2c6d8] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff] md:inline-flex"
+          >
+            Login
+          </Link>
+          <Link
+            href="/register"
+            className="hidden rounded-xl border border-[#424655] bg-[#050505]/82 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-[#e2e2e2] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff] lg:inline-flex"
+          >
+            Register
+          </Link>
+          <Link
             href="/dashboard"
             className="whitespace-nowrap rounded-xl border border-[#568dff] bg-[linear-gradient(135deg,#568dff,#0058cb)] px-3 py-3 text-center text-xs font-semibold text-white shadow-[0_0_16px_rgba(86,141,255,0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110 sm:px-5 sm:text-sm"
           >
@@ -129,29 +148,98 @@ export function Navbar() {
             </div>
 
             <div className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-[#63f7ff]">
-              Platform Navigation
+              Testnet Workspace
             </div>
-            <nav className="mt-4 grid gap-2 overflow-y-auto pr-1">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={closeMenu}
-                  className="group rounded-2xl border border-[#1f1f1f] bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(7,7,7,0.78))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff]/55 hover:bg-[#061719]/72 hover:shadow-[inset_0_1px_0_rgba(99,247,255,0.06),0_16px_38px_rgba(0,0,0,0.26)]"
-                >
-                  <span className="flex items-center justify-between gap-4">
-                    <span className="font-mono text-sm uppercase tracking-[0.12em] text-white">
+            <div className="mt-4 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+              <div className="flex items-center gap-3">
+                <div className="grid size-11 place-items-center rounded-xl border border-[#63f7ff]/45 bg-[#061719] font-mono text-sm font-semibold text-[#63f7ff]">
+                  DO
+                </div>
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-semibold text-white">
+                    Demo Operator
+                  </div>
+                  <div className="truncate font-mono text-xs text-[#8c90a1]">
+                    demo@quantbot.local
+                  </div>
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-[0.14em]">
+                <span className="rounded-lg border border-[#568dff]/55 bg-[#07101f] px-2 py-1 text-[#9dbaff]">
+                  Private Beta
+                </span>
+                <span className="rounded-lg border border-[#63f7ff]/40 bg-[#061719] px-2 py-1 text-[#63f7ff]">
+                  Testnet Workspace
+                </span>
+              </div>
+            </div>
+
+            <nav className="mt-4 grid gap-5 overflow-y-auto pr-1">
+              <div>
+                <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
+                  Main
+                </div>
+                <div className="grid gap-2">
+                  {navItems.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="group rounded-2xl border border-[#1f1f1f] bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(7,7,7,0.78))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff]/55 hover:bg-[#061719]/72 hover:shadow-[inset_0_1px_0_rgba(99,247,255,0.06),0_16px_38px_rgba(0,0,0,0.26)]"
+                    >
+                      <span className="flex items-center justify-between gap-4">
+                        <span className="font-mono text-sm uppercase tracking-[0.12em] text-white">
+                          {item.label}
+                        </span>
+                        <span className="font-mono text-xs text-[#63f7ff] transition-transform duration-200 group-hover:translate-x-1">
+                          -&gt;
+                        </span>
+                      </span>
+                      <span className="mt-3 block text-sm leading-6 text-[#8c90a1]">
+                        {item.description}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
+                  Account
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {accountItems.map((item) => (
+                    <Link
+                      key={item.href + item.label}
+                      href={item.href}
+                      onClick={closeMenu}
+                      className="rounded-xl border border-[#243042] bg-[#050505]/82 px-3 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition duration-200 hover:-translate-y-px hover:border-[#63f7ff] hover:text-[#63f7ff]"
+                    >
                       {item.label}
-                    </span>
-                    <span className="font-mono text-xs text-[#63f7ff] transition-transform duration-200 group-hover:translate-x-1">
-                      -&gt;
-                    </span>
-                  </span>
-                  <span className="mt-3 block text-sm leading-6 text-[#8c90a1]">
-                    {item.description}
-                  </span>
+                    </Link>
+                  ))}
+                </div>
+                <p className="mt-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#6f7485]">
+                  Account controls are visual placeholders for future auth.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 border-t border-[#243042] pt-4">
+                <Link
+                  href="/login"
+                  onClick={closeMenu}
+                  className="rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] transition duration-200 hover:border-[#63f7ff] hover:text-[#63f7ff]"
+                >
+                  Login
                 </Link>
-              ))}
+                <Link
+                  href="/register"
+                  onClick={closeMenu}
+                  className="rounded-xl border border-[#568dff]/70 bg-[#07101f] px-3 py-3 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#9dbaff] transition duration-200 hover:border-[#63f7ff] hover:text-[#63f7ff]"
+                >
+                  Register
+                </Link>
+              </div>
             </nav>
           </aside>
         </div>
