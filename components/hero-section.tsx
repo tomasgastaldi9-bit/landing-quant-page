@@ -18,7 +18,7 @@ export function HeroSection() {
             href="/demo-testnet"
             className="mb-6 inline-flex items-center gap-2 rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)] transition duration-200 hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
           >
-            <span className="size-1.5 bg-[var(--accent-primary)]" />
+            <span className="relative size-2 rounded-full bg-[var(--accent-primary)] shadow-[0_0_0_3px_rgb(var(--accent-primary-rgb)/0.08),0_0_14px_rgb(var(--accent-primary-rgb)/0.24)] before:absolute before:inset-[2px] before:rounded-full before:bg-white/40" />
             Sistema Online
           </Link>
           <h1 className="max-w-3xl text-[42px] font-semibold leading-[1.04] tracking-normal text-white sm:text-6xl lg:text-[68px]">
