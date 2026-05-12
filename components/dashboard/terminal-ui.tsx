@@ -1,23 +1,35 @@
 import Link from "next/link";
 
 export function TerminalPanel({
+  id,
   eyebrow,
   title,
   action,
   children,
   className = "",
+  priority = "normal",
 }: {
+  id?: string;
   eyebrow: string;
   title: string;
   action?: string;
   children: React.ReactNode;
   className?: string;
+  priority?: "primary" | "normal" | "passive";
 }) {
+  const priorityClass =
+    priority === "primary"
+      ? "border-[var(--accent-primary)]/32 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_24px_70px_rgba(0,0,0,0.34)]"
+      : priority === "passive"
+        ? "border-[#1f1f1f]/70 opacity-[0.96]"
+        : "border-[#1f1f1f]/90";
+
   return (
     <article
-      className={`group overflow-hidden rounded-2xl border border-[#1f1f1f]/90 bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-all duration-200 hover:border-[#2f3b52] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_22px_65px_rgba(0,0,0,0.3)] ${className}`}
+      id={id}
+      className={`group overflow-hidden rounded-2xl border bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-all duration-200 hover:border-[#2f3b52] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_22px_65px_rgba(0,0,0,0.3)] ${priorityClass} ${className}`}
     >
-      <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f]/80 bg-[#0e0e0e]/44 px-4 py-3">
+      <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f]/80 bg-[linear-gradient(90deg,rgba(14,14,14,0.76),rgba(5,5,5,0.42))] px-4 py-3">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
             {eyebrow}
@@ -43,23 +55,43 @@ export function MetricTile({
   detail,
   href,
   emphasis = false,
+  tone = "neutral",
+  compact = false,
 }: {
   label: string;
   value: string;
   detail: string;
   href?: string;
   emphasis?: boolean;
+  tone?: "neutral" | "good" | "warning" | "muted";
+  compact?: boolean;
 }) {
+  const toneClass =
+    tone === "good"
+      ? "text-emerald-300"
+      : tone === "warning"
+        ? "text-amber-200"
+        : tone === "muted"
+          ? "text-[#c2c6d8]"
+          : "text-white";
+  const borderClass = emphasis
+    ? "border-[var(--accent-primary)]/38 bg-[linear-gradient(180deg,rgb(var(--accent-soft-rgb)/0.45),rgba(7,7,7,0.86))]"
+    : "border-[#1f1f1f]/90";
+
   const card = (
     <article
-      className={`rounded-2xl border bg-[linear-gradient(180deg,rgba(14,14,14,0.92),rgba(7,7,7,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_16px_45px_rgba(0,0,0,0.22)] transition-all duration-200 hover:-translate-y-px hover:border-[#2f3b52] ${
-        emphasis ? "border-[var(--accent-primary)]/35" : "border-[#1f1f1f]/90"
+      className={`rounded-2xl border bg-[linear-gradient(180deg,rgba(14,14,14,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_16px_45px_rgba(0,0,0,0.22)] transition-all duration-200 hover:-translate-y-px hover:border-[#2f3b52] ${borderClass} ${
+        compact ? "p-4" : "p-5"
       }`}
     >
       <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c2c6d8]">
         {label}
       </div>
-      <div className="mt-3 font-mono text-[30px] font-semibold leading-none text-white">
+      <div
+        className={`mt-3 font-mono font-semibold leading-none ${toneClass} ${
+          compact ? "text-2xl" : "text-[30px]"
+        }`}
+      >
         {value}
       </div>
       <div className="mt-2 font-mono text-xs text-[var(--accent-primary)]">
@@ -86,7 +118,7 @@ export function StatusBadge({
 }) {
   return (
     <span
-      className={`rounded-xl border px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_30px_rgba(0,0,0,0.18)] transition-colors ${
+      className={`inline-flex items-center rounded-xl border px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_30px_rgba(0,0,0,0.18)] transition-colors ${
         tone === "accent"
           ? "border-[var(--accent-primary)]/60 bg-[var(--accent-surface)]/90 text-[var(--accent-primary)] hover:border-[var(--accent-primary)]"
           : "border-[#243042] bg-[#0e0e0e]/82 text-[#c2c6d8] hover:border-[#424655]"

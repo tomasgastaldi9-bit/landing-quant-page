@@ -66,7 +66,7 @@ export function DashboardShell({
 }) {
   const equityMetrics = [
     {
-      label: "Current Equity",
+      label: "Equity Source",
       value: formatCurrency(equitySnapshot.currentEquity),
       detail:
         equitySnapshot.source === "live-csv" ? "From live CSV" : "Mock fallback",
@@ -103,7 +103,7 @@ export function DashboardShell({
           <div className="flex items-center justify-between gap-4">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
-                Quant Terminal
+                QuantBot
               </div>
               <div className="mt-1 text-lg font-semibold text-white">
                 Dashboard / Terminal
@@ -147,19 +147,27 @@ export function DashboardShell({
               Trading, risk, execution, and scheduler systems remain untouched.
             </p>
           </div>
-          <div className="mt-5 rounded-2xl border border-[var(--accent-primary)]/35 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.86),rgba(10,10,10,0.72))] px-4 py-3 font-mono text-[11px] uppercase leading-5 tracking-[0.12em] text-[var(--accent-primary)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_18px_50px_rgba(0,0,0,0.22)]">
-            Frontend read-only. Equity source:{" "}
-            {equitySnapshot.source === "live-csv" ? "live CSV" : "mock fallback"}.
-            {" "}
-            {equitySnapshot.message}
-            {equitySnapshot.source === "mock-fallback"
-              ? " Place CSV at output/live_testnet_equity.csv to enable live equity display."
-              : ""}
-            {" "}
-            Positions source:{" "}
-            {positionsSnapshot.source === "live-csv"
-              ? "live CSV"
-              : "mock fallback"}.
+          <div className="mt-5 grid gap-3 rounded-2xl border border-[var(--accent-primary)]/30 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.72),rgba(10,10,10,0.68))] p-3 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_18px_50px_rgba(0,0,0,0.22)] sm:grid-cols-[auto_1fr] sm:items-center">
+            <div className="inline-flex w-fit items-center gap-2 rounded-xl border border-[var(--accent-primary)]/45 bg-[#050505]/72 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--accent-primary)]">
+              <StatusLed state={liveSource ? "online" : "standby"} />
+              Read-only terminal
+            </div>
+            <div className="font-mono text-[11px] uppercase leading-5 tracking-[0.12em] text-[#c2c6d8]">
+              Equity:{" "}
+              <span className="text-[var(--accent-primary)]">
+                {equitySnapshot.source === "live-csv" ? "live CSV" : "mock fallback"}
+              </span>
+              . Positions:{" "}
+              <span className="text-[var(--accent-primary)]">
+                {positionsSnapshot.source === "live-csv"
+                  ? "live CSV"
+                  : "mock fallback"}
+              </span>
+              . {equitySnapshot.message}
+              {equitySnapshot.source === "mock-fallback"
+                ? " Place CSV at output/live_testnet_equity.csv to enable live equity display."
+                : ""}
+            </div>
           </div>
         </section>
 
@@ -169,24 +177,40 @@ export function DashboardShell({
             value={formatCurrency(equitySnapshot.currentEquity)}
             detail={formatTime(equitySnapshot.lastUpdate)}
             emphasis
+            compact
           />
           <MetricTile
             label="Data Mode"
             value={liveSource ? "Live" : "Mock"}
             detail={liveSource ? "Testnet CSV" : "Fallback"}
+            tone={liveSource ? "good" : "muted"}
+            compact
           />
-          <MetricTile label="Risk State" value="Low" detail="Within limits" />
+          <MetricTile
+            label="Risk State"
+            value="Low"
+            detail="Within limits"
+            tone="good"
+            compact
+          />
           <MetricTile
             label="Open Positions"
             value={String(openPositions)}
             detail={`${positionsSnapshot.positions.length} tracked`}
+            compact
           />
-          <MetricTile label="System Status" value="OK" detail="3 online / 1 idle" />
+          <MetricTile
+            label="System Status"
+            value="OK"
+            detail="3 online / 1 idle"
+            tone="good"
+            compact
+          />
         </section>
 
         <section className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {equityMetrics.map((metric) => (
-            <MetricTile key={metric.label} {...metric} />
+            <MetricTile key={metric.label} {...metric} compact />
           ))}
         </section>
 
@@ -195,6 +219,7 @@ export function DashboardShell({
             eyebrow="Equity Curve"
             title="Testnet Equity"
             action={equitySnapshot.source === "live-csv" ? "CSV loaded" : "Fallback"}
+            priority="primary"
           >
             <EquityChart points={equitySnapshot.points} />
           </TerminalPanel>
@@ -211,6 +236,7 @@ export function DashboardShell({
             ))}
           </section>
           <TerminalPanel
+            id="positions"
             eyebrow="Positions"
             title="Active Positions"
             action={
@@ -218,9 +244,11 @@ export function DashboardShell({
                 ? "LIVE TESTNET DATA"
                 : "MOCK DATA FALLBACK"
             }
+            priority="primary"
+            className="scroll-mt-32"
           >
             <PositionsTable positions={positionsSnapshot.positions} />
-            <div className="mt-3 border border-[#243042] bg-[#050505] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1]">
+            <div className="mt-3 rounded-xl border border-[#243042] bg-[#050505] px-3 py-2 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1]">
               {positionsSnapshot.message}
               {positionsSnapshot.lastUpdate
                 ? ` Last update: ${formatDateTime(positionsSnapshot.lastUpdate)}.`
@@ -236,10 +264,20 @@ export function DashboardShell({
         </section>
 
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[0.9fr_1.1fr]">
-          <TerminalPanel eyebrow="System" title="Health Indicators" action="Live mock">
+          <TerminalPanel
+            eyebrow="System"
+            title="Health Indicators"
+            action="Telemetry"
+            priority="passive"
+          >
             <SystemHealth />
           </TerminalPanel>
-          <TerminalPanel eyebrow="Execution" title="Execution Logs" action="Testnet sim">
+          <TerminalPanel
+            eyebrow="Execution"
+            title="Execution Logs"
+            action="Read-only log"
+            priority="passive"
+          >
             <ExecutionLogs />
           </TerminalPanel>
         </section>

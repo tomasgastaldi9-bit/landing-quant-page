@@ -2,6 +2,7 @@
 
 import { BrandMark } from "./brand-mark";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const navGroups = [
@@ -15,7 +16,7 @@ const navGroups = [
       },
       {
         label: "Positions",
-        href: "/dashboard",
+        href: "/dashboard#positions",
         description: "Active positions, exposure, and testnet state.",
       },
       {
@@ -84,6 +85,7 @@ const navGroups = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -214,31 +216,54 @@ export function Navbar() {
 
             <nav className="mt-4 grid gap-5 overflow-y-auto overscroll-contain rounded-2xl pr-1">
               {navGroups.map((group) => (
-                <div key={group.label}>
-                  <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
+                <div
+                  key={group.label}
+                  className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/42 p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]"
+                >
+                  <div className="px-2 pb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
                     {group.label}
                   </div>
                   <div className="grid gap-2">
-                    {group.items.map((item) => (
-                      <Link
-                        key={`${group.label}-${item.label}`}
-                        href={item.href}
-                        onClick={closeMenu}
-                        className="group rounded-2xl border border-[#1f1f1f] bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(7,7,7,0.78))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/55 hover:bg-[var(--accent-soft)]/72 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06),0_16px_38px_rgba(0,0,0,0.26)]"
-                      >
-                        <span className="flex items-center justify-between gap-4">
-                          <span className="font-mono text-sm uppercase tracking-[0.12em] text-white">
-                            {item.label}
+                    {group.items.map((item) => {
+                      const routeHref = item.href.split("#")[0];
+                      const isHashLink = item.href.includes("#");
+                      const isActive =
+                        !isHashLink &&
+                        (pathname === routeHref ||
+                          (routeHref !== "/" &&
+                            pathname.startsWith(`${routeHref}/`)));
+
+                      return (
+                        <Link
+                          key={`${group.label}-${item.label}`}
+                          href={item.href}
+                          onClick={closeMenu}
+                          className={`group rounded-xl border p-3 transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/55 hover:bg-[var(--accent-soft)]/72 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06),0_16px_38px_rgba(0,0,0,0.22)] ${
+                            isActive
+                              ? "border-[var(--accent-primary)]/45 bg-[var(--accent-soft)]/70"
+                              : "border-transparent bg-[linear-gradient(180deg,rgba(14,14,14,0.74),rgba(7,7,7,0.58))]"
+                          }`}
+                        >
+                          <span className="flex items-center justify-between gap-4">
+                            <span
+                              className={`font-mono text-sm uppercase tracking-[0.12em] ${
+                                isActive
+                                  ? "text-[var(--accent-primary)]"
+                                  : "text-white"
+                              }`}
+                            >
+                              {item.label}
+                            </span>
+                            <span className="font-mono text-xs text-[var(--accent-primary)] transition-transform duration-200 group-hover:translate-x-1">
+                              -&gt;
+                            </span>
                           </span>
-                          <span className="font-mono text-xs text-[var(--accent-primary)] transition-transform duration-200 group-hover:translate-x-1">
-                            -&gt;
+                          <span className="mt-2 block text-sm leading-6 text-[#8c90a1]">
+                            {item.description}
                           </span>
-                        </span>
-                        <span className="mt-3 block text-sm leading-6 text-[#8c90a1]">
-                          {item.description}
-                        </span>
-                      </Link>
-                    ))}
+                        </Link>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
