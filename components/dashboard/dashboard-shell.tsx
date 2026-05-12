@@ -301,11 +301,13 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
 
   return (
     <TerminalChartFrame
-      className="h-[360px]"
+      className="h-[320px]"
       footer={
         <div className="grid gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1] sm:grid-cols-3">
           <span>Start: {firstEquity ? formatCurrency(firstEquity) : "--"}</span>
-          <span>Reference: {midEquity ? formatCurrency(midEquity) : "--"}</span>
+          <span className="text-[#6f7485]">
+            Ref: {midEquity ? formatCurrency(midEquity) : "--"}
+          </span>
           <span className="text-[var(--accent-primary)]">
             Last: {lastEquity ? formatCurrency(lastEquity) : "--"}
           </span>
@@ -318,16 +320,16 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
             Equity
           </span>
           <span className="inline-flex items-center gap-2">
-            <span className="h-px w-5 bg-[#9d79ff]" />
-            Reference
+            <span className="h-px w-5 bg-[#6f7485]/60" />
+            Ref
           </span>
         </>
       }
-      title="Read-only equity curve"
+      title="Equity curve"
     >
       <svg
         aria-label="Mock equity curve"
-        className="h-[280px] w-full"
+        className="h-[238px] w-full"
         role="img"
         viewBox="0 0 900 300"
       >
@@ -372,10 +374,10 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
             <path
               d={chartPoints.baseline}
               fill="none"
-              stroke="#9d79ff"
-              strokeDasharray="8 10"
-              strokeOpacity="0.58"
-              strokeWidth="2"
+              stroke="#8c90a1"
+              strokeDasharray="4 14"
+              strokeOpacity="0.24"
+              strokeWidth="1.5"
             />
             <line
               x1="0"
@@ -422,19 +424,6 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
                 />
               </>
             ) : null}
-            <text fill="#8c90a1" fontFamily="monospace" fontSize="12" x="8" y="24">
-              START {firstEquity ? formatCurrency(firstEquity) : "--"}
-            </text>
-            <text
-              fill="var(--accent-primary)"
-              fontFamily="monospace"
-              fontSize="12"
-              textAnchor="end"
-              x="892"
-              y="24"
-            >
-              LAST {lastEquity ? formatCurrency(lastEquity) : "--"}
-            </text>
           </>
         ) : (
           <text fill="#8c90a1" fontFamily="monospace" fontSize="14" x="352" y="156">
