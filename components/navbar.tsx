@@ -274,7 +274,7 @@ export function Navbar() {
                     Demo Operator
                   </div>
                   <div className="truncate font-mono text-xs text-[#8c90a1]">
-                    demo@quantterminal.local
+                    demo@quantbot.local
                   </div>
                 </div>
                 <span className="ml-auto rounded-lg border border-[var(--accent-primary)]/60 bg-[var(--accent-soft)] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--accent-primary)]">

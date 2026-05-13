@@ -1,6 +1,6 @@
-# Quant Terminal Website
+# QuantBot Website
 
-Quant Terminal is a premium institutional-style frontend for a quantitative research product. The current build includes a public landing page, explainer pages, a demo execution/risk monitoring dashboard, and private beta access previews.
+QuantBot is a premium institutional-style frontend for a quantitative research product. The current build includes a public landing page, explainer pages, a demo execution/risk monitoring dashboard, and private beta access previews.
 
 This repository is frontend-only. The dashboard and access request flow use mock/demo behavior and are not connected to live trading, authentication, payments, databases, or backend services.
 
@@ -14,8 +14,8 @@ This repository is frontend-only. The dashboard and access request flow use mock
 
 ## Routes
 
-- `/` - Landing page for Quant Terminal, including hero, platform capabilities, CTA, compliance-oriented copy, and links into the demo terminal and private beta request flow.
-- `/dashboard` - Mock institutional quant terminal for execution/risk monitoring. Uses static demo/testnet data only.
+- `/` - Landing page for QuantBot, including hero, platform capabilities, CTA, compliance-oriented copy, and links into the demo terminal and private beta request flow.
+- `/dashboard` - Institutional operator dashboard for read-only execution/risk monitoring. Uses live telemetry APIs when local artifacts are available and safe mock fallback otherwise.
 - `/demo-testnet` - Explainer page for demo/testnet behavior and no-real-capital constraints.
 - `/alpha-engine` - Explainer page for multi-alpha research architecture.
 - `/risk-layer` - Explainer page for risk controls and execution safeguards.
@@ -30,13 +30,13 @@ This repository is frontend-only. The dashboard and access request flow use mock
 - Landing navbar:
   - `Terminal Demo` links to `/dashboard`.
   - `Request Access` links to `/request-access`.
-  - `Launch Terminal` links to `/dashboard`.
+  - `Open Demo Terminal` links to `/dashboard`.
 - Landing hero:
-  - `Open Terminal Demo` links to `/dashboard`.
+  - `Open Demo Terminal` links to `/dashboard`.
   - `Request Access` links to `/request-access`.
   - Terminal card includes a visible `Terminal Demo` link to `/dashboard`.
 - Landing CTA:
-  - `Open Terminal Demo` links to `/dashboard`.
+  - `Open Demo Terminal` links to `/dashboard`.
   - `Request Access` links to `/request-access`.
 - Dashboard:
   - Header includes `Request Access` linking to `/request-access`.
@@ -68,8 +68,8 @@ app/
   request-access/page.tsx     # Waitlist route (/request-access)
 
 components/
-  brand-mark.tsx              # Shared Quant Terminal brand assets
-  navbar.tsx                  # Landing navigation
+  brand-mark.tsx              # Shared QuantBot brand assets
+  navbar.tsx                  # Global navigation and drawer
   hero-section.tsx            # Landing hero and demo terminal preview
   metrics-section.tsx         # Landing capability cards and architecture copy
   cta-section.tsx             # Landing CTA and disclaimer copy
@@ -82,13 +82,13 @@ components/
 
 public/
   branding/
-    quant-terminal-icon-transparent.png
-  quant-terminal-icon.png
+    quantbot-logo-v2.png / quantbot-icon-v2.png
+  quantbot themed branding assets
 ```
 
 ## Demo Data Policy
 
-The `/dashboard` route is a mock institutional quant terminal. All positions, exposure metrics, equity curves, execution logs, system health indicators, risk states, and alpha engine states are static demo/testnet data.
+The `/dashboard` route is a read-only institutional quant terminal. It consumes local telemetry artifacts through Next.js route handlers when available, and falls back to clearly labeled mock/demo data when files are unavailable.
 
 The `/request-access` route is a frontend-only mock waitlist. Submitting the form validates inputs locally, shows a loading state, then displays a success state. It does not call an API route, store data, create accounts, or send email.
 
