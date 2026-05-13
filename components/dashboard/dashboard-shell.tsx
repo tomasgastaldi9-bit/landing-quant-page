@@ -516,13 +516,13 @@ function PositionsTable({ positions }: { positions: PositionRow[] }) {
           </tr>
         </thead>
         <tbody>
-          {positions.map((position) => {
+          {positions.map((position, index) => {
             const symbolClass = getSideToneClass(position.side);
             const pnlClass = getPnlToneClass(position.unrealizedPnl);
 
             return (
               <tr
-                key={position.symbol}
+                key={getPositionRowKey(position, index)}
                 className="border-b border-[#1f1f1f] text-[#c2c6d8] transition-colors hover:bg-[#101820]"
               >
                 <td className={`px-3 py-3 font-semibold ${symbolClass}`}>
@@ -739,7 +739,7 @@ function ExecutionLogs({
 
           return (
             <div
-              key={`${log.time}-${log.message}`}
+              key={getLogRowKey(log, index)}
               className={`group grid grid-cols-[4px_84px_70px_1fr] gap-3 overflow-hidden rounded-xl border bg-[#050505]/92 pr-3 font-mono text-xs transition duration-200 hover:-translate-y-px hover:border-[#424655] hover:bg-[#101820] ${
                 isLatest
                   ? "border-[var(--accent-primary)]/45 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)]"
@@ -779,6 +779,14 @@ function ExecutionLogs({
       </div>
     </div>
   );
+}
+
+function getPositionRowKey(position: PositionRow, index: number) {
+  return `${position.symbol || "no-symbol"}-${position.side || "no-side"}-${position.timestamp || "no-time"}-${index}`;
+}
+
+function getLogRowKey(log: TelemetryEvent, index: number) {
+  return `${log.timestamp || log.time || "no-time"}-${log.type || "log"}-${index}`;
 }
 
 function formatSourceStatus(status: TelemetrySourceStatus) {
