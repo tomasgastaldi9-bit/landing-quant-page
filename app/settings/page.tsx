@@ -6,6 +6,7 @@ import {
   StatusLed,
   TerminalPanel,
 } from "@/components/dashboard/terminal-ui";
+import { SettingsThemePreferences } from "@/components/theme/settings-theme-preferences";
 
 const preferenceRows = [
   {
@@ -30,29 +31,6 @@ const notificationRows = [
   { label: "Execution logs", value: "Enabled", state: "online" as const },
   { label: "Research updates", value: "Daily digest", state: "standby" as const },
   { label: "Marketing emails", value: "Disabled", state: "standby" as const },
-];
-
-const themeModes = [
-  {
-    label: "Cyan",
-    status: "Active",
-    swatch: "from-[var(--accent-primary)] to-sky-300",
-  },
-  {
-    label: "Institutional Blue",
-    status: "Preview",
-    swatch: "from-blue-500 to-indigo-300",
-  },
-  {
-    label: "Deep Teal",
-    status: "Preview",
-    swatch: "from-teal-500 to-emerald-300",
-  },
-  {
-    label: "Silver / Ice",
-    status: "Preview",
-    swatch: "from-slate-200 to-cyan-100",
-  },
 ];
 
 function SettingsRow({
@@ -117,44 +95,6 @@ function MockToggle({
               : "bg-[#8c90a1]"
           }`}
         />
-      </div>
-    </div>
-  );
-}
-
-function ThemeSwatch({
-  label,
-  status,
-  swatch,
-}: {
-  label: string;
-  status: string;
-  swatch: string;
-}) {
-  const active = status === "Active";
-
-  return (
-    <div
-      className={`rounded-2xl border p-4 transition ${
-        active
-          ? "border-[var(--accent-primary)]/46 bg-[var(--accent-soft)]"
-          : "border-[#1f1f1f]/90 bg-[#050505]/58"
-      }`}
-    >
-      <div className={`h-10 rounded-xl bg-gradient-to-r ${swatch}`} />
-      <div className="mt-4 flex items-center justify-between gap-3">
-        <span className="font-mono text-xs uppercase tracking-[0.12em] text-white">
-          {label}
-        </span>
-        <span
-          className={`rounded-lg border px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] ${
-            active
-              ? "border-[var(--accent-primary)]/46 text-[var(--accent-primary)]"
-              : "border-[#243042] text-[#8c90a1]"
-          }`}
-        >
-          {status}
-        </span>
       </div>
     </div>
   );
@@ -282,15 +222,11 @@ export default function SettingsPage() {
           eyebrow="Theme"
           title="Theme / Accent Mode"
         >
-          <div className="grid gap-3 sm:grid-cols-2">
-            {themeModes.map((theme) => (
-              <ThemeSwatch key={theme.label} {...theme} />
-            ))}
-          </div>
+          <SettingsThemePreferences />
           <p className="mt-4 text-sm leading-6 text-[#8c90a1]">
-            Theme options mirror the centralized CSS token system. This page is
-            a visual control preview only; the developer switcher remains the
-            current testing utility.
+            Theme options are powered by the same centralized CSS token system
+            as Accent Lab. Changes apply in this browser session only; no
+            backend preference is saved.
           </p>
         </TerminalPanel>
 
