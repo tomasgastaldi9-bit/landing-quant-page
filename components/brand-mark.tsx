@@ -1,7 +1,22 @@
 import Image from "next/image";
 
-const logoSrc = "/branding/quantbot-logo-v2.png";
-const iconSrc = "/branding/quantbot-icon-v2.png";
+const logoNeutralSrc = "/branding/quantbot-logo-neutral-v2.png";
+const logoAccentMaskSrc = "/branding/quantbot-logo-accent-mask-v2.png";
+const iconNeutralSrc = "/branding/quantbot-icon-neutral-v2.png";
+const iconAccentMaskSrc = "/branding/quantbot-icon-accent-mask-v2.png";
+
+function AccentMask({ src }: { src: string }) {
+  return (
+    <span
+      aria-hidden="true"
+      className="absolute inset-0 bg-[var(--accent-primary)] transition-colors duration-300"
+      style={{
+        WebkitMask: `url(${src}) left center / contain no-repeat`,
+        mask: `url(${src}) left center / contain no-repeat`,
+      }}
+    />
+  );
+}
 
 export function BrandMark({
   compact = false,
@@ -14,12 +29,13 @@ export function BrandMark({
     return (
       <div className="relative h-11 w-12 shrink-0">
         <Image
-          src={iconSrc}
+          src={iconNeutralSrc}
           alt="QuantBot"
           fill
           sizes="44px"
           className="object-contain"
         />
+        <AccentMask src={iconAccentMaskSrc} />
       </div>
     );
   }
@@ -32,13 +48,14 @@ export function BrandMark({
   return (
     <div className={`relative min-w-0 shrink-0 ${logoSize}`}>
       <Image
-        src={logoSrc}
+        src={logoNeutralSrc}
         alt="QuantBot"
         fill
         priority
         sizes={size === "drawer" ? "192px" : "(min-width: 640px) 226px, 190px"}
         className="object-contain object-left"
       />
+      <AccentMask src={logoAccentMaskSrc} />
     </div>
   );
 }
