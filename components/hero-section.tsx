@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { RevealController } from "@/components/reveal-controller";
+
 const terminalMetrics = [
   { label: "Equity", value: "Read-only", href: "/dashboard" },
   { label: "Positions", value: "Observed", href: "/dashboard#positions" },
@@ -34,6 +36,7 @@ export function HeroSection() {
       id="platform"
       className="terminal-scan relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:32px_32px,32px_32px]"
     >
+      <RevealController />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_82%,rgb(var(--accent-secondary-rgb)/0.14),transparent_38%),radial-gradient(circle_at_70%_18%,rgb(var(--accent-primary-rgb)/0.22),transparent_36%),linear-gradient(90deg,rgba(5,5,5,0.95),rgba(5,5,5,0.72)_48%,rgba(5,5,5,0.94))]" />
       <div className="ambient-drift absolute right-[8%] top-[12%] hidden h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.14),transparent_64%)] blur-2xl sm:block" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_42%,rgba(0,0,0,0.48)_100%)]" />
