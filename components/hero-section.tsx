@@ -15,9 +15,11 @@ export function HeroSection() {
   return (
     <section
       id="platform"
-      className="relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px),url('https://images.unsplash.com/photo-1642543492481-44e81e3914a7?q=80&w=2070&auto=format&fit=crop')] bg-[size:32px_32px,32px_32px,cover] bg-center"
+      className="terminal-scan relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px),url('https://images.unsplash.com/photo-1642543492481-44e81e3914a7?q=80&w=2070&auto=format&fit=crop')] bg-[size:32px_32px,32px_32px,cover] bg-center"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_18%,rgb(var(--accent-primary-rgb)/0.18),transparent_32%),linear-gradient(90deg,rgba(5,5,5,0.98),rgba(5,5,5,0.82)_48%,rgba(5,5,5,0.95))]" />
+      <div className="ambient-drift absolute right-[8%] top-[12%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.14),transparent_64%)] blur-2xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_42%,rgba(0,0,0,0.48)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(0deg,#050505,transparent)]" />
       <div className="relative mx-auto grid min-h-[640px] max-w-7xl grid-cols-1 items-center gap-10 px-4 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
         <div className="max-w-3xl">
@@ -25,7 +27,7 @@ export function HeroSection() {
             href="/demo-testnet"
             className="mb-5 inline-flex items-center gap-2 rounded-xl border border-[#424655] bg-[#0e0e0e]/80 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)] transition duration-200 hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
           >
-            <span className="relative size-2 rounded-full bg-[var(--accent-primary)] shadow-[0_0_0_3px_rgb(var(--accent-primary-rgb)/0.08),0_0_14px_rgb(var(--accent-primary-rgb)/0.24)] before:absolute before:inset-[2px] before:rounded-full before:bg-white/40" />
+            <span className="status-pulse relative size-2 rounded-full bg-[var(--accent-primary)] before:absolute before:inset-[2px] before:rounded-full before:bg-white/40" />
             Sistema Online
           </Link>
           <h1 className="max-w-3xl text-[42px] font-semibold leading-[1.04] tracking-normal text-white sm:text-6xl lg:text-[72px]">
@@ -53,9 +55,10 @@ export function HeroSection() {
         </div>
 
         <div className="relative mx-auto w-full max-w-[480px] lg:mr-0">
+          <div className="ambient-drift absolute -inset-10 hidden rounded-[3rem] bg-[radial-gradient(circle_at_54%_36%,rgb(var(--accent-primary-rgb)/0.14),transparent_62%)] blur-2xl lg:block" />
           <div className="absolute -left-6 top-10 hidden h-72 w-72 rounded-[2rem] border border-[#243042] bg-[var(--accent-soft)]/20 blur-[1px] backdrop-blur-sm lg:block" />
           <div className="absolute -right-6 bottom-8 hidden h-48 w-48 rounded-[2rem] border border-[#1f1f1f] bg-[#050505]/54 lg:block" />
-          <div className="relative overflow-hidden rounded-[28px] border border-[#424655] bg-[linear-gradient(180deg,rgba(14,14,14,0.94),rgba(7,7,7,0.9))] p-4 shadow-[0_28px_90px_rgba(0,0,0,0.42)] backdrop-blur-sm">
+          <div className="terminal-scan relative overflow-hidden rounded-[28px] border border-[#424655] bg-[linear-gradient(180deg,rgba(14,14,14,0.94),rgba(7,7,7,0.9))] p-4 shadow-[0_28px_90px_rgba(0,0,0,0.42),0_0_72px_rgb(var(--accent-primary-rgb)/0.08)] backdrop-blur-sm transition duration-300 hover:border-[var(--accent-primary)]/45 hover:shadow-[0_32px_100px_rgba(0,0,0,0.46),0_0_86px_rgb(var(--accent-primary-rgb)/0.12)]">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.65),transparent)]" />
             <div className="flex items-center justify-between border-b border-[#424655] pb-3">
               <span className="font-mono text-xs uppercase tracking-[0.16em] text-[#e2e2e2]">
@@ -87,6 +90,7 @@ export function HeroSection() {
                   fill="url(#lineFill)"
                 />
                 <polyline
+                  className="trace-draw"
                   fill="none"
                   points="0,102 82,78 168,90 252,46 336,58 420,20"
                   stroke="var(--accent-primary)"
@@ -94,7 +98,7 @@ export function HeroSection() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
-                <circle cx="420" cy="20" fill="var(--accent-primary)" r="6" />
+                <circle className="status-pulse" cx="420" cy="20" fill="var(--accent-primary)" r="6" />
               </svg>
             </div>
             <div className="mt-3 grid gap-1.5 rounded-2xl border border-[#243042] bg-[#050505]/68 p-3">
@@ -113,7 +117,7 @@ export function HeroSection() {
                 <Link
                   key={metric.label}
                   href={metric.href}
-                  className="rounded-xl border border-[#424655] bg-[#050505] p-3 transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)]"
+                  className="rounded-xl border border-[#424655] bg-[#050505] p-3 transition duration-300 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:bg-[var(--accent-soft)] hover:shadow-[0_12px_34px_rgb(var(--accent-primary-rgb)/0.08)]"
                 >
                   <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#c2c6d8]">
                     {metric.label}

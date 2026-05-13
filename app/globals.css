@@ -12,6 +12,92 @@
   }
 }
 
+@keyframes ambientDrift {
+  0%,
+  100% {
+    opacity: 0.78;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate3d(1.5%, -1%, 0) scale(1.025);
+  }
+}
+
+@keyframes terminalScan {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes statusPulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    box-shadow: 0 0 0 3px rgb(var(--accent-primary-rgb) / 0.08),
+      0 0 14px rgb(var(--accent-primary-rgb) / 0.2);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 0 5px rgb(var(--accent-primary-rgb) / 0.045),
+      0 0 22px rgb(var(--accent-primary-rgb) / 0.3);
+  }
+}
+
+@keyframes traceDraw {
+  from {
+    stroke-dashoffset: 32;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.ambient-drift {
+  animation: ambientDrift 18s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+.terminal-scan::after {
+  animation: terminalScan 9s linear infinite;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgb(var(--accent-primary-rgb) / 0.055),
+    transparent
+  );
+  content: "";
+  inset: -45% 0;
+  pointer-events: none;
+  position: absolute;
+  transform: translateY(-100%);
+}
+
+.status-pulse {
+  animation: statusPulse 3.8s ease-in-out infinite;
+}
+
+.trace-draw {
+  animation: traceDraw 5.5s linear infinite;
+  stroke-dasharray: 16 16;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-drift,
+  .terminal-scan::after,
+  .status-pulse,
+  .trace-draw {
+    animation: none;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
