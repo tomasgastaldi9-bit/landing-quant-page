@@ -1,6 +1,11 @@
+import Link from "next/link";
 import { BrandMark } from "./brand-mark";
 
-const footerLinks = ["Terms of Service", "Risk Disclosure", "Privacy Policy"];
+const footerLinks = [
+  { label: "Terms of Service", href: "/legal/terms" },
+  { label: "Risk Disclosure", href: "/legal/risk-disclosure" },
+  { label: "Privacy Policy", href: "/legal/privacy" },
+];
 
 export function Footer() {
   return (
@@ -10,13 +15,13 @@ export function Footer() {
           <BrandMark />
           <div className="flex flex-wrap gap-x-6 gap-y-3">
             {footerLinks.map((link) => (
-              <a
-                key={link}
-                href="#"
+              <Link
+                key={link.href}
+                href={link.href}
                 className="font-mono text-xs text-[#c2c6d8] transition hover:text-[var(--accent-primary)]"
               >
-                {link}
-              </a>
+                {link.label}
+              </Link>
             ))}
           </div>
           <div className="font-mono text-xs uppercase text-[#c2c6d8]">

@@ -166,9 +166,9 @@ export function Navbar() {
           </Link>
           <Link
             href="/dashboard"
-            className="whitespace-nowrap rounded-xl border border-[var(--accent-secondary)] bg-[linear-gradient(135deg,var(--accent-secondary),var(--accent-strong))] px-3 py-3 text-center text-xs font-semibold text-white shadow-[0_0_16px_rgb(var(--accent-secondary-rgb)/0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110 sm:px-5 sm:text-sm"
+            className="whitespace-nowrap rounded-xl border border-[var(--accent-primary)]/70 bg-[linear-gradient(135deg,var(--accent-primary),var(--accent-secondary))] px-3 py-3 text-center text-xs font-semibold text-[#050505] shadow-[0_0_16px_rgb(var(--accent-primary-rgb)/0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110 sm:px-5 sm:text-sm"
           >
-            Launch Terminal
+            Open Demo Terminal
           </Link>
         </div>
       </div>
@@ -203,37 +203,7 @@ export function Navbar() {
               </button>
             </div>
 
-            <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
-              Testnet Workspace
-            </div>
-            <div className="mt-2.5 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_12px_30px_rgba(0,0,0,0.2)]">
-              <div className="flex items-center gap-2.5">
-                <div className="grid size-9 place-items-center rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] font-mono text-xs font-semibold text-[var(--accent-primary)]">
-                  DO
-                </div>
-                <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold text-white">
-                    Demo Operator
-                  </div>
-                  <div className="truncate font-mono text-xs text-[#8c90a1]">
-                    demo@quantterminal.local
-                  </div>
-                </div>
-              </div>
-              <div className="mt-2.5 flex flex-wrap gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em]">
-                <span className="rounded-lg border border-[var(--accent-secondary)]/55 bg-[var(--accent-soft)] px-2 py-1 text-[var(--accent-muted)]">
-                  Private Beta
-                </span>
-                <span className="rounded-lg border border-[var(--accent-primary)]/40 bg-[var(--accent-soft)] px-2 py-1 text-[var(--accent-primary)]">
-                  Testnet Workspace
-                </span>
-                <span className="rounded-lg border border-[#424655] bg-[#050505]/82 px-2 py-1 text-[#8c90a1]">
-                  Mock User
-                </span>
-              </div>
-            </div>
-
-            <nav className="mt-2.5 grid gap-2.5 overflow-y-auto overscroll-contain rounded-2xl pr-1">
+            <nav className="mt-4 grid gap-2.5 overflow-y-auto overscroll-contain rounded-2xl pr-1">
               {navGroups.map((group) => (
                 <div
                   key={group.label}
@@ -286,12 +256,44 @@ export function Navbar() {
                   </div>
                 </div>
               ))}
-
-              <p className="rounded-xl border border-[#1f1f1f] bg-[#050505]/70 p-2.5 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#6f7485]">
-                Account controls are visual placeholders for future auth. No
-                session is created.
-              </p>
             </nav>
+
+            <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-[#8c90a1]">
+              Preview Workspace
+            </div>
+            <div className="mt-2.5 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_12px_30px_rgba(0,0,0,0.2)]">
+              <div className="flex items-center gap-2.5">
+                <div
+                  aria-hidden="true"
+                  className="grid size-9 place-items-center rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] font-mono text-xs font-semibold text-[var(--accent-primary)]"
+                >
+                  DO
+                </div>
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-semibold text-white">
+                    Demo Operator
+                  </div>
+                  <div className="truncate font-mono text-xs text-[#8c90a1]">
+                    demo@quantterminal.local
+                  </div>
+                </div>
+                <span className="ml-auto rounded-lg border border-[var(--accent-primary)]/60 bg-[var(--accent-soft)] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--accent-primary)]">
+                  Preview
+                </span>
+              </div>
+              <div className="mt-2.5 flex flex-wrap gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em]">
+                <span className="rounded-lg border border-[var(--accent-secondary)]/55 bg-[var(--accent-soft)] px-2 py-1 text-[var(--accent-muted)]">
+                  Private Beta
+                </span>
+                <span className="rounded-lg border border-[#424655] bg-[#050505]/82 px-2 py-1 text-[#8c90a1]">
+                  Mock User
+                </span>
+              </div>
+            </div>
+            <p className="mt-2 rounded-xl border border-[#1f1f1f] bg-[#050505]/70 p-2.5 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1]">
+              This is a mock workspace. No real account is created and no
+              session is active.
+            </p>
           </aside>
         </div>
       ) : null}

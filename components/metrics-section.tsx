@@ -1,57 +1,109 @@
 import Link from "next/link";
+import type { SVGProps } from "react";
+
+type IconProps = SVGProps<SVGSVGElement>;
+
+const SVG_BASE: IconProps = {
+  width: 20,
+  height: 20,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.5,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": true,
+};
+
+function CpuIcon(props: IconProps) {
+  return (
+    <svg {...SVG_BASE} {...props}>
+      <rect x="4" y="4" width="16" height="16" rx="2" />
+      <rect x="9" y="9" width="6" height="6" />
+      <path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3" />
+    </svg>
+  );
+}
+
+function ShieldIcon(props: IconProps) {
+  return (
+    <svg {...SVG_BASE} {...props}>
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    </svg>
+  );
+}
+
+function ActivityIcon(props: IconProps) {
+  return (
+    <svg {...SVG_BASE} {...props}>
+      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+    </svg>
+  );
+}
+
+function BookOpenIcon(props: IconProps) {
+  return (
+    <svg {...SVG_BASE} {...props}>
+      <path d="M2 4h7a3 3 0 0 1 3 3v13" />
+      <path d="M22 4h-7a3 3 0 0 0-3 3v13" />
+      <path d="M2 4v15h7a3 3 0 0 1 3 3" />
+      <path d="M22 4v15h-7a3 3 0 0 0-3 3" />
+    </svg>
+  );
+}
 
 const metrics = [
   {
     label: "Execution Mode",
-    value: "Demo",
-    detail: "Testnet / Paper",
+    headline: "Testnet-only execution",
+    detail: "No real capital",
     href: "/demo-testnet",
   },
   {
     label: "Risk Layer",
-    value: "Active",
-    detail: "Policy Controls",
+    headline: "Policy-driven controls",
+    detail: "Active enforcement",
     href: "/risk-layer",
   },
   {
     label: "Monitoring",
-    value: "Live",
-    detail: "System Telemetry",
+    headline: "Read-only telemetry",
+    detail: "Live system view",
     href: "/monitoring",
   },
   {
     label: "Alpha Lab",
-    value: "Multi",
-    detail: "Research Signals",
+    headline: "Multi-sleeve research",
+    detail: "Regime-aware",
     href: "/alpha-lab",
   },
 ];
 
 const architecture = [
   {
-    title: "Motor Multi-Alpha",
-    body: "Arquitectura de investigacion para organizar modelos estadisticos, sleeves y senales por regimen sin prometer performance futura.",
+    title: "Multi-Alpha Engine",
+    body: "Research architecture for organizing statistical models, sleeves, and signals by regime — without promising future performance.",
     wide: true,
-    icon: "++",
+    Icon: CpuIcon,
     href: "/alpha-lab",
   },
   {
-    title: "Controles de Riesgo",
-    body: "Gestion de exposicion dinamica y limites estrictos por posicion en tiempo real.",
-    icon: "[]",
+    title: "Risk Controls",
+    body: "Dynamic exposure management and strict per-position limits enforced in real time.",
+    Icon: ShieldIcon,
     href: "/risk-layer",
   },
   {
-    title: "Observabilidad Operativa",
-    body: "Superficie read-only para equity, posiciones, logs, alertas y salud del sistema en demo/testnet.",
-    icon: "<>",
+    title: "Operational Observability",
+    body: "Read-only surface for equity, positions, logs, alerts, and system health across demo/testnet.",
+    Icon: ActivityIcon,
     href: "/monitoring",
   },
   {
-    title: "Disciplina Metodologica",
-    body: "Workflow research-first con backtesting, walk-forward, validacion paper/demo y revisiones de despliegue.",
+    title: "Methodological Discipline",
+    body: "Research-first workflow with backtesting, walk-forward, paper/demo validation, and deployment reviews.",
     wide: true,
-    icon: "//",
+    Icon: BookOpenIcon,
     href: "/methodology",
   },
 ];
@@ -113,17 +165,17 @@ export function MetricsSection() {
   return (
     <section
       id="metrics"
-      className="terminal-scan relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]"
+      className="relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]"
     >
-      <div className="ambient-drift pointer-events-none absolute left-[5%] top-[18%] hidden h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-secondary-rgb)/0.08),transparent_68%)] blur-2xl md:block" />
+      <div className="pointer-events-none absolute left-[5%] top-[18%] hidden h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-secondary-rgb)/0.08),transparent_68%)] blur-2xl md:block" />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-8 lg:py-20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
-              Platform Layer
+              Platform Capabilities
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white">
-              Capacidades de Plataforma
+              What QuantBot Includes
             </h2>
           </div>
           <div className="w-fit rounded-full border border-[#243042] bg-white/[0.03] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-[#8c90a1] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
@@ -141,8 +193,8 @@ export function MetricsSection() {
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#c2c6d8]">
                 {metric.label}
               </div>
-              <div className="mt-2.5 font-mono text-[32px] font-semibold leading-none tracking-normal text-white sm:text-[38px]">
-                {metric.value}
+              <div className="mt-3 text-lg font-semibold leading-snug tracking-normal text-white">
+                {metric.headline}
               </div>
               <div className="mt-4 inline-flex rounded-full border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/70 px-3 py-1.5 font-mono text-[11px] text-[var(--accent-primary)] transition-colors group-hover:border-[var(--accent-primary)]/55">
                 {metric.detail}
@@ -157,11 +209,11 @@ export function MetricsSection() {
               Institutional Stack
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white">
-              Arquitectura Institucional
+              Institutional Architecture
             </h2>
             <p className="mt-3 text-sm leading-6 text-[#c2c6d8] sm:text-base sm:leading-7">
-              Infraestructura disenada para investigacion, simulacion de
-              ejecucion y analisis de riesgo en entornos controlados.
+              Infrastructure designed for research, execution simulation, and
+              risk analysis in controlled environments.
             </p>
           </div>
           <div className="mt-6 grid grid-cols-1 gap-3.5 lg:grid-cols-3">
@@ -174,8 +226,8 @@ export function MetricsSection() {
                 }`}
               >
                 <div className="flex items-start justify-between gap-4">
-                  <div className="rounded-xl border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/65 px-3 py-2 font-mono text-xl text-[var(--accent-primary)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)]">
-                    {item.icon}
+                  <div className="grid size-11 place-items-center rounded-xl border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/65 text-[var(--accent-primary)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)]">
+                    <item.Icon />
                   </div>
                   <div className="mt-1 h-px flex-1 bg-[linear-gradient(90deg,rgb(var(--accent-primary-rgb)/0.34),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
                 </div>
@@ -299,11 +351,11 @@ export function MetricsSection() {
               className="w-fit rounded-xl border border-[#243042] bg-[#050505]/82 px-4 py-3 font-mono text-xs uppercase tracking-[0.14em] text-[#c2c6d8] transition hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
               href="/dashboard"
             >
-              Launch Terminal Demo
+              Open Demo Terminal
             </Link>
           </div>
           <div className="mt-6 grid gap-3.5 lg:grid-cols-3">
-            {telemetryPanels.map((panel) => (
+            {telemetryPanels.map((panel, index) => (
               <Link
                 className="group overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_50px_rgba(0,0,0,0.22)] transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45"
                 href={panel.href}
@@ -313,7 +365,11 @@ export function MetricsSection() {
                   <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-white">
                     {panel.label}
                   </div>
-                  <span className="status-pulse size-2 rounded-full bg-[var(--accent-primary)]" />
+                  <span
+                    className={`size-2 rounded-full bg-[var(--accent-primary)] ${
+                      index === 0 ? "status-pulse" : ""
+                    }`}
+                  />
                 </div>
                 <div className="mt-3 h-18 rounded-xl border border-[#1f1f1f]/90 bg-[#050505]/72 p-3">
                   <svg
@@ -323,7 +379,7 @@ export function MetricsSection() {
                     viewBox="0 0 260 80"
                   >
                     <path
-                      className="trace-draw"
+                      className={index === 0 ? "trace-draw" : ""}
                       d="M0 58 C42 42 62 44 96 50 C128 56 144 18 174 28 C204 38 218 24 260 14"
                       fill="none"
                       stroke="var(--accent-primary)"
