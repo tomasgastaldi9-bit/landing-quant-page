@@ -96,6 +96,10 @@
   .trace-draw {
     animation: none;
   }
+
+  .trace-draw {
+    stroke-dasharray: none;
+  }
 }
 
 :root {

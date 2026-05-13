@@ -18,7 +18,7 @@ export function HeroSection() {
       className="terminal-scan relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px),url('https://images.unsplash.com/photo-1642543492481-44e81e3914a7?q=80&w=2070&auto=format&fit=crop')] bg-[size:32px_32px,32px_32px,cover] bg-center"
     >
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_18%,rgb(var(--accent-primary-rgb)/0.18),transparent_32%),linear-gradient(90deg,rgba(5,5,5,0.98),rgba(5,5,5,0.82)_48%,rgba(5,5,5,0.95))]" />
-      <div className="ambient-drift absolute right-[8%] top-[12%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.14),transparent_64%)] blur-2xl" />
+      <div className="ambient-drift absolute right-[8%] top-[12%] hidden h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.14),transparent_64%)] blur-2xl sm:block" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_42%,rgba(0,0,0,0.48)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(0deg,#050505,transparent)]" />
       <div className="relative mx-auto grid min-h-[640px] max-w-7xl grid-cols-1 items-center gap-10 px-4 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
