@@ -115,7 +115,7 @@ export function MetricsSection() {
       id="metrics"
       className="border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:32px_32px]"
     >
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-8 lg:py-24">
+      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-8 lg:py-20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
@@ -129,46 +129,46 @@ export function MetricsSection() {
             Private beta capability snapshot
           </div>
         </div>
-        <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-7 grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
           {metrics.map((metric) => (
             <Link
               key={metric.label}
               href={metric.href}
-              className="group relative overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.018)_42%,rgba(5,5,5,0.72))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_24px_70px_rgba(0,0,0,0.3)] sm:p-6"
+              className="group relative overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.018)_42%,rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_24px_70px_rgba(0,0,0,0.3)] sm:p-5"
             >
               <div className="absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.42),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#c2c6d8]">
                 {metric.label}
               </div>
-              <div className="mt-3 font-mono text-[34px] font-semibold leading-none tracking-normal text-white sm:text-[42px]">
+              <div className="mt-2.5 font-mono text-[32px] font-semibold leading-none tracking-normal text-white sm:text-[38px]">
                 {metric.value}
               </div>
-              <div className="mt-5 inline-flex rounded-full border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/70 px-3 py-1.5 font-mono text-xs text-[var(--accent-primary)] transition-colors group-hover:border-[var(--accent-primary)]/55">
+              <div className="mt-4 inline-flex rounded-full border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/70 px-3 py-1.5 font-mono text-[11px] text-[var(--accent-primary)] transition-colors group-hover:border-[var(--accent-primary)]/55">
                 {metric.detail}
               </div>
             </Link>
           ))}
         </div>
 
-        <div id="risk-controls" className="mt-16 sm:mt-24">
-          <div className="max-w-3xl rounded-2xl border border-[#1f1f1f]/80 bg-[#050505]/48 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] sm:p-6">
+        <div id="risk-controls" className="mt-14 border-t border-[#1f1f1f]/90 pt-10 sm:mt-20 sm:pt-12">
+          <div className="max-w-3xl rounded-2xl border border-[#1f1f1f]/80 bg-[#050505]/48 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] sm:p-5">
             <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
               Institutional Stack
             </div>
             <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white">
               Arquitectura Institucional
             </h2>
-            <p className="mt-4 text-base leading-7 text-[#c2c6d8]">
+            <p className="mt-3 text-sm leading-6 text-[#c2c6d8] sm:text-base sm:leading-7">
               Infraestructura disenada para investigacion, simulacion de
               ejecucion y analisis de riesgo en entornos controlados.
             </p>
           </div>
-          <div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-3.5 lg:grid-cols-3">
             {architecture.map((item) => (
               <Link
                 key={item.title}
                 href={item.href}
-                className={`group relative min-h-[230px] overflow-hidden rounded-2xl border border-[#243042]/70 bg-[radial-gradient(circle_at_18%_0%,rgb(var(--accent-primary-rgb)/0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.74))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.2)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.07),0_24px_70px_rgba(0,0,0,0.3)] sm:p-6 ${
+                className={`group relative min-h-[200px] overflow-hidden rounded-2xl border border-[#243042]/70 bg-[radial-gradient(circle_at_18%_0%,rgb(var(--accent-primary-rgb)/0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.2)] backdrop-blur-sm transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.07),0_24px_70px_rgba(0,0,0,0.3)] sm:p-5 ${
                   item.wide ? "lg:col-span-2" : ""
                 }`}
               >
@@ -178,10 +178,10 @@ export function MetricsSection() {
                   </div>
                   <div className="mt-1 h-px flex-1 bg-[linear-gradient(90deg,rgb(var(--accent-primary-rgb)/0.34),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
                 </div>
-                <h3 className="mt-8 text-xl font-semibold text-white">
+                <h3 className="mt-6 text-lg font-semibold text-white">
                   {item.title}
                 </h3>
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-[#c2c6d8]">
+                <p className="mt-2.5 max-w-2xl text-sm leading-6 text-[#c2c6d8]">
                   {item.body}
                 </p>
               </Link>
@@ -189,32 +189,32 @@ export function MetricsSection() {
           </div>
         </div>
 
-        <div className="mt-16 sm:mt-24">
-          <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-            <div className="sticky top-28 rounded-[28px] border border-[#243042]/80 bg-[radial-gradient(circle_at_20%_0%,rgb(var(--accent-primary-rgb)/0.1),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.045),rgba(5,5,5,0.76))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_22px_70px_rgba(0,0,0,0.24)] sm:p-6">
+        <div className="mt-14 border-t border-[#1f1f1f]/90 pt-10 sm:mt-20 sm:pt-12">
+          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
+            <div className="sticky top-28 rounded-[28px] border border-[#243042]/80 bg-[radial-gradient(circle_at_20%_0%,rgb(var(--accent-primary-rgb)/0.1),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.045),rgba(5,5,5,0.76))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_22px_70px_rgba(0,0,0,0.24)] sm:p-5">
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
                 Research Lifecycle
               </div>
               <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white">
                 From alpha hypothesis to monitored testnet workflow.
               </h2>
-              <p className="mt-4 text-base leading-7 text-[#c2c6d8]">
+              <p className="mt-3 text-sm leading-6 text-[#c2c6d8] sm:text-base sm:leading-7">
                 The homepage now maps the product around the workflow a quant
                 operator expects: research, validation, risk review, and
                 observability before any live deployment conversation.
               </p>
               <Link
                 href="/alpha-lab"
-                className="mt-6 inline-flex rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] px-4 py-3 font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent-primary)] transition hover:border-[var(--accent-primary)] hover:bg-[var(--accent-surface)]"
+                className="mt-5 inline-flex rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] px-4 py-2.5 font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent-primary)] transition hover:border-[var(--accent-primary)] hover:bg-[var(--accent-surface)]"
               >
                 Open Alpha Lab
               </Link>
             </div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-3">
               {lifecycle.map((item, index) => (
                 <Link
-                  className="group relative overflow-hidden rounded-2xl border border-[#243042]/72 bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(5,5,5,0.74))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_18px_50px_rgba(0,0,0,0.2)] transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:bg-[linear-gradient(180deg,rgb(var(--accent-soft-rgb)/0.22),rgba(5,5,5,0.78))]"
+                  className="group relative overflow-hidden rounded-2xl border border-[#243042]/72 bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_18px_50px_rgba(0,0,0,0.2)] transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45 hover:bg-[linear-gradient(180deg,rgb(var(--accent-soft-rgb)/0.22),rgba(5,5,5,0.78))]"
                   href={item.href}
                   key={item.title}
                 >
@@ -224,11 +224,11 @@ export function MetricsSection() {
                         {item.phase}
                       </div>
                       {index < lifecycle.length - 1 ? (
-                        <div className="mt-3 h-16 w-px bg-[linear-gradient(180deg,rgb(var(--accent-primary-rgb)/0.55),transparent)]" />
+                        <div className="mt-2.5 h-12 w-px bg-[linear-gradient(180deg,rgb(var(--accent-primary-rgb)/0.55),transparent)]" />
                       ) : null}
                     </div>
                     <div className="min-w-0 pb-2">
-                      <h3 className="text-xl font-semibold text-white">
+                      <h3 className="text-lg font-semibold text-white">
                         {item.title}
                       </h3>
                       <p className="mt-2 text-sm leading-6 text-[#c2c6d8]">
@@ -242,8 +242,8 @@ export function MetricsSection() {
           </div>
         </div>
 
-        <div className="mt-16 rounded-[32px] border border-[#243042]/80 bg-[radial-gradient(circle_at_82%_16%,rgb(var(--accent-primary-rgb)/0.11),transparent_34%),linear-gradient(180deg,rgba(14,14,14,0.92),rgba(5,5,5,0.82))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_28px_90px_rgba(0,0,0,0.28)] sm:mt-24 sm:p-6 lg:p-8">
-          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+        <div className="mt-14 rounded-[32px] border border-[#243042]/80 bg-[radial-gradient(circle_at_82%_16%,rgb(var(--accent-primary-rgb)/0.11),transparent_34%),linear-gradient(180deg,rgba(14,14,14,0.92),rgba(5,5,5,0.82))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_28px_90px_rgba(0,0,0,0.28)] sm:mt-20 sm:p-5 lg:p-6">
+          <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
                 Deployment Workflow
@@ -251,17 +251,17 @@ export function MetricsSection() {
               <h2 className="mt-3 text-3xl font-semibold tracking-normal text-white">
                 A disciplined path from research candidate to operator review.
               </h2>
-              <p className="mt-4 text-base leading-7 text-[#c2c6d8]">
+              <p className="mt-3 text-sm leading-6 text-[#c2c6d8] sm:text-base sm:leading-7">
                 QuantBot presents deployment as a controlled review workflow,
                 not a performance promise: every stage is framed around
                 observability, risk policy, and testnet validation.
               </p>
             </div>
-            <div className="rounded-2xl border border-[#243042] bg-[#050505]/68 p-4">
-              <div className="grid gap-3">
+            <div className="rounded-2xl border border-[#243042] bg-[#050505]/68 p-3">
+              <div className="grid gap-2">
                 {deploymentSteps.map((step, index) => (
                   <div
-                    className="flex items-center gap-3 rounded-xl border border-[#1f1f1f]/90 bg-[#0e0e0e]/70 px-3 py-3"
+                    className="flex items-center gap-3 rounded-xl border border-[#1f1f1f]/90 bg-[#0e0e0e]/70 px-3 py-2.5"
                     key={step}
                   >
                     <span
@@ -284,7 +284,7 @@ export function MetricsSection() {
           </div>
         </div>
 
-        <div className="mt-16 sm:mt-24">
+        <div className="mt-14 border-t border-[#1f1f1f]/90 pt-10 sm:mt-20 sm:pt-12">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
@@ -301,10 +301,10 @@ export function MetricsSection() {
               Launch Terminal Demo
             </Link>
           </div>
-          <div className="mt-8 grid gap-4 lg:grid-cols-3">
+          <div className="mt-6 grid gap-3.5 lg:grid-cols-3">
             {telemetryPanels.map((panel) => (
               <Link
-                className="group overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.72))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_50px_rgba(0,0,0,0.22)] transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45"
+                className="group overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_50px_rgba(0,0,0,0.22)] transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45"
                 href={panel.href}
                 key={panel.label}
               >
@@ -314,7 +314,7 @@ export function MetricsSection() {
                   </div>
                   <span className="size-2 rounded-full bg-[var(--accent-primary)] shadow-[0_0_14px_rgb(var(--accent-primary-rgb)/0.24)]" />
                 </div>
-                <div className="mt-4 h-20 rounded-xl border border-[#1f1f1f]/90 bg-[#050505]/72 p-3">
+                <div className="mt-3 h-18 rounded-xl border border-[#1f1f1f]/90 bg-[#050505]/72 p-3">
                   <svg
                     aria-label={`${panel.label} preview sparkline`}
                     className="h-full w-full"
@@ -334,7 +334,7 @@ export function MetricsSection() {
                     />
                   </svg>
                 </div>
-                <div className="mt-4 font-mono text-xs uppercase tracking-[0.12em] text-[var(--accent-primary)]">
+                <div className="mt-3 font-mono text-xs uppercase tracking-[0.12em] text-[var(--accent-primary)]">
                   {panel.value}
                 </div>
               </Link>
