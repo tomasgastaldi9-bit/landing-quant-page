@@ -129,12 +129,6 @@ export function DashboardShell({
 }) {
   const equityMetrics = [
     {
-      label: "Estimated Equity",
-      value: formatCurrency(equitySnapshot.currentEquity),
-      detail:
-        equitySnapshot.source === "live-csv" ? "Wallet + unrealized PnL" : "Mock fallback",
-    },
-    {
       label: "Unrealized PnL",
       value: formatSignedCurrency(equitySnapshot.unrealizedPnl ?? null),
       detail:
@@ -253,7 +247,7 @@ export function DashboardShell({
           <MetricTile
             label="Equity"
             value={formatCurrency(equitySnapshot.currentEquity)}
-            detail={formatTime(equitySnapshot.lastUpdate)}
+            detail="Live marked-to-market"
             emphasis
             compact
           />
@@ -286,7 +280,7 @@ export function DashboardShell({
           />
         </section>
 
-        <section className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {equityMetrics.map((metric) => (
             <MetricTile key={metric.label} {...metric} compact />
           ))}
