@@ -1,4 +1,4 @@
-import { DashboardShell } from "@/components/dashboard/dashboard-shell";
+import { DashboardTelemetryClient } from "@/components/dashboard/dashboard-telemetry-client";
 import { getEquitySnapshot } from "@/lib/equity/csv-adapter";
 import { getPositionsSnapshot } from "@/lib/positions/csv-adapter";
 
@@ -11,9 +11,9 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <DashboardShell
-      equitySnapshot={equitySnapshot}
-      positionsSnapshot={positionsSnapshot}
+    <DashboardTelemetryClient
+      initialEquitySnapshot={equitySnapshot}
+      initialPositionsSnapshot={positionsSnapshot}
     />
   );
 }

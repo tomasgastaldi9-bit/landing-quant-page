@@ -17,6 +17,7 @@ export function getMockEquitySnapshot(message = "CSV not found. Showing mock fal
 
   return {
     source: "mock-fallback",
+    sourceStatus: "MOCK_FALLBACK",
     points: mockPoints,
     currentEquity: last.equity,
     lastUpdate: last.timestamp,

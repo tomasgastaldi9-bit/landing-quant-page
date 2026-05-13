@@ -1,55 +1,70 @@
-import { existsSync } from "node:fs";
-import { readFile } from "node:fs/promises";
-import path from "node:path";
 import { getFirstValue, normalizeTimestamp, parseCsv, parseNumber } from "@/lib/csv";
+import { readTelemetryCsv } from "@/lib/telemetry/files";
 import { getMockEquitySnapshot } from "./mock-equity";
 import type { EquityPoint, EquitySnapshot } from "./types";
 
 const TIMESTAMP_COLUMNS = ["timestamp", "time", "datetime", "date"];
-const EQUITY_COLUMNS = ["equity", "balance", "portfolio_value", "account_equity"];
+const EQUITY_COLUMNS = [
+  "equity",
+  "balance",
+  "portfolio_value",
+  "account_equity",
+  "usdt_equity_after",
+  "usdt_equity_before",
+];
 
 export async function getEquitySnapshot(): Promise<EquitySnapshot> {
-  const csvPath = resolveEquityCsvPath();
+  const source = await readTelemetryCsv("live_testnet_equity.csv", { limit: 1200 });
 
-  if (!existsSync(csvPath)) {
-    return getMockEquitySnapshot(`CSV not found at ${csvPath}. Showing mock fallback data.`);
-  }
-
-  try {
-    const csv = await readFile(csvPath, "utf8");
-    const points = parseEquityCsv(csv);
-
-    if (points.length === 0) {
-      return getMockEquitySnapshot("CSV exists but no equity rows could be parsed.");
-    }
-
-    const current = points[points.length - 1];
-    const firstToday = findFirstPointForDay(points, current.timestamp) ?? points[0];
-
+  if (source.status === "MISSING_FILE") {
     return {
-      source: "live-csv",
-      points,
-      currentEquity: current.equity,
-      lastUpdate: current.timestamp,
-      dailyPnl: current.equity - firstToday.equity,
-      message: `Loaded ${points.length} equity rows from CSV.`,
+      ...getMockEquitySnapshot(source.message),
+      sourceStatus: "MISSING_FILE",
+      filePath: source.filePath,
+      fileLastModified: source.lastModified,
     };
-  } catch (error) {
-    const message =
-      error instanceof Error
-        ? `Failed to read equity CSV: ${error.message}`
-        : "Failed to read equity CSV.";
-
-    return getMockEquitySnapshot(message);
   }
+
+  if (source.status === "PARSE_ERROR") {
+    return {
+      ...getMockEquitySnapshot(source.message),
+      source: "parse-error",
+      sourceStatus: "PARSE_ERROR",
+      filePath: source.filePath,
+      fileLastModified: source.lastModified,
+    };
+  }
+
+  const points = parseEquityRows(source.rows);
+
+  if (points.length === 0) {
+    return {
+      ...getMockEquitySnapshot("CSV exists but no equity rows could be parsed."),
+      source: "parse-error",
+      sourceStatus: "PARSE_ERROR",
+      filePath: source.filePath,
+      fileLastModified: source.lastModified,
+    };
+  }
+
+  const current = points[points.length - 1];
+  const firstToday = findFirstPointForDay(points, current.timestamp) ?? points[0];
+
+  return {
+    source: "live-csv",
+    sourceStatus: "LIVE_FILE",
+    points,
+    currentEquity: current.equity,
+    lastUpdate: current.timestamp,
+    dailyPnl: current.equity - firstToday.equity,
+    message: source.message,
+    filePath: source.filePath,
+    fileLastModified: source.lastModified,
+  };
 }
 
-function resolveEquityCsvPath() {
-  return path.join(process.cwd(), "output", "live_testnet_equity.csv");
-}
-
-function parseEquityCsv(csv: string): EquityPoint[] {
-  return parseCsv(csv)
+function parseEquityRows(rows: ReturnType<typeof parseCsv>): EquityPoint[] {
+  return rows
     .map((row) => {
       const timestamp = getFirstValue(row, TIMESTAMP_COLUMNS);
       const equity = parseNumber(getFirstValue(row, EQUITY_COLUMNS));

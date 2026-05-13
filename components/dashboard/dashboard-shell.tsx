@@ -11,6 +11,7 @@ import {
 } from "@/components/charts/terminal-charts";
 import type { EquitySnapshot } from "@/lib/equity/types";
 import type { PositionRow, PositionsSnapshot } from "@/lib/positions/types";
+import type { TelemetryEvent, TelemetrySourceStatus } from "@/lib/telemetry/types";
 import Link from "next/link";
 
 const exposureMetrics = [
@@ -40,44 +41,51 @@ const exposureMetrics = [
   },
 ];
 
-const logs = [
+const mockLogs: TelemetryEvent[] = [
   {
+    timestamp: "2026-05-08T14:03:21.842Z",
     time: "14:03:21.842",
     type: "risk",
     source: "risk-policy",
     message: "Position policy check passed",
   },
   {
+    timestamp: "2026-05-08T14:03:09.118Z",
     time: "14:03:09.118",
     type: "exec",
     source: "testnet-router",
     message: "Demo order routed to testnet venue",
   },
   {
+    timestamp: "2026-05-08T14:02:48.504Z",
     time: "14:02:48.504",
     type: "alpha",
     source: "alpha-engine",
     message: "Momentum signal weight reduced",
   },
   {
+    timestamp: "2026-05-08T14:02:17.093Z",
     time: "14:02:17.093",
     type: "sys",
     source: "market-data",
     message: "Market data heartbeat normal",
   },
   {
+    timestamp: "2026-05-08T14:01:54.770Z",
     time: "14:01:54.770",
     type: "alert",
     source: "exposure-watch",
     message: "Exposure drift below alert threshold",
   },
   {
+    timestamp: "2026-05-08T14:01:22.611Z",
     time: "14:01:22.611",
     type: "risk",
     source: "risk-policy",
     message: "Reduce-only guard remains armed",
   },
   {
+    timestamp: "2026-05-08T14:00:58.406Z",
     time: "14:00:58.406",
     type: "exec",
     source: "testnet-router",
@@ -101,9 +109,17 @@ const alphaModules = [
 export function DashboardShell({
   equitySnapshot,
   positionsSnapshot,
+  telemetryEvents = [],
+  eventSourceStatus = "MOCK_FALLBACK",
+  healthSourceStatus,
+  apiLastUpdated,
 }: {
   equitySnapshot: EquitySnapshot;
   positionsSnapshot: PositionsSnapshot;
+  telemetryEvents?: TelemetryEvent[];
+  eventSourceStatus?: TelemetrySourceStatus;
+  healthSourceStatus?: TelemetrySourceStatus | null;
+  apiLastUpdated?: string | null;
 }) {
   const equityMetrics = [
     {
@@ -136,6 +152,13 @@ export function DashboardShell({
   ).length;
   const liveSource =
     equitySnapshot.source === "live-csv" || positionsSnapshot.source === "live-csv";
+  const hasParseError =
+    equitySnapshot.source === "parse-error" || positionsSnapshot.source === "parse-error";
+  const dataModeSource = hasParseError
+    ? "parse-error"
+    : liveSource
+      ? "live-csv"
+      : "mock-fallback";
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] bg-[size:32px_32px] text-[#e2e2e2]">
@@ -159,7 +182,7 @@ export function DashboardShell({
           </div>
           <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-[#c2c6d8]">
             <Link href="/demo-testnet"><StatusBadge>Demo / Testnet</StatusBadge></Link>
-            <DataModeBadge source={liveSource ? "live-csv" : "mock-fallback"} />
+            <DataModeBadge source={dataModeSource} />
             <Link href="/demo-testnet"><StatusBadge>Research Mode</StatusBadge></Link>
             <StatusBadge>Not Financial Advice</StatusBadge>
             <a
@@ -205,8 +228,9 @@ export function DashboardShell({
                   : "mock fallback"}
               </span>
               . {equitySnapshot.message}
+              {apiLastUpdated ? ` Last updated: ${formatDateTime(apiLastUpdated)}.` : ""}
               {equitySnapshot.source === "mock-fallback"
-                ? " Place CSV at output/live_testnet_equity.csv to enable live equity display."
+                ? " Configure QUANTBOT_OUTPUT_DIR or place CSVs in ../crypto_bot/output to enable live telemetry."
                 : ""}
             </div>
           </div>
@@ -223,8 +247,8 @@ export function DashboardShell({
           <MetricTile
             label="Data Mode"
             value={liveSource ? "Live" : "Mock"}
-            detail={liveSource ? "Testnet CSV" : "Fallback"}
-            tone={liveSource ? "good" : "muted"}
+            detail={hasParseError ? "Parse error" : liveSource ? "Testnet CSV" : "Fallback"}
+            tone={hasParseError ? "warning" : liveSource ? "good" : "muted"}
             compact
           />
           <MetricTile
@@ -298,7 +322,7 @@ export function DashboardShell({
                 ? ` Last update: ${formatDateTime(positionsSnapshot.lastUpdate)}.`
                 : " Last update unavailable."}
               {positionsSnapshot.source === "mock-fallback"
-                ? " Place CSV at output/live_testnet_positions.csv to enable live positions."
+                ? " Configure QUANTBOT_OUTPUT_DIR or place CSVs in ../crypto_bot/output to enable live positions."
                 : ""}
             </div>
           </TerminalPanel>
@@ -311,19 +335,19 @@ export function DashboardShell({
           <TerminalPanel
             eyebrow="System"
             title="Health Indicators"
-            action="Telemetry"
+            action={formatSourceStatus(healthSourceStatus ?? "MOCK_FALLBACK")}
             priority="passive"
           >
-            <SystemHealth />
+            <SystemHealth healthSourceStatus={healthSourceStatus} />
           </TerminalPanel>
           <TerminalPanel
             id="execution-logs"
             eyebrow="Execution"
             title="Execution Logs"
-            action="Read-only log"
+            action={formatSourceStatus(eventSourceStatus)}
             priority="passive"
           >
-            <ExecutionLogs />
+            <ExecutionLogs events={telemetryEvents} sourceStatus={eventSourceStatus} />
           </TerminalPanel>
         </section>
       </div>
@@ -522,8 +546,9 @@ function PositionsTable({ positions }: { positions: PositionRow[] }) {
 }
 
 function getSideToneClass(side: PositionRow["side"]) {
-  if (side === "LONG") return "text-emerald-300";
-  if (side === "SHORT") return "text-rose-300";
+  const normalized = side.toUpperCase();
+  if (normalized === "LONG") return "text-emerald-300";
+  if (normalized === "SHORT") return "text-rose-300";
   return "text-[#c2c6d8]";
 }
 
@@ -619,28 +644,52 @@ function AlphaEngineStatus() {
   );
 }
 
-function SystemHealth() {
+function SystemHealth({
+  healthSourceStatus,
+}: {
+  healthSourceStatus?: TelemetrySourceStatus | null;
+}) {
+  const statusLabel = formatSourceStatus(healthSourceStatus ?? "MOCK_FALLBACK");
+  const statusTone = healthSourceStatus === "LIVE_FILE" ? "online" : "standby";
+
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      {health.map((item) => (
-        <div key={item.label} className="rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors hover:border-[#424655]">
-          <div className="flex items-center justify-between gap-3">
-            <div className="font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8]">
-              {item.label}
+    <div className="space-y-3">
+      <div className="rounded-xl border border-[var(--accent-primary)]/25 bg-[var(--accent-soft)]/55 p-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[#c2c6d8]">
+        <span className="mr-2 inline-flex align-middle">
+          <StatusLed state={statusTone} />
+        </span>
+        Telemetry source: <span className="text-[var(--accent-primary)]">{statusLabel}</span>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {health.map((item) => (
+          <div key={item.label} className="rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors hover:border-[#424655]">
+            <div className="flex items-center justify-between gap-3">
+              <div className="font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8]">
+                {item.label}
+              </div>
+              <StatusLed state={item.state as "online" | "standby"} />
             </div>
-            <StatusLed state={item.state as "online" | "standby"} />
+            <div className="mt-3 font-mono text-2xl font-semibold text-white">
+              {item.value}
+            </div>
           </div>
-          <div className="mt-3 font-mono text-2xl font-semibold text-white">
-            {item.value}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
 
-function ExecutionLogs() {
+function ExecutionLogs({
+  events,
+  sourceStatus,
+}: {
+  events: TelemetryEvent[];
+  sourceStatus: TelemetrySourceStatus;
+}) {
   const filters = ["All", "Risk", "Exec", "Alpha", "Alerts"];
+  const logs = events.length > 0 ? events : mockLogs;
+  const sourceLabel =
+    events.length > 0 ? formatSourceStatus(sourceStatus) : "MOCK_FALLBACK";
 
   if (logs.length === 0) {
     return (
@@ -663,7 +712,7 @@ function ExecutionLogs() {
           </div>
         </div>
         <div className="rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1]">
-          Source: mock/testnet stream
+          Source: {sourceLabel}
         </div>
       </div>
 
@@ -730,6 +779,14 @@ function ExecutionLogs() {
       </div>
     </div>
   );
+}
+
+function formatSourceStatus(status: TelemetrySourceStatus) {
+  return status
+    .toLowerCase()
+    .split("_")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 }
 
 function getLogSeverity(type: string) {

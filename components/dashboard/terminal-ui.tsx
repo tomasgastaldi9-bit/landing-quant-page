@@ -132,12 +132,19 @@ export function StatusBadge({
 export function DataModeBadge({
   source,
 }: {
-  source: "live-csv" | "mock-fallback";
+  source: "live-csv" | "mock-fallback" | "parse-error";
 }) {
+  const label =
+    source === "live-csv"
+      ? "Live Testnet Data"
+      : source === "parse-error"
+        ? "Parse Error"
+        : "Mock Data Fallback";
+
   return (
     <Link href="/demo-testnet" className="inline-flex">
       <StatusBadge tone="accent">
-        {source === "live-csv" ? "Live Testnet Data" : "Mock Data Fallback"}
+        {label}
       </StatusBadge>
     </Link>
   );

@@ -5,6 +5,7 @@ export function getMockPositionsSnapshot(
 ): PositionsSnapshot {
   return {
     source: "mock-fallback",
+    sourceStatus: "MOCK_FALLBACK",
     lastUpdate: "2026-05-08T16:00:00.000Z",
     message,
     positions: [
