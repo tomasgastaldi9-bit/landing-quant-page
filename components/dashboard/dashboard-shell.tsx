@@ -411,6 +411,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
       <svg
         aria-label="Equity curve"
         className="-mx-4 h-[214px] w-[calc(100%+2rem)] sm:h-[226px]"
+        preserveAspectRatio="none"
         role="img"
         viewBox="0 0 900 300"
       >
