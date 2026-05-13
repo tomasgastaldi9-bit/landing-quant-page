@@ -64,6 +64,14 @@ export function RevealController() {
       return;
     }
 
+    function revealVisibleElements() {
+      elements.forEach((element) => {
+        if (isElementInViewport(element)) {
+          element.classList.add("is-visible");
+        }
+      });
+    }
+
     elements.forEach((element) => {
       element.style.setProperty("--reveal-delay", `${getStaggerDelay(element)}ms`);
       element.classList.add("reveal-on-scroll");
@@ -96,13 +104,15 @@ export function RevealController() {
       .filter((element) => !element.classList.contains("is-visible"))
       .forEach((element) => observer.observe(element));
 
-    const fallbackTimer = window.setTimeout(() => {
-      elements.forEach((element) => element.classList.add("is-visible"));
-      observer.disconnect();
-    }, 500);
+    window.addEventListener("scroll", revealVisibleElements, { passive: true });
+    window.addEventListener("resize", revealVisibleElements);
+
+    const fallbackTimer = window.setTimeout(revealVisibleElements, 500);
 
     return () => {
       window.clearTimeout(fallbackTimer);
+      window.removeEventListener("scroll", revealVisibleElements);
+      window.removeEventListener("resize", revealVisibleElements);
       observer.disconnect();
     };
   }, [pathname]);
