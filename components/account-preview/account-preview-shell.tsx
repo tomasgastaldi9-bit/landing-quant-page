@@ -77,7 +77,7 @@ export function AccountPreviewShell({
                     Demo Operator
                   </div>
                   <div className="font-mono text-xs text-[#8c90a1]">
-                    demo@quantterminal.local
+                    demo@quantbot.local
                   </div>
                 </div>
               </div>

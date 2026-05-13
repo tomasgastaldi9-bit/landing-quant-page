@@ -42,7 +42,7 @@ export function AccessRequestShell() {
               Request Private Beta Access
             </h1>
             <p className="mt-6 max-w-xl text-base leading-7 text-[#c2c6d8] sm:text-lg">
-              Join the institutional research waitlist for Quant Terminal&apos;s demo
+              Join the institutional research waitlist for QuantBot&apos;s demo
               execution terminal, alpha research workspace, and risk monitoring
               environment.
             </p>

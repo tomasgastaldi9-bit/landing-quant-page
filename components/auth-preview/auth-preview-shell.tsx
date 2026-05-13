@@ -93,7 +93,7 @@ export function AuthPreviewShell({ mode }: AuthPreviewShellProps) {
                 <input
                   required
                   className={terminalInput}
-                  placeholder="demo@quantterminal.local"
+                  placeholder="demo@quantbot.local"
                   type="email"
                 />
               </label>

@@ -180,7 +180,7 @@ export function DashboardShell({
                 Execution / Risk Monitoring
               </div>
               <h1 className="mt-3 text-3xl font-semibold leading-tight tracking-normal text-white sm:text-5xl">
-                Institutional Quant Terminal
+                QuantBot Operator Terminal
               </h1>
             </div>
             <p className="max-w-xl font-mono text-xs leading-6 text-[#8c90a1]">
