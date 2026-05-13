@@ -34,11 +34,11 @@ export function HeroSection() {
   return (
     <section
       id="platform"
-      className="terminal-scan relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:32px_32px,32px_32px]"
+      className="relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:32px_32px,32px_32px]"
     >
       <RevealController />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_82%,rgb(var(--accent-secondary-rgb)/0.14),transparent_38%),radial-gradient(circle_at_70%_18%,rgb(var(--accent-primary-rgb)/0.22),transparent_36%),linear-gradient(90deg,rgba(5,5,5,0.95),rgba(5,5,5,0.72)_48%,rgba(5,5,5,0.94))]" />
-      <div className="ambient-drift absolute right-[8%] top-[12%] hidden h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.14),transparent_64%)] blur-2xl sm:block" />
+      <div className="ambient-drift absolute right-[8%] top-[12%] hidden h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.1),transparent_64%)] blur-xl sm:block" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_42%,rgba(0,0,0,0.48)_100%)]" />
       <div className="absolute inset-x-0 bottom-0 h-32 bg-[linear-gradient(0deg,#050505,transparent)]" />
       <div className="relative mx-auto grid min-h-[640px] max-w-7xl grid-cols-1 items-center gap-10 px-4 py-14 sm:px-8 sm:py-16 lg:grid-cols-[1.02fr_0.98fr] lg:py-20">
@@ -82,10 +82,10 @@ export function HeroSection() {
         </div>
 
         <div className="relative mx-auto w-full max-w-[480px] lg:mr-0">
-          <div className="ambient-drift absolute -inset-10 hidden rounded-[3rem] bg-[radial-gradient(circle_at_54%_36%,rgb(var(--accent-primary-rgb)/0.14),transparent_62%)] blur-2xl lg:block" />
-          <div className="absolute -left-6 top-10 hidden h-72 w-72 rounded-[2rem] border border-[#243042] bg-[var(--accent-soft)]/20 blur-[1px] backdrop-blur-sm lg:block" />
+          <div className="ambient-drift absolute -inset-8 hidden rounded-[3rem] bg-[radial-gradient(circle_at_54%_36%,rgb(var(--accent-primary-rgb)/0.1),transparent_62%)] blur-xl lg:block" />
+          <div className="absolute -left-6 top-10 hidden h-72 w-72 rounded-[2rem] border border-[#243042] bg-[var(--accent-soft)]/18 lg:block" />
           <div className="absolute -right-6 bottom-8 hidden h-48 w-48 rounded-[2rem] border border-[#1f1f1f] bg-[#050505]/54 lg:block" />
-          <div className="terminal-scan relative overflow-hidden rounded-[28px] border border-[#424655] bg-[linear-gradient(180deg,rgba(14,14,14,0.94),rgba(7,7,7,0.9))] p-3 shadow-[0_28px_90px_rgba(0,0,0,0.42),0_0_72px_rgb(var(--accent-primary-rgb)/0.08)] backdrop-blur-sm transition duration-300 hover:border-[var(--accent-primary)]/45 hover:shadow-[0_32px_100px_rgba(0,0,0,0.46),0_0_86px_rgb(var(--accent-primary-rgb)/0.12)] sm:p-4">
+          <div className="terminal-scan relative overflow-hidden rounded-[28px] border border-[#424655] bg-[linear-gradient(180deg,rgba(14,14,14,0.94),rgba(7,7,7,0.9))] p-3 shadow-[0_22px_64px_rgba(0,0,0,0.36),0_0_42px_rgb(var(--accent-primary-rgb)/0.055)] transition duration-200 hover:border-[var(--accent-primary)]/45 hover:shadow-[0_24px_70px_rgba(0,0,0,0.38),0_0_48px_rgb(var(--accent-primary-rgb)/0.08)] sm:p-4">
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.65),transparent)]" />
             <div className="flex items-center justify-between border-b border-[#424655] pb-3">
               <span className="font-mono text-xs uppercase tracking-[0.16em] text-[#e2e2e2]">

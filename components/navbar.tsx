@@ -121,7 +121,7 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/90 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/94 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-md">
       <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between gap-3 px-3 sm:h-24 sm:px-8">
         <Link className="min-w-0" href="/" aria-label="QuantBot home">
           <BrandMark />
@@ -178,7 +178,7 @@ export function Navbar() {
           <button
             type="button"
             aria-label="Close navigation overlay"
-            className="absolute inset-0 cursor-default bg-[radial-gradient(circle_at_12%_18%,rgb(var(--accent-primary-rgb)/0.08),transparent_28%),rgba(0,0,0,0.78)] backdrop-blur-sm transition-opacity duration-200"
+            className="absolute inset-0 cursor-default bg-[radial-gradient(circle_at_12%_18%,rgb(var(--accent-primary-rgb)/0.06),transparent_28%),rgba(0,0,0,0.82)] transition-opacity duration-200"
             onClick={closeMenu}
           />
           <aside
@@ -186,7 +186,7 @@ export function Navbar() {
             aria-label="Primary navigation"
             role="dialog"
             aria-modal="true"
-            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,360px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] p-3 shadow-[24px_0_72px_rgba(0,0,0,0.42)] sm:w-[360px] sm:px-3.5 sm:py-4"
+            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,360px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.97))] bg-[size:32px_32px,32px_32px,auto] p-3 shadow-[18px_0_54px_rgba(0,0,0,0.36)] will-change-transform sm:w-[360px] sm:px-3.5 sm:py-4"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.65),transparent)]" />
             <div className="flex items-center justify-between gap-3 border-b border-[#243042] pb-4">

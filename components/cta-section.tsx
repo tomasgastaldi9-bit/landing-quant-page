@@ -35,7 +35,7 @@ export function CTASection() {
           </a>
           <a
             href="/request-access"
-            className="rounded-xl border border-[#424655] bg-[#0a0a0a]/90 px-6 py-3.5 text-center text-sm font-semibold text-[#e2e2e2] shadow-[0_14px_34px_rgba(0,0,0,0.18)] backdrop-blur-sm transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
+            className="rounded-xl border border-[#424655] bg-[#0a0a0a]/90 px-6 py-3.5 text-center text-sm font-semibold text-[#e2e2e2] shadow-[0_14px_34px_rgba(0,0,0,0.18)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
           >
             Request Access
           </a>

@@ -42,7 +42,7 @@ export function CredibilitySection() {
       id="credibility"
       className="relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]"
     >
-      <div className="pointer-events-none absolute right-[6%] top-[18%] hidden h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.08),transparent_64%)] blur-2xl md:block" />
+      <div className="pointer-events-none absolute right-[6%] top-[18%] hidden h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-primary-rgb)/0.08),transparent_64%)] blur-xl md:block" />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-8 lg:py-20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -64,7 +64,7 @@ export function CredibilitySection() {
             <a
               key={member.name}
               href={member.href}
-              className="group relative overflow-hidden rounded-2xl border border-[#243042]/72 bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_18px_50px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/50 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.07),0_24px_64px_rgba(0,0,0,0.26)] sm:p-5"
+              className="group relative overflow-hidden rounded-2xl border border-[#243042]/72 bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_18px_50px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/50 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.07),0_18px_48px_rgba(0,0,0,0.24)] sm:p-5"
             >
               <div className="flex items-center gap-4">
                 <div
