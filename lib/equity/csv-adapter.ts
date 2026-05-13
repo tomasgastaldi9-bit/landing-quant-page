@@ -14,7 +14,7 @@ const EQUITY_COLUMNS = [
 ];
 
 export async function getEquitySnapshot(): Promise<EquitySnapshot> {
-  const source = await readTelemetryCsv("live_testnet_equity.csv", { limit: 1200 });
+  const source = await readPreferredEquityCsv();
 
   if (source.status === "MISSING_FILE") {
     return {
@@ -61,6 +61,12 @@ export async function getEquitySnapshot(): Promise<EquitySnapshot> {
     filePath: source.filePath,
     fileLastModified: source.lastModified,
   };
+}
+
+async function readPreferredEquityCsv() {
+  const liveTelemetry = await readTelemetryCsv("live_telemetry_equity.csv", { limit: 1200 });
+  if (liveTelemetry.status !== "MISSING_FILE") return liveTelemetry;
+  return readTelemetryCsv("live_testnet_equity.csv", { limit: 1200 });
 }
 
 function parseEquityRows(rows: ReturnType<typeof parseCsv>): EquityPoint[] {

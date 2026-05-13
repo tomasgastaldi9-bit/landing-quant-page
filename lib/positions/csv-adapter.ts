@@ -7,12 +7,12 @@ const SYMBOL_COLUMNS = ["symbol", "ticker", "instrument", "market", "pair"];
 const SIDE_COLUMNS = ["side", "direction", "position_side"];
 const SIZE_COLUMNS = ["size", "qty", "quantity", "position_size", "amount", "position_amt", "positionamt"];
 const ENTRY_COLUMNS = ["entry", "entry_price", "entryprice", "avg_entry", "average_entry_price"];
-const MARK_COLUMNS = ["mark", "mark_price", "current_price", "price", "last_price"];
+const MARK_COLUMNS = ["mark", "mark_price", "markprice", "current_price", "price", "last_price"];
 const PNL_COLUMNS = ["unrealized_pnl", "upnl", "pnl", "unrealized", "unrealized_profit", "unrealizedprofit"];
 const TIMESTAMP_COLUMNS = ["timestamp", "time", "updated_at", "datetime", "date"];
 
 export async function getPositionsSnapshot(): Promise<PositionsSnapshot> {
-  const source = await readTelemetryCsv("live_testnet_positions.csv", { limit: 250 });
+  const source = await readPreferredPositionsCsv();
 
   if (source.status === "MISSING_FILE") {
     return {
@@ -54,6 +54,12 @@ export async function getPositionsSnapshot(): Promise<PositionsSnapshot> {
     filePath: source.filePath,
     fileLastModified: source.lastModified,
   };
+}
+
+async function readPreferredPositionsCsv() {
+  const liveTelemetry = await readTelemetryCsv("live_telemetry_positions.csv", { limit: 250 });
+  if (liveTelemetry.status !== "MISSING_FILE") return liveTelemetry;
+  return readTelemetryCsv("live_testnet_positions.csv", { limit: 250 });
 }
 
 function parsePositionsRows(rows: ReturnType<typeof parseCsv>): PositionRow[] {
