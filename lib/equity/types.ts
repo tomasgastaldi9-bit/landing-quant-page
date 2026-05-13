@@ -1,6 +1,9 @@
 export type EquityPoint = {
   timestamp: string;
   equity: number;
+  walletBalance?: number | null;
+  unrealizedPnl?: number | null;
+  estimatedEquity?: number | null;
 };
 
 export type EquitySnapshot = {
@@ -10,6 +13,9 @@ export type EquitySnapshot = {
   currentEquity: number;
   lastUpdate: string;
   dailyPnl: number | null;
+  walletBalance?: number | null;
+  unrealizedPnl?: number | null;
+  estimatedEquity?: number | null;
   message: string;
   filePath?: string;
   fileLastModified?: string | null;

@@ -129,28 +129,29 @@ export function DashboardShell({
 }) {
   const equityMetrics = [
     {
-      label: "Equity Source",
+      label: "Estimated Equity",
       value: formatCurrency(equitySnapshot.currentEquity),
       detail:
-        equitySnapshot.source === "live-csv" ? "From live CSV" : "Mock fallback",
+        equitySnapshot.source === "live-csv" ? "Wallet + unrealized PnL" : "Mock fallback",
+    },
+    {
+      label: "Unrealized PnL",
+      value: formatSignedCurrency(equitySnapshot.unrealizedPnl ?? null),
+      detail:
+        equitySnapshot.unrealizedPnl === null || equitySnapshot.unrealizedPnl === undefined
+          ? "Unavailable"
+          : "Open positions",
+      tone: getPnlMetricTone(equitySnapshot.unrealizedPnl ?? null),
+    },
+    {
+      label: "Wallet Balance",
+      value: formatOptionalCurrency(equitySnapshot.walletBalance ?? null),
+      detail: equitySnapshot.source === "live-csv" ? "Read-only account" : "Mock fallback",
     },
     {
       label: "Daily PnL",
       value: formatSignedCurrency(equitySnapshot.dailyPnl),
       detail: equitySnapshot.dailyPnl === null ? "Unavailable" : "Simple day delta",
-    },
-    {
-      label: "Last Update",
-      value: formatTime(equitySnapshot.lastUpdate),
-      detail: formatDate(equitySnapshot.lastUpdate),
-    },
-    {
-      label: "Data Source",
-      value: equitySnapshot.source === "live-csv" ? "CSV" : "Mock",
-      detail:
-        equitySnapshot.source === "live-csv"
-          ? "Read-only adapter"
-          : "Fallback mode",
     },
   ];
   const openPositions = positionsSnapshot.positions.filter(
@@ -611,6 +612,11 @@ function getPnlToneClass(value: number | null) {
   return "text-rose-300";
 }
 
+function getPnlMetricTone(value: number | null): "neutral" | "good" | "warning" | "muted" {
+  if (value === null || value === 0) return "muted";
+  return value > 0 ? "good" : "warning";
+}
+
 function RegimePanel() {
   return (
     <TerminalPanel eyebrow="Regime" title="Market State" action="Demo classifier">
@@ -927,17 +933,6 @@ function formatTime(timestamp: string) {
     minute: "2-digit",
     second: "2-digit",
     hour12: false,
-  }).format(date);
-}
-
-function formatDate(timestamp: string) {
-  const date = new Date(timestamp);
-  if (Number.isNaN(date.getTime())) return "Timestamp unavailable";
-
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    day: "2-digit",
-    year: "numeric",
   }).format(date);
 }
 

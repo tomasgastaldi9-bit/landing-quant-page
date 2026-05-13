@@ -5,12 +5,20 @@ import type { EquityPoint, EquitySnapshot } from "./types";
 
 const TIMESTAMP_COLUMNS = ["timestamp", "time", "datetime", "date"];
 const EQUITY_COLUMNS = [
+  "estimated_equity",
   "equity",
   "balance",
   "portfolio_value",
   "account_equity",
   "usdt_equity_after",
   "usdt_equity_before",
+];
+const WALLET_COLUMNS = ["wallet_balance", "balance", "cross_wallet_balance"];
+const UNREALIZED_COLUMNS = [
+  "unrealized_pnl",
+  "cross_unrealized_pnl",
+  "unrealized",
+  "unrealized_profit",
 ];
 
 export async function getEquitySnapshot(): Promise<EquitySnapshot> {
@@ -55,6 +63,9 @@ export async function getEquitySnapshot(): Promise<EquitySnapshot> {
     sourceStatus: "LIVE_FILE",
     points,
     currentEquity: current.equity,
+    estimatedEquity: current.estimatedEquity ?? current.equity,
+    walletBalance: current.walletBalance ?? null,
+    unrealizedPnl: current.unrealizedPnl ?? null,
     lastUpdate: current.timestamp,
     dailyPnl: current.equity - firstToday.equity,
     message: source.message,
@@ -74,15 +85,20 @@ function parseEquityRows(rows: ReturnType<typeof parseCsv>): EquityPoint[] {
     .map((row) => {
       const timestamp = getFirstValue(row, TIMESTAMP_COLUMNS);
       const equity = parseNumber(getFirstValue(row, EQUITY_COLUMNS));
+      const walletBalance = parseNumber(getFirstValue(row, WALLET_COLUMNS));
+      const unrealizedPnl = parseNumber(getFirstValue(row, UNREALIZED_COLUMNS));
 
       if (!timestamp || equity === null) return null;
 
       return {
         timestamp: normalizeTimestamp(timestamp),
         equity,
+        walletBalance,
+        unrealizedPnl,
+        estimatedEquity: equity,
       };
     })
-    .filter((point): point is EquityPoint => point !== null)
+    .filter((point): point is NonNullable<typeof point> => point !== null)
     .sort(
       (left, right) =>
         new Date(left.timestamp).getTime() - new Date(right.timestamp).getTime(),
