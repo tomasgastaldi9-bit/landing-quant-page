@@ -9,16 +9,19 @@ import type { TelemetryEvent, TelemetrySourceStatus } from "@/lib/telemetry/type
 type ApiSnapshot<T> = {
   status: TelemetrySourceStatus;
   data: T;
+  fetchedAt?: string;
 };
 
 type EventApiResponse = {
   status: TelemetrySourceStatus;
   events: TelemetryEvent[];
+  fetchedAt?: string;
 };
 
 type HealthApiResponse = {
   status: TelemetrySourceStatus;
   lastUpdated: string | null;
+  fetchedAt?: string;
 };
 
 const REFRESH_INTERVAL_MS = 10_000;
@@ -37,8 +40,11 @@ export function DashboardTelemetryClient({
   const [healthStatus, setHealthStatus] = useState<TelemetrySourceStatus | null>(null);
   const [healthLastUpdated, setHealthLastUpdated] = useState<string | null>(null);
   const [lastRefreshAt, setLastRefreshAt] = useState<string | null>(null);
-  const [refreshState, setRefreshState] = useState<"idle" | "refreshing" | "degraded">("idle");
+  const [refreshState, setRefreshState] = useState<
+    "idle" | "refreshing" | "unchanged" | "degraded"
+  >("idle");
   const inFlightRef = useRef(false);
+  const latestSignatureRef = useRef<string | null>(null);
 
   const loadTelemetry = useCallback(async () => {
     if (inFlightRef.current) return;
@@ -47,22 +53,31 @@ export function DashboardTelemetryClient({
 
     try {
       const [equity, positions, orders, decisions, alerts, health] = await Promise.all([
-        fetchJson<ApiSnapshot<EquitySnapshot>>("/api/equity"),
-        fetchJson<ApiSnapshot<PositionsSnapshot>>("/api/positions"),
-        fetchJson<EventApiResponse>("/api/orders"),
-        fetchJson<EventApiResponse>("/api/decisions"),
-        fetchJson<EventApiResponse>("/api/alerts"),
-        fetchJson<HealthApiResponse>("/api/health"),
+        fetchJson<ApiSnapshot<EquitySnapshot>>(withRefreshToken("/api/equity")),
+        fetchJson<ApiSnapshot<PositionsSnapshot>>(withRefreshToken("/api/positions")),
+        fetchJson<EventApiResponse>(withRefreshToken("/api/orders")),
+        fetchJson<EventApiResponse>(withRefreshToken("/api/decisions")),
+        fetchJson<EventApiResponse>(withRefreshToken("/api/alerts")),
+        fetchJson<HealthApiResponse>(withRefreshToken("/api/health")),
       ]);
+      const mergedEvents = mergeEvents([orders.events, decisions.events, alerts.events]);
+      const nextSignature = getTelemetrySignature({
+        equity,
+        positions,
+        events: mergedEvents,
+        health,
+      });
+      const dataUnchanged = latestSignatureRef.current === nextSignature;
 
+      latestSignatureRef.current = nextSignature;
       setEquitySnapshot(equity.data);
       setPositionsSnapshot(positions.data);
-      setEvents(mergeEvents([orders.events, decisions.events, alerts.events]));
+      setEvents(mergedEvents);
       setEventStatus(deriveEventStatus([orders.status, decisions.status, alerts.status]));
       setHealthStatus(health.status);
       setHealthLastUpdated(health.lastUpdated);
-      setLastRefreshAt(new Date().toISOString());
-      setRefreshState("idle");
+      setLastRefreshAt(health.fetchedAt ?? equity.fetchedAt ?? new Date().toISOString());
+      setRefreshState(dataUnchanged ? "unchanged" : "idle");
     } catch {
       setRefreshState("degraded");
     } finally {
@@ -122,6 +137,10 @@ async function fetchJson<T>(url: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+function withRefreshToken(url: string) {
+  return `${url}?refresh=${Date.now()}`;
+}
+
 function mergeEvents(eventGroups: TelemetryEvent[][]) {
   return eventGroups
     .flat()
@@ -131,6 +150,34 @@ function mergeEvents(eventGroups: TelemetryEvent[][]) {
         new Date(right.timestamp).getTime() - new Date(left.timestamp).getTime(),
     )
     .slice(0, 30);
+}
+
+function getTelemetrySignature({
+  equity,
+  positions,
+  events,
+  health,
+}: {
+  equity: ApiSnapshot<EquitySnapshot>;
+  positions: ApiSnapshot<PositionsSnapshot>;
+  events: TelemetryEvent[];
+  health: HealthApiResponse;
+}) {
+  const latestEvent = events[0];
+
+  return JSON.stringify({
+    equityStatus: equity.status,
+    equityLastUpdate: equity.data.lastUpdate,
+    equityCurrent: equity.data.currentEquity,
+    positionsStatus: positions.status,
+    positionsLastUpdate: positions.data.lastUpdate,
+    positionCount: positions.data.positions.length,
+    latestEvent: latestEvent
+      ? `${latestEvent.timestamp}-${latestEvent.type}-${latestEvent.status ?? ""}`
+      : "none",
+    healthStatus: health.status,
+    healthLastUpdated: health.lastUpdated,
+  });
 }
 
 function deriveEventStatus(statuses: TelemetrySourceStatus[]) {

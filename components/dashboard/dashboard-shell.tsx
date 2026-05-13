@@ -123,7 +123,7 @@ export function DashboardShell({
   eventSourceStatus?: TelemetrySourceStatus;
   healthSourceStatus?: TelemetrySourceStatus | null;
   apiLastUpdated?: string | null;
-  refreshState?: "idle" | "refreshing" | "degraded";
+  refreshState?: "idle" | "refreshing" | "unchanged" | "degraded";
   lastRefreshAt?: string | null;
   refreshIntervalSeconds?: number;
 }) {
@@ -517,7 +517,7 @@ function RefreshStatusBadge({
   lastRefreshAt,
   refreshIntervalSeconds,
 }: {
-  refreshState: "idle" | "refreshing" | "degraded";
+  refreshState: "idle" | "refreshing" | "unchanged" | "degraded";
   lastRefreshAt?: string | null;
   refreshIntervalSeconds: number;
 }) {
@@ -526,8 +526,11 @@ function RefreshStatusBadge({
       ? "Refreshing"
       : refreshState === "degraded"
         ? "Degraded"
-        : "Live / Auto Refresh";
+        : refreshState === "unchanged"
+          ? "Data Unchanged"
+          : "Live / Auto Refresh";
   const ledState = refreshState === "degraded" ? "standby" : "online";
+  const lastRefreshLabel = lastRefreshAt ? formatTime(lastRefreshAt) : "--:--:--";
 
   return (
     <div
@@ -544,6 +547,7 @@ function RefreshStatusBadge({
     >
       <StatusLed state={ledState} />
       <span>{stateLabel}</span>
+      <span className="text-[#8c90a1]">Last {lastRefreshLabel}</span>
       <span className="text-[#8c90a1]">{refreshIntervalSeconds}s</span>
     </div>
   );
