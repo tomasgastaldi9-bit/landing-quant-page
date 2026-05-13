@@ -370,6 +370,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
   const lastEquity = points.at(-1)?.equity;
   const midEquity =
     firstEquity && lastEquity ? (firstEquity + lastEquity) / 2 : undefined;
+  const hasLimitedHistory = points.length < 2;
 
   return (
     <TerminalChartFrame
@@ -391,6 +392,12 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
             <span className="size-2 rounded-full bg-[var(--accent-primary)]" />
             Equity
           </span>
+          {hasLimitedHistory ? (
+            <span className="inline-flex items-center gap-2 text-amber-100/80">
+              <span className="size-2 rounded-full bg-amber-200/70" />
+              Limited telemetry history
+            </span>
+          ) : null}
           <span className="inline-flex items-center gap-2">
             <span className="h-px w-5 bg-[#6f7485]/60" />
             Ref
@@ -399,12 +406,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
       }
       title="Equity curve"
     >
-      <svg
-        aria-label="Mock equity curve"
-        className="h-[214px] w-full sm:h-[226px]"
-        role="img"
-        viewBox="0 0 900 300"
-      >
+      <svg aria-label="Equity curve" className="h-[214px] w-full sm:h-[226px]" role="img" viewBox="0 0 900 300">
         <defs>
           <linearGradient id="equityFill" x1="0" x2="0" y1="0" y2="1">
             <stop stopColor="var(--accent-primary)" stopOpacity="0.2" />
@@ -440,7 +442,52 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
             strokeWidth="1"
           />
         ))}
-        {chartPoints ? (
+        {hasLimitedHistory ? (
+          <g>
+            <rect
+              fill="rgb(var(--accent-soft-rgb)/0.16)"
+              height="150"
+              rx="18"
+              stroke="rgb(var(--accent-primary-rgb)/0.18)"
+              width="520"
+              x="190"
+              y="75"
+            />
+            <text
+              fill="var(--accent-primary)"
+              fontFamily="monospace"
+              fontSize="16"
+              fontWeight="700"
+              textAnchor="middle"
+              x="450"
+              y="135"
+            >
+              COLLECTING LIVE TELEMETRY HISTORY
+            </text>
+            <text
+              fill="#8c90a1"
+              fontFamily="monospace"
+              fontSize="12"
+              textAnchor="middle"
+              x="450"
+              y="165"
+            >
+              Chart will activate after enough samples
+            </text>
+            {lastEquity ? (
+              <text
+                fill="#c2c6d8"
+                fontFamily="monospace"
+                fontSize="12"
+                textAnchor="middle"
+                x="450"
+                y="194"
+              >
+                Current equity: {formatCurrency(lastEquity)}
+              </text>
+            ) : null}
+          </g>
+        ) : chartPoints ? (
           <>
             <path d={areaPath} fill="url(#equityFill)" />
             <path
@@ -945,15 +992,19 @@ function formatDateTime(timestamp: string) {
 }
 
 function toSvgPoints(points: EquitySnapshot["points"]) {
-  if (points.length === 0) return null;
+  if (points.length < 2) return null;
 
   const min = Math.min(...points.map((point) => point.equity));
   const max = Math.max(...points.map((point) => point.equity));
-  const range = max - min || 1;
+  const rawRange = max - min;
+  const midpoint = (max + min) / 2;
+  const minimumRange = Math.max(Math.abs(midpoint) * 0.001, 10);
+  const range = Math.max(rawRange, minimumRange);
+  const scaledMin = midpoint - range / 2;
   const denominator = Math.max(points.length - 1, 1);
   const coordinates = points.map((point, index) => {
     const x = (index / denominator) * 900;
-    const y = 260 - ((point.equity - min) / range) * 200;
+    const y = 250 - ((point.equity - scaledMin) / range) * 180;
     return { x, y };
   });
   const mapped = coordinates.map((point) => ({
