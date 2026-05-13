@@ -23,7 +23,7 @@ function getStaggerDelay(element: HTMLElement) {
   );
   const index = Math.max(0, siblings.indexOf(element));
 
-  return Math.min((index % 6) * 80, 320);
+  return Math.min((index % 6) * 70, 280);
 }
 
 export function RevealController() {
@@ -58,8 +58,8 @@ export function RevealController() {
         });
       },
       {
-        rootMargin: "0px 0px -8% 0px",
-        threshold: 0.12,
+        rootMargin: "0px 0px -5% 0px",
+        threshold: 0.1,
       },
     );
 
