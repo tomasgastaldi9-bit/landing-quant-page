@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 const revealSelectors = [
@@ -26,24 +27,52 @@ function getStaggerDelay(element: HTMLElement) {
   return Math.min((index % 6) * 70, 280);
 }
 
+function isElementInViewport(element: HTMLElement) {
+  const rect = element.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+
+  return (
+    rect.top < viewportHeight * 0.95 &&
+    rect.bottom > 0 &&
+    rect.left < viewportWidth &&
+    rect.right > 0
+  );
+}
+
 export function RevealController() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
 
-    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    const elements = Array.from(
+      document.querySelectorAll<HTMLElement>(revealSelectors),
+    );
+
+    if (elements.length === 0) {
       return;
     }
 
-    const elements = Array.from(
-      document.querySelectorAll<HTMLElement>(revealSelectors),
-    ).filter((element) => !element.dataset.revealBound);
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      elements.forEach((element) => {
+        element.classList.add("is-visible");
+      });
+
+      return;
+    }
 
     elements.forEach((element) => {
-      element.dataset.revealBound = "true";
       element.style.setProperty("--reveal-delay", `${getStaggerDelay(element)}ms`);
       element.classList.add("reveal-on-scroll");
+
+      if (isElementInViewport(element)) {
+        element.classList.add("is-visible");
+      } else {
+        element.classList.remove("is-visible");
+      }
     });
 
     const observer = new IntersectionObserver(
@@ -63,10 +92,20 @@ export function RevealController() {
       },
     );
 
-    elements.forEach((element) => observer.observe(element));
+    elements
+      .filter((element) => !element.classList.contains("is-visible"))
+      .forEach((element) => observer.observe(element));
 
-    return () => observer.disconnect();
-  }, []);
+    const fallbackTimer = window.setTimeout(() => {
+      elements.forEach((element) => element.classList.add("is-visible"));
+      observer.disconnect();
+    }, 500);
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      observer.disconnect();
+    };
+  }, [pathname]);
 
   return null;
 }
