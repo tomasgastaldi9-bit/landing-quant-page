@@ -366,9 +366,6 @@ export function DashboardShell({
 
 function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
   const chartPoints = toSvgPoints(points);
-  const areaPath = chartPoints
-    ? `${chartPoints.area} L${chartPoints.plotRight} 300 L${chartPoints.plotLeft} 300 Z`
-    : "";
   const lastPoint = chartPoints?.coordinates.at(-1);
   const firstEquity = points[0]?.equity;
   const lastEquity = points.at(-1)?.equity;
@@ -400,6 +397,12 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
             <span className="inline-flex items-center gap-2 text-amber-100/80">
               <span className="size-2 rounded-full bg-amber-200/70" />
               Limited telemetry history
+            </span>
+          ) : null}
+          {chartPoints && chartPoints.gaps.length > 0 ? (
+            <span className="inline-flex items-center gap-2 text-amber-100/80">
+              <span className="h-px w-5 border-t border-dashed border-amber-200/70" />
+              Telemetry gap
             </span>
           ) : null}
           <span className="inline-flex items-center gap-2">
@@ -499,7 +502,9 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
           </g>
         ) : chartPoints ? (
           <>
-            <path d={areaPath} fill="url(#equityFill)" />
+            {chartPoints.areaSegments.map((segment) => (
+              <path key={`area-${segment.key}`} d={segment.path} fill="url(#equityFill)" />
+            ))}
             <path
               d={chartPoints.baseline}
               fill="none"
@@ -517,14 +522,49 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
               strokeDasharray="2 12"
               strokeOpacity="0.18"
             />
-            <path
-              d={chartPoints.line}
-              fill="none"
-              stroke="url(#equityStroke)"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="4"
-            />
+            {chartPoints.gaps.map((gap, index) => (
+              <g key={`gap-${gap.from.x}-${gap.to.x}-${index}`}>
+                <path
+                  d={`M${gap.from.x},${gap.from.y} L${gap.to.x},${gap.to.y}`}
+                  fill="none"
+                  stroke="#f4d58d"
+                  strokeDasharray="8 12"
+                  strokeLinecap="round"
+                  strokeOpacity="0.38"
+                  strokeWidth="2"
+                />
+                <circle
+                  cx={(gap.from.x + gap.to.x) / 2}
+                  cy={(gap.from.y + gap.to.y) / 2}
+                  fill="#f4d58d"
+                  opacity="0.68"
+                  r="3"
+                />
+                {index === 0 ? (
+                  <text
+                    fill="#f4d58d"
+                    fontFamily="monospace"
+                    fontSize="10"
+                    textAnchor="middle"
+                    x={(gap.from.x + gap.to.x) / 2}
+                    y={Math.max(42, Math.min(gap.from.y, gap.to.y) - 12)}
+                  >
+                    TELEMETRY GAP
+                  </text>
+                ) : null}
+              </g>
+            ))}
+            {chartPoints.lineSegments.map((segment) => (
+              <path
+                key={`line-${segment.key}`}
+                d={segment.path}
+                fill="none"
+                stroke="url(#equityStroke)"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="4"
+              />
+            ))}
             {lastPoint ? (
               <>
                 <circle
@@ -1038,6 +1078,8 @@ function formatDateTime(timestamp: string) {
 function toSvgPoints(points: EquitySnapshot["points"]) {
   if (points.length < 2) return null;
 
+  const expectedTelemetryIntervalMs = 10_000;
+  const telemetryGapThresholdMs = expectedTelemetryIntervalMs * 3;
   const plotLeft = 0;
   const plotRight = 886;
   const plotWidth = plotRight - plotLeft;
@@ -1054,10 +1096,12 @@ function toSvgPoints(points: EquitySnapshot["points"]) {
     const y = 250 - ((point.equity - scaledMin) / range) * 180;
     return { x, y };
   });
-  const mapped = coordinates.map((point) => ({
+  const mapped = coordinates.map((point, index) => ({
     x: Number(point.x.toFixed(2)),
     y: Number(point.y.toFixed(2)),
+    timestamp: points[index].timestamp,
   }));
+  const { segments, gaps } = splitTelemetrySegments(mapped, telemetryGapThresholdMs);
   const baseline = coordinates.map((point, index) => {
     const y = 248 - (index / denominator) * 94;
     return {
@@ -1068,12 +1112,65 @@ function toSvgPoints(points: EquitySnapshot["points"]) {
 
   return {
     coordinates,
+    gaps,
     plotLeft,
     plotRight,
-    line: toSmoothPath(mapped),
+    lineSegments: segments.map((segment, index) => ({
+      key: index,
+      path: toSmoothPath(segment),
+    })),
     baseline: toSmoothPath(baseline),
-    area: toSmoothPath(mapped),
+    areaSegments: segments.map((segment, index) => {
+      const first = segment[0];
+      const last = segment.at(-1);
+
+      return {
+        key: index,
+        path:
+          first && last
+            ? `${toSmoothPath(segment)} L${last.x} 300 L${first.x} 300 Z`
+            : "",
+      };
+    }),
   };
+}
+
+function splitTelemetrySegments(
+  points: Array<{ x: number; y: number; timestamp: string }>,
+  gapThresholdMs: number,
+) {
+  const segments: Array<Array<{ x: number; y: number }>> = [];
+  const gaps: Array<{
+    from: { x: number; y: number };
+    to: { x: number; y: number };
+  }> = [];
+  let current: Array<{ x: number; y: number }> = [];
+
+  points.forEach((point, index) => {
+    const previous = points[index - 1];
+    const previousTime = previous ? new Date(previous.timestamp).getTime() : NaN;
+    const currentTime = new Date(point.timestamp).getTime();
+    const hasTelemetryGap =
+      previous &&
+      Number.isFinite(previousTime) &&
+      Number.isFinite(currentTime) &&
+      currentTime - previousTime > gapThresholdMs;
+
+    if (hasTelemetryGap && previous) {
+      if (current.length > 0) segments.push(current);
+      gaps.push({
+        from: { x: previous.x, y: previous.y },
+        to: { x: point.x, y: point.y },
+      });
+      current = [];
+    }
+
+    current.push({ x: point.x, y: point.y });
+  });
+
+  if (current.length > 0) segments.push(current);
+
+  return { segments, gaps };
 }
 
 function toSmoothPath(points: Array<{ x: number; y: number }>) {
