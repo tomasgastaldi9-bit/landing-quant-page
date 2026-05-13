@@ -364,7 +364,9 @@ export function DashboardShell({
 
 function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
   const chartPoints = toSvgPoints(points);
-  const areaPath = chartPoints ? `${chartPoints.area} L900 300 L0 300 Z` : "";
+  const areaPath = chartPoints
+    ? `${chartPoints.area} L${chartPoints.plotRight} 300 L${chartPoints.plotLeft} 300 Z`
+    : "";
   const lastPoint = chartPoints?.coordinates.at(-1);
   const firstEquity = points[0]?.equity;
   const lastEquity = points.at(-1)?.equity;
@@ -374,7 +376,7 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
 
   return (
     <TerminalChartFrame
-      className="py-3"
+      className="px-1 py-3 sm:px-2"
       footer={
         <div className="grid gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1] sm:grid-cols-3">
           <span>Start: {firstEquity ? formatCurrency(firstEquity) : "--"}</span>
@@ -994,6 +996,9 @@ function formatDateTime(timestamp: string) {
 function toSvgPoints(points: EquitySnapshot["points"]) {
   if (points.length < 2) return null;
 
+  const plotLeft = 14;
+  const plotRight = 886;
+  const plotWidth = plotRight - plotLeft;
   const min = Math.min(...points.map((point) => point.equity));
   const max = Math.max(...points.map((point) => point.equity));
   const rawRange = max - min;
@@ -1003,7 +1008,7 @@ function toSvgPoints(points: EquitySnapshot["points"]) {
   const scaledMin = midpoint - range / 2;
   const denominator = Math.max(points.length - 1, 1);
   const coordinates = points.map((point, index) => {
-    const x = (index / denominator) * 900;
+    const x = plotLeft + (index / denominator) * plotWidth;
     const y = 250 - ((point.equity - scaledMin) / range) * 180;
     return { x, y };
   });
@@ -1021,6 +1026,8 @@ function toSvgPoints(points: EquitySnapshot["points"]) {
 
   return {
     coordinates,
+    plotLeft,
+    plotRight,
     line: toSmoothPath(mapped),
     baseline: toSmoothPath(baseline),
     area: toSmoothPath(mapped),
