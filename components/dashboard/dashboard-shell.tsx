@@ -148,9 +148,8 @@ export function DashboardShell({
       detail: equitySnapshot.dailyPnl === null ? "Unavailable" : "Simple day delta",
     },
   ];
-  const openPositions = positionsSnapshot.positions.filter(
-    (position) => position.side !== "FLAT",
-  ).length;
+  const activePositions = positionsSnapshot.positions.filter(isOpenPosition);
+  const openPositions = activePositions.length;
   const liveSource =
     equitySnapshot.source === "live-csv" || positionsSnapshot.source === "live-csv";
   const hasParseError =
@@ -268,7 +267,7 @@ export function DashboardShell({
           <MetricTile
             label="Open Positions"
             value={String(openPositions)}
-            detail={`${positionsSnapshot.positions.length} tracked`}
+            detail={`${positionsSnapshot.positions.length} reported`}
             compact
           />
           <MetricTile
@@ -322,7 +321,10 @@ export function DashboardShell({
             priority="primary"
             className="scroll-mt-32"
           >
-            <PositionsTable positions={positionsSnapshot.positions} />
+            <PositionsTable
+              positions={activePositions}
+              isLiveSource={positionsSnapshot.source === "live-csv"}
+            />
             <div className="mt-3 rounded-xl border border-[#243042] bg-[#050505] px-3 py-2 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1]">
               {positionsSnapshot.message}
               {positionsSnapshot.lastUpdate
@@ -603,7 +605,33 @@ function RefreshStatusBadge({
   );
 }
 
-function PositionsTable({ positions }: { positions: PositionRow[] }) {
+function PositionsTable({
+  positions,
+  isLiveSource,
+}: {
+  positions: PositionRow[];
+  isLiveSource: boolean;
+}) {
+  if (positions.length === 0) {
+    return (
+      <div className="rounded-xl border border-[#1f1f1f] bg-[#050505]/60 p-5">
+        <div className="flex items-center gap-3">
+          <StatusLed state={isLiveSource ? "standby" : "online"} />
+          <div>
+            <div className="font-mono text-xs uppercase tracking-[0.16em] text-[#c2c6d8]">
+              No active positions detected
+            </div>
+            <div className="mt-2 max-w-xl text-sm leading-6 text-[#8c90a1]">
+              {isLiveSource
+                ? "Live telemetry is connected, but no open positions were reported."
+                : "Demo mode is active and no mock positions are currently displayed."}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="overflow-x-auto rounded-xl border border-[#1f1f1f] bg-[#050505]/60">
       <table className="w-full min-w-[760px] border-collapse font-mono text-xs">
@@ -646,6 +674,14 @@ function PositionsTable({ positions }: { positions: PositionRow[] }) {
       </table>
     </div>
   );
+}
+
+function isOpenPosition(position: PositionRow) {
+  const side = position.side.toUpperCase();
+  if (side === "FLAT") return false;
+  if (position.size !== null && position.size === 0) return false;
+  if (side === "LONG" || side === "SHORT") return true;
+  return position.size !== null && position.size !== 0;
 }
 
 function getSideToneClass(side: PositionRow["side"]) {

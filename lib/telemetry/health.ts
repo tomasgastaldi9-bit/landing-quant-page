@@ -73,6 +73,7 @@ function stripRows(file: TelemetryFileRead) {
 function deriveHealthStatus(files: TelemetryFileRead[]) {
   if (files.some((file) => file.status === "PARSE_ERROR")) return "PARSE_ERROR";
   if (files.some((file) => file.status === "LIVE_FILE")) return "LIVE_FILE";
+  if (files.some((file) => file.status === "LIVE_FILE_EMPTY")) return "LIVE_FILE_EMPTY";
   return "MISSING_FILE";
 }
 

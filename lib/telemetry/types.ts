@@ -1,5 +1,6 @@
 export type TelemetrySourceStatus =
   | "LIVE_FILE"
+  | "LIVE_FILE_EMPTY"
   | "MISSING_FILE"
   | "PARSE_ERROR"
   | "MOCK_FALLBACK";

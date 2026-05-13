@@ -31,7 +31,7 @@ export async function readTelemetryCsv(
     const rows = limitRows(parsedRows, limit);
 
     return {
-      status: parsedRows.length > 0 ? "LIVE_FILE" : "PARSE_ERROR",
+      status: parsedRows.length > 0 ? "LIVE_FILE" : "LIVE_FILE_EMPTY",
       fileName,
       filePath,
       lastModified: fileStat.mtime.toISOString(),

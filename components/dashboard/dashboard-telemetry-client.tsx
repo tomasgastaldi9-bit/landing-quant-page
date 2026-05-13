@@ -182,6 +182,7 @@ function getTelemetrySignature({
 
 function deriveEventStatus(statuses: TelemetrySourceStatus[]) {
   if (statuses.some((status) => status === "LIVE_FILE")) return "LIVE_FILE";
+  if (statuses.some((status) => status === "LIVE_FILE_EMPTY")) return "LIVE_FILE_EMPTY";
   if (statuses.some((status) => status === "PARSE_ERROR")) return "PARSE_ERROR";
   if (statuses.some((status) => status === "MOCK_FALLBACK")) return "MOCK_FALLBACK";
   return "MISSING_FILE";

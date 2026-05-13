@@ -25,9 +25,23 @@ export async function getPositionsSnapshot(): Promise<PositionsSnapshot> {
 
   if (source.status === "PARSE_ERROR") {
     return {
-      ...getMockPositionsSnapshot(source.message),
       source: "parse-error",
       sourceStatus: "PARSE_ERROR",
+      positions: [],
+      lastUpdate: source.lastModified,
+      message: source.message,
+      filePath: source.filePath,
+      fileLastModified: source.lastModified,
+    };
+  }
+
+  if (source.status === "LIVE_FILE_EMPTY") {
+    return {
+      source: "live-csv",
+      sourceStatus: "LIVE_FILE_EMPTY",
+      positions: [],
+      lastUpdate: source.lastModified,
+      message: "Live positions file is connected, but no open positions were reported.",
       filePath: source.filePath,
       fileLastModified: source.lastModified,
     };
@@ -37,9 +51,11 @@ export async function getPositionsSnapshot(): Promise<PositionsSnapshot> {
 
   if (positions.length === 0) {
     return {
-      ...getMockPositionsSnapshot("Positions CSV exists but no position rows could be parsed."),
-      source: "parse-error",
-      sourceStatus: "PARSE_ERROR",
+      source: "live-csv",
+      sourceStatus: "LIVE_FILE_EMPTY",
+      positions: [],
+      lastUpdate: source.lastModified,
+      message: "Live positions file is connected, but no valid position rows were parsed.",
       filePath: source.filePath,
       fileLastModified: source.lastModified,
     };
