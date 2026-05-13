@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 
 const logoNeutralSrc = "/branding/quantbot-logo-neutral-v2.png";
 const logoAccentMaskSrc = "/branding/quantbot-logo-accent-mask-v2.png";
@@ -6,14 +7,22 @@ const iconNeutralSrc = "/branding/quantbot-icon-neutral-v2.png";
 const iconAccentMaskSrc = "/branding/quantbot-icon-accent-mask-v2.png";
 
 function AccentMask({ src }: { src: string }) {
+  const maskStyle = {
+    WebkitMaskImage: `url(${src})`,
+    WebkitMaskPosition: "left center",
+    WebkitMaskRepeat: "no-repeat",
+    WebkitMaskSize: "contain",
+    maskImage: `url(${src})`,
+    maskPosition: "left center",
+    maskRepeat: "no-repeat",
+    maskSize: "contain",
+  } satisfies CSSProperties;
+
   return (
     <span
       aria-hidden="true"
-      className="absolute inset-0 bg-[var(--accent-primary)] transition-colors duration-300"
-      style={{
-        WebkitMask: `url(${src}) left center / contain no-repeat`,
-        mask: `url(${src}) left center / contain no-repeat`,
-      }}
+      className="pointer-events-none absolute inset-0 z-10 bg-[var(--accent-primary)] transition-colors duration-300"
+      style={maskStyle}
     />
   );
 }
@@ -33,7 +42,7 @@ export function BrandMark({
           alt="QuantBot"
           fill
           sizes="44px"
-          className="object-contain"
+          className="z-0 object-contain"
         />
         <AccentMask src={iconAccentMaskSrc} />
       </div>
@@ -53,7 +62,7 @@ export function BrandMark({
         fill
         priority
         sizes={size === "drawer" ? "192px" : "(min-width: 640px) 226px, 190px"}
-        className="object-contain object-left"
+        className="z-0 object-contain object-left"
       />
       <AccentMask src={logoAccentMaskSrc} />
     </div>
