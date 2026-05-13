@@ -996,7 +996,7 @@ function formatDateTime(timestamp: string) {
 function toSvgPoints(points: EquitySnapshot["points"]) {
   if (points.length < 2) return null;
 
-  const plotLeft = 14;
+  const plotLeft = 3;
   const plotRight = 886;
   const plotWidth = plotRight - plotLeft;
   const min = Math.min(...points.map((point) => point.equity));
