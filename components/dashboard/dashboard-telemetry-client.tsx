@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import type { EquitySnapshot } from "@/lib/equity/types";
 import type { PositionsSnapshot } from "@/lib/positions/types";
@@ -21,6 +21,8 @@ type HealthApiResponse = {
   lastUpdated: string | null;
 };
 
+const REFRESH_INTERVAL_MS = 10_000;
+
 export function DashboardTelemetryClient({
   initialEquitySnapshot,
   initialPositionsSnapshot,
@@ -34,42 +36,65 @@ export function DashboardTelemetryClient({
   const [eventStatus, setEventStatus] = useState<TelemetrySourceStatus>("MOCK_FALLBACK");
   const [healthStatus, setHealthStatus] = useState<TelemetrySourceStatus | null>(null);
   const [healthLastUpdated, setHealthLastUpdated] = useState<string | null>(null);
+  const [lastRefreshAt, setLastRefreshAt] = useState<string | null>(null);
+  const [refreshState, setRefreshState] = useState<"idle" | "refreshing" | "degraded">("idle");
+  const inFlightRef = useRef(false);
+
+  const loadTelemetry = useCallback(async () => {
+    if (inFlightRef.current) return;
+    inFlightRef.current = true;
+    setRefreshState("refreshing");
+
+    try {
+      const [equity, positions, orders, decisions, alerts, health] = await Promise.all([
+        fetchJson<ApiSnapshot<EquitySnapshot>>("/api/equity"),
+        fetchJson<ApiSnapshot<PositionsSnapshot>>("/api/positions"),
+        fetchJson<EventApiResponse>("/api/orders"),
+        fetchJson<EventApiResponse>("/api/decisions"),
+        fetchJson<EventApiResponse>("/api/alerts"),
+        fetchJson<HealthApiResponse>("/api/health"),
+      ]);
+
+      setEquitySnapshot(equity.data);
+      setPositionsSnapshot(positions.data);
+      setEvents(mergeEvents([orders.events, decisions.events, alerts.events]));
+      setEventStatus(deriveEventStatus([orders.status, decisions.status, alerts.status]));
+      setHealthStatus(health.status);
+      setHealthLastUpdated(health.lastUpdated);
+      setLastRefreshAt(new Date().toISOString());
+      setRefreshState("idle");
+    } catch {
+      setRefreshState("degraded");
+    } finally {
+      inFlightRef.current = false;
+    }
+  }, []);
 
   useEffect(() => {
-    let cancelled = false;
+    const initialRefresh = window.setTimeout(() => {
+      void loadTelemetry();
+    }, 0);
 
-    async function loadTelemetry() {
-      try {
-        const [equity, positions, orders, decisions, alerts, health] = await Promise.all([
-          fetchJson<ApiSnapshot<EquitySnapshot>>("/api/equity"),
-          fetchJson<ApiSnapshot<PositionsSnapshot>>("/api/positions"),
-          fetchJson<EventApiResponse>("/api/orders"),
-          fetchJson<EventApiResponse>("/api/decisions"),
-          fetchJson<EventApiResponse>("/api/alerts"),
-          fetchJson<HealthApiResponse>("/api/health"),
-        ]);
+    const interval = window.setInterval(() => {
+      if (document.visibilityState === "visible") {
+        void loadTelemetry();
+      }
+    }, REFRESH_INTERVAL_MS);
 
-        if (cancelled) return;
-
-        setEquitySnapshot(equity.data);
-        setPositionsSnapshot(positions.data);
-        setEvents(mergeEvents([orders.events, decisions.events, alerts.events]));
-        setEventStatus(deriveEventStatus([orders.status, decisions.status, alerts.status]));
-        setHealthStatus(health.status);
-        setHealthLastUpdated(health.lastUpdated);
-      } catch {
-        if (!cancelled) {
-          setEventStatus("MOCK_FALLBACK");
-        }
+    function handleVisibilityChange() {
+      if (document.visibilityState === "visible") {
+        void loadTelemetry();
       }
     }
 
-    void loadTelemetry();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      cancelled = true;
+      window.clearTimeout(initialRefresh);
+      window.clearInterval(interval);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [loadTelemetry]);
 
   const apiLastUpdated = useMemo(
     () => healthLastUpdated ?? equitySnapshot.fileLastModified ?? equitySnapshot.lastUpdate,
@@ -82,7 +107,10 @@ export function DashboardTelemetryClient({
       equitySnapshot={equitySnapshot}
       eventSourceStatus={eventStatus}
       healthSourceStatus={healthStatus}
+      lastRefreshAt={lastRefreshAt}
       positionsSnapshot={positionsSnapshot}
+      refreshIntervalSeconds={REFRESH_INTERVAL_MS / 1000}
+      refreshState={refreshState}
       telemetryEvents={events}
     />
   );

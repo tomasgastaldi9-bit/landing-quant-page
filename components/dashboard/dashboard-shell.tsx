@@ -113,6 +113,9 @@ export function DashboardShell({
   eventSourceStatus = "MOCK_FALLBACK",
   healthSourceStatus,
   apiLastUpdated,
+  refreshState = "idle",
+  lastRefreshAt,
+  refreshIntervalSeconds = 10,
 }: {
   equitySnapshot: EquitySnapshot;
   positionsSnapshot: PositionsSnapshot;
@@ -120,6 +123,9 @@ export function DashboardShell({
   eventSourceStatus?: TelemetrySourceStatus;
   healthSourceStatus?: TelemetrySourceStatus | null;
   apiLastUpdated?: string | null;
+  refreshState?: "idle" | "refreshing" | "degraded";
+  lastRefreshAt?: string | null;
+  refreshIntervalSeconds?: number;
 }) {
   const equityMetrics = [
     {
@@ -181,6 +187,11 @@ export function DashboardShell({
             </Link>
           </div>
           <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.14em] text-[#c2c6d8]">
+            <RefreshStatusBadge
+              lastRefreshAt={lastRefreshAt}
+              refreshIntervalSeconds={refreshIntervalSeconds}
+              refreshState={refreshState}
+            />
             <Link href="/demo-testnet"><StatusBadge>Demo / Testnet</StatusBadge></Link>
             <DataModeBadge source={dataModeSource} />
             <Link href="/demo-testnet"><StatusBadge>Research Mode</StatusBadge></Link>
@@ -229,6 +240,7 @@ export function DashboardShell({
               </span>
               . {equitySnapshot.message}
               {apiLastUpdated ? ` Last updated: ${formatDateTime(apiLastUpdated)}.` : ""}
+              {lastRefreshAt ? ` Last refresh: ${formatDateTime(lastRefreshAt)}.` : ""}
               {equitySnapshot.source === "mock-fallback"
                 ? " Configure QUANTBOT_OUTPUT_DIR or place CSVs in ../crypto_bot/output to enable live telemetry."
                 : ""}
@@ -497,6 +509,43 @@ function EquityChart({ points }: { points: EquitySnapshot["points"] }) {
         )}
       </svg>
     </TerminalChartFrame>
+  );
+}
+
+function RefreshStatusBadge({
+  refreshState,
+  lastRefreshAt,
+  refreshIntervalSeconds,
+}: {
+  refreshState: "idle" | "refreshing" | "degraded";
+  lastRefreshAt?: string | null;
+  refreshIntervalSeconds: number;
+}) {
+  const stateLabel =
+    refreshState === "refreshing"
+      ? "Refreshing"
+      : refreshState === "degraded"
+        ? "Degraded"
+        : "Live / Auto Refresh";
+  const ledState = refreshState === "degraded" ? "standby" : "online";
+
+  return (
+    <div
+      className={`inline-flex items-center gap-2 rounded-xl border px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_30px_rgba(0,0,0,0.18)] ${
+        refreshState === "degraded"
+          ? "border-amber-200/30 bg-amber-200/[0.05] text-amber-100"
+          : "border-[var(--accent-primary)]/45 bg-[var(--accent-surface)]/90 text-[var(--accent-primary)]"
+      }`}
+      title={
+        lastRefreshAt
+          ? `Last refresh ${formatDateTime(lastRefreshAt)}`
+          : `Polling every ${refreshIntervalSeconds}s`
+      }
+    >
+      <StatusLed state={ledState} />
+      <span>{stateLabel}</span>
+      <span className="text-[#8c90a1]">{refreshIntervalSeconds}s</span>
+    </div>
   );
 }
 
