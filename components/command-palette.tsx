@@ -37,6 +37,13 @@ const baseCommands: CommandItem[] = [
     shortcut: "P",
   },
   {
+    group: "Navigation",
+    href: "/model-portfolio",
+    label: "Model Portfolio",
+    meta: "Client-facing current model allocation",
+    aliases: ["/mp", "model portfolio", "allocation", "model allocation", "weights"],
+  },
+  {
     group: "Research",
     href: "/alpha-lab",
     label: "Alpha Lab",

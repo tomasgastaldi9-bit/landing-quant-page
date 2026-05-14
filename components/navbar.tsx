@@ -20,6 +20,12 @@ const navGroups = [
         description: "Active positions, exposure, and testnet state.",
       },
       {
+        label: "Model Portfolio",
+        href: "/model-portfolio",
+        description: "Client-facing model allocation from live telemetry.",
+        badge: "MODEL",
+      },
+      {
         label: "Monitoring",
         href: "/monitoring",
         description: "Equity, logs, alerts, and system health.",
