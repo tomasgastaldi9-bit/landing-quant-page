@@ -15,6 +15,7 @@ type CommandItem = {
   href: string;
   label: string;
   meta: string;
+  aliases?: string[];
   shortcut?: string;
 };
 
@@ -24,6 +25,7 @@ const baseCommands: CommandItem[] = [
     href: "/dashboard",
     label: "Dashboard",
     meta: "Operator workspace and terminal overview",
+    aliases: ["/d", "dashboard", "terminal", "operator"],
     shortcut: "D",
   },
   {
@@ -31,6 +33,7 @@ const baseCommands: CommandItem[] = [
     href: "/dashboard#positions",
     label: "Positions",
     meta: "Active positions table",
+    aliases: ["/p", "positions", "position", "exposure"],
     shortcut: "P",
   },
   {
@@ -38,6 +41,7 @@ const baseCommands: CommandItem[] = [
     href: "/alpha-lab",
     label: "Alpha Lab",
     meta: "Research workspace and candidate registry",
+    aliases: ["/a", "alpha", "alpha lab", "research"],
     shortcut: "A",
   },
   {
@@ -45,12 +49,14 @@ const baseCommands: CommandItem[] = [
     href: "/alpha-engine",
     label: "Alpha Engine",
     meta: "Multi-alpha architecture explainer",
+    aliases: ["alpha engine", "engine"],
   },
   {
     group: "Risk",
     href: "/risk-layer",
     label: "Risk Layer",
     meta: "Policy engine and exposure controls",
+    aliases: ["/r", "risk", "risk layer", "policy"],
     shortcut: "R",
   },
   {
@@ -58,12 +64,15 @@ const baseCommands: CommandItem[] = [
     href: "/monitoring",
     label: "Monitoring",
     meta: "System health and observability",
+    aliases: ["/m", "monitoring", "monitor", "observability", "health"],
+    shortcut: "M",
   },
   {
     group: "Monitoring",
     href: "/dashboard#execution-logs",
     label: "Execution Logs",
     meta: "Read-only event stream",
+    aliases: ["/l", "logs", "execution logs", "events", "event stream"],
     shortcut: "L",
   },
   {
@@ -71,12 +80,14 @@ const baseCommands: CommandItem[] = [
     href: "/request-access",
     label: "Request Access",
     meta: "Private beta onboarding",
+    aliases: ["/access", "/request", "access", "request", "waitlist"],
   },
   {
     group: "Account",
     href: "/settings",
     label: "Workspace Settings",
     meta: "Mock preferences, data mode, and read-only access controls",
+    aliases: ["/s", "settings", "workspace settings", "preferences"],
     shortcut: "S",
   },
 ];
@@ -86,6 +97,7 @@ const candidateCommands: CommandItem[] = alphaCandidates.map((candidate) => ({
   href: `/alpha-lab/${candidate.slug}`,
   label: candidate.name,
   meta: `${candidate.family} / ${candidate.stage}`,
+  aliases: [candidate.slug, candidate.name.toLowerCase(), candidate.family.toLowerCase()],
 }));
 
 const commands = [...baseCommands, ...candidateCommands];
@@ -97,6 +109,38 @@ const groupOrder: CommandItem["group"][] = [
   "Account",
   "Candidates",
 ];
+
+function getCommandSearchText(command: CommandItem) {
+  return [
+    command.label,
+    command.meta,
+    command.group,
+    command.href,
+    command.shortcut,
+    ...(command.aliases ?? []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+function getCommandScore(command: CommandItem, query: string) {
+  const aliases = command.aliases ?? [];
+  const normalizedAliases = aliases.map((alias) => alias.toLowerCase());
+  const normalizedLabel = command.label.toLowerCase();
+  const normalizedHref = command.href.toLowerCase();
+
+  if (normalizedAliases.includes(query)) return 100;
+  if (query.startsWith("/") && normalizedAliases.some((alias) => alias.startsWith(query))) {
+    return 90;
+  }
+  if (normalizedLabel === query || normalizedHref === query) return 80;
+  if (normalizedLabel.startsWith(query)) return 70;
+  if (normalizedAliases.some((alias) => alias.includes(query))) return 65;
+  if (getCommandSearchText(command).includes(query)) return 40;
+
+  return 0;
+}
 
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
@@ -110,12 +154,14 @@ export function CommandPalette() {
 
     if (!normalized) return commands;
 
-    return commands.filter((command) =>
-      [command.label, command.meta, command.group, command.href]
-        .join(" ")
-        .toLowerCase()
-        .includes(normalized),
-    );
+    return commands
+      .map((command) => ({
+        command,
+        score: getCommandScore(command, normalized),
+      }))
+      .filter((item) => item.score > 0)
+      .sort((left, right) => right.score - left.score)
+      .map((item) => item.command);
   }, [query]);
 
   const groupedCommands = useMemo(
