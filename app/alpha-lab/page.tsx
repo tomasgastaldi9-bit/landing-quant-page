@@ -8,42 +8,16 @@ import {
   MiniBarMeter,
   TimelineProgress,
 } from "@/components/charts/terminal-charts";
-import { alphaCandidates } from "@/lib/alpha-lab/candidates";
+import {
+  getAlphaLabSnapshot,
+  type AlphaLabRegime,
+  type AlphaLabRegistryEntry,
+  type AlphaLabSignalHealth,
+  type AlphaLabSnapshot,
+  type AlphaLabSource,
+  type AlphaLabSourceStatus,
+} from "@/lib/alpha-lab/live-adapter";
 import Link from "next/link";
-
-const overviewMetrics = [
-  {
-    label: "Active Pipelines",
-    value: "04",
-    detail: "Research sleeves",
-    tone: "neutral" as const,
-    emphasis: true,
-  },
-  {
-    label: "Candidates",
-    value: "11",
-    detail: "In review",
-    tone: "muted" as const,
-  },
-  {
-    label: "Validation",
-    value: "03",
-    detail: "Stages active",
-    tone: "good" as const,
-  },
-  {
-    label: "Deployment",
-    value: "01",
-    detail: "Candidate only",
-    tone: "warning" as const,
-  },
-];
-
-const regimes = [
-  { label: "Low", value: "Stable", state: "standby", width: "44%" },
-  { label: "Mid", value: "Current", state: "online", width: "68%" },
-  { label: "High", value: "Watch", state: "standby", width: "22%" },
-];
 
 const pipelineStages = [
   "Research",
@@ -53,35 +27,13 @@ const pipelineStages = [
   "Deployment Candidate",
 ];
 
-const signalHealth = [
-  { label: "Activity", value: "Normal", detail: "No spike", tone: "good" as const },
-  {
-    label: "Stability",
-    value: "High",
-    detail: "Drift contained",
-    tone: "good" as const,
-  },
-  {
-    label: "Turnover",
-    value: "Moderate",
-    detail: "Policy aligned",
-    tone: "muted" as const,
-  },
-  {
-    label: "Correlation",
-    value: "0.32",
-    detail: "Sleeve overlap",
-    tone: "muted" as const,
-  },
-  {
-    label: "Persistence",
-    value: "Watch",
-    detail: "Needs more samples",
-    tone: "warning" as const,
-  },
-];
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
-export default function AlphaLabPage() {
+export default async function AlphaLabPage() {
+  const snapshot = await getAlphaLabSnapshot();
+  const sourceLabel = formatSourceStatus(snapshot.sourceStatus);
+
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px)] bg-[size:32px_32px] text-[#e2e2e2]">
       <div className="mx-auto max-w-[1500px] px-4 py-7 sm:px-6 lg:py-10">
@@ -95,14 +47,15 @@ export default function AlphaLabPage() {
                 Alpha Lab
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-[#c2c6d8] sm:text-base">
-                A mock institutional research desk for organizing multi-alpha
-                candidates, regime context, validation stages, and deployment
-                readiness without live capital or production execution.
+                Read-only research telemetry for QuantBot alpha attribution,
+                regime context, candidate review, and validation artifacts. Live
+                files are used when available; fallback states are labeled
+                explicitly.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <StatusBadge tone="accent">Research</StatusBadge>
-              <StatusBadge>Mock Data</StatusBadge>
+              <StatusBadge tone="accent">{sourceLabel}</StatusBadge>
+              <StatusBadge>Read Only</StatusBadge>
               <StatusBadge>No Live Capital</StatusBadge>
               <StatusBadge>Private Beta</StatusBadge>
             </div>
@@ -123,39 +76,57 @@ export default function AlphaLabPage() {
           </div>
         </section>
 
-        <section className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {overviewMetrics.map((metric) => (
-            <MetricTile key={metric.label} {...metric} compact />
-          ))}
-        </section>
+        <OverviewMetrics snapshot={snapshot} />
 
         <section className="mt-4 grid grid-cols-1 gap-3 xl:grid-cols-[0.8fr_1.2fr]">
-          <TerminalPanel eyebrow="Regime" title="Regime Monitor" action="Demo model" priority="primary">
-            <RegimeMonitor />
+          <TerminalPanel
+            action={formatSourceStatus(snapshot.regime.sourceStatus)}
+            eyebrow="Regime"
+            priority="primary"
+            title="Regime Monitor"
+          >
+            <RegimeMonitor regime={snapshot.regime} />
           </TerminalPanel>
-          <TerminalPanel eyebrow="Registry" title="Alpha Registry" action="Mock research" priority="primary">
-            <AlphaRegistry />
+          <TerminalPanel
+            action="Read-only artifacts"
+            eyebrow="Registry"
+            priority="primary"
+            title="Alpha Registry"
+          >
+            <AlphaRegistry entries={snapshot.registry} />
           </TerminalPanel>
         </section>
 
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1.1fr_0.9fr]">
-          <TerminalPanel eyebrow="Validation" title="Research Pipeline" action="Gated workflow">
-            <ValidationPipeline />
+          <TerminalPanel
+            action={formatSourceStatus(snapshot.pipeline.sourceStatus)}
+            eyebrow="Validation"
+            title="Research Pipeline"
+          >
+            <ValidationPipeline snapshot={snapshot} />
           </TerminalPanel>
-          <TerminalPanel eyebrow="Signals" title="Signal Health" action="Telemetry">
-            <SignalHealth />
+          <TerminalPanel eyebrow="Signals" title="Signal Health" action="Artifacts">
+            <SignalHealth signals={snapshot.signalHealth} />
           </TerminalPanel>
         </section>
 
-        <section className="mt-3">
-          <TerminalPanel eyebrow="Compliance" title="Research Environment" action="Informational" priority="passive">
-            <div className="grid gap-3 font-mono text-[11px] uppercase leading-6 tracking-[0.12em] text-[#8c90a1] md:grid-cols-3">
+        <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1.15fr_0.85fr]">
+          <TerminalPanel eyebrow="Sources" title="Artifact Freshness" action="Read only">
+            <ArtifactSources sources={snapshot.sources} />
+          </TerminalPanel>
+          <TerminalPanel
+            eyebrow="Compliance"
+            title="Research Environment"
+            action="Informational"
+            priority="passive"
+          >
+            <div className="grid gap-3 font-mono text-[11px] uppercase leading-6 tracking-[0.12em] text-[#8c90a1]">
               <div className="rounded-xl border border-[#243042] bg-[#050505]/78 p-4">
                 No live trading access is provided from this workspace.
               </div>
               <div className="rounded-xl border border-[#243042] bg-[#050505]/78 p-4">
-                Mock data is for product demonstration and research workflow
-                visualization.
+                Research artifacts are read-only and never modify bot execution,
+                scheduler, risk, or strategy logic.
               </div>
               <div className="rounded-xl border border-[#243042] bg-[#050505]/78 p-4">
                 Performance is not guaranteed. Not financial advice.
@@ -168,7 +139,45 @@ export default function AlphaLabPage() {
   );
 }
 
-function RegimeMonitor() {
+function OverviewMetrics({ snapshot }: { snapshot: AlphaLabSnapshot }) {
+  const metrics = [
+    {
+      label: "Active Pipelines",
+      value: padMetric(snapshot.overview.activePipelines),
+      detail: "Observed alpha activity",
+      tone: snapshot.overview.activePipelines > 0 ? ("good" as const) : ("muted" as const),
+      emphasis: true,
+    },
+    {
+      label: "Candidates",
+      value: padMetric(snapshot.overview.candidatesInReview),
+      detail: "Registry entries",
+      tone: "muted" as const,
+    },
+    {
+      label: "Validation",
+      value: padMetric(snapshot.overview.validationStages),
+      detail: "Artifact stages",
+      tone: snapshot.overview.validationStages > 0 ? ("good" as const) : ("warning" as const),
+    },
+    {
+      label: "Deployment",
+      value: padMetric(snapshot.overview.deploymentCandidates),
+      detail: "Baseline candidates",
+      tone: snapshot.overview.deploymentCandidates > 0 ? ("good" as const) : ("muted" as const),
+    },
+  ];
+
+  return (
+    <section className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {metrics.map((metric) => (
+        <MetricTile key={metric.label} {...metric} compact />
+      ))}
+    </section>
+  );
+}
+
+function RegimeMonitor({ regime }: { regime: AlphaLabRegime }) {
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-[var(--accent-primary)]/35 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.58),rgba(5,5,5,0.76))] p-5">
@@ -178,81 +187,161 @@ function RegimeMonitor() {
               Current Regime
             </div>
             <div className="mt-3 text-3xl font-semibold text-white">
-              Mid Dispersion
+              {regime.current ?? "Unavailable"}
             </div>
           </div>
-          <StatusLed state="online" />
+          <StatusLed state={regime.current ? "online" : "standby"} />
         </div>
         <div className="mt-3 font-mono text-xs uppercase tracking-[0.12em] text-[var(--accent-primary)]">
-          Transition watch: low to mid confirmed
+          {regime.message}
+        </div>
+        <div className="mt-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1]">
+          Source: {regime.source}
+          {regime.lastUpdate ? ` · ${formatTimestamp(regime.lastUpdate)}` : ""}
         </div>
       </div>
       <div className="grid gap-3">
-        {regimes.map((regime) => (
+        {regime.scores.map((score) => (
           <MiniBarMeter
-            key={regime.label}
-            label={`${regime.label} dispersion`}
-            tone={regime.state === "online" ? "good" : "accent"}
-            value={regime.value}
-            width={regime.width}
+            key={score.label}
+            label={`${score.label} dispersion`}
+            tone={score.state === "online" ? "good" : "accent"}
+            value={score.value}
+            width={score.width}
           />
         ))}
+      </div>
+      <div className="rounded-xl border border-[#1f1f1f] bg-[#050505]/72 p-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1]">
+        {regime.transition}
       </div>
     </div>
   );
 }
 
-function AlphaRegistry() {
+function AlphaRegistry({ entries }: { entries: AlphaLabRegistryEntry[] }) {
   return (
     <div className="grid gap-3 md:grid-cols-2">
-      {alphaCandidates.map((alpha) => (
-        <Link
-          className="rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(8,8,8,0.92),rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/45"
-          href={`/alpha-lab/${alpha.slug}`}
-          key={alpha.name}
-        >
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--accent-primary)]">
-                {alpha.family}
+      {entries.map((alpha) => {
+        const content = (
+          <>
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--accent-primary)]">
+                  {alpha.family}
+                </div>
+                <h2 className="mt-2 text-lg font-semibold text-white">
+                  {alpha.name}
+                </h2>
               </div>
-              <h2 className="mt-2 text-lg font-semibold text-white">
-                {alpha.name}
-              </h2>
+              <StatusLed state={alpha.activity !== "Inactive" ? "online" : "standby"} />
             </div>
-            <StatusLed state={alpha.status === "Active Research" ? "online" : "standby"} />
-          </div>
-          <div className="mt-4 grid grid-cols-2 gap-2 font-mono text-[10px] uppercase tracking-[0.12em]">
-            <DataCell label="Status" value={alpha.status} />
-            <DataCell label="Stage" value={alpha.stage} />
-            <DataCell label="Readiness" value={alpha.readiness} />
-            <DataCell label="Stability" value={alpha.stability} />
-          </div>
-          <div className="mt-3 rounded-xl border border-[#1f1f1f] bg-[#050505]/72 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1]">
-            Activity: <span className="text-[var(--accent-primary)]">{alpha.activity}</span>
-          </div>
-        </Link>
-      ))}
+            <div className="mt-4 grid grid-cols-2 gap-2 font-mono text-[10px] uppercase tracking-[0.12em]">
+              <DataCell label="Status" value={alpha.status} />
+              <DataCell label="Stage" value={alpha.stage} />
+              <DataCell label="Readiness" value={alpha.readiness} />
+              <DataCell label="Stability" value={alpha.stability} />
+            </div>
+            <div className="mt-3 rounded-xl border border-[#1f1f1f] bg-[#050505]/72 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1]">
+              Activity:{" "}
+              <span className="text-[var(--accent-primary)]">{alpha.activity}</span>
+              <span className="mt-1 block text-[#6f7485]">
+                {formatSourceStatus(alpha.sourceStatus)} · {alpha.source}
+              </span>
+            </div>
+          </>
+        );
+        const className =
+          "rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(8,8,8,0.92),rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/45";
+
+        if (!alpha.slug) {
+          return (
+            <article className={className} key={`${alpha.name}-${alpha.source}`}>
+              {content}
+            </article>
+          );
+        }
+
+        return (
+          <Link
+            className={className}
+            href={`/alpha-lab/${alpha.slug}`}
+            key={`${alpha.name}-${alpha.source}`}
+          >
+            {content}
+          </Link>
+        );
+      })}
     </div>
   );
 }
 
-function ValidationPipeline() {
-  return <TimelineProgress currentIndex={2} stages={pipelineStages} />;
+function ValidationPipeline({ snapshot }: { snapshot: AlphaLabSnapshot }) {
+  return (
+    <div className="space-y-4">
+      <TimelineProgress currentIndex={snapshot.pipeline.currentIndex} stages={pipelineStages} />
+      <div className="grid gap-2">
+        {snapshot.pipeline.candidates.length > 0 ? (
+          snapshot.pipeline.candidates.map((candidate) => (
+            <div
+              className="grid gap-3 rounded-xl border border-[#1f1f1f] bg-[#050505]/72 p-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1] sm:grid-cols-[1fr_auto]"
+              key={`${candidate.name}-${candidate.status}`}
+            >
+              <div>
+                <span className="text-[#d7dceb]">{candidate.name}</span>
+                <span className="mt-1 block text-[#6f7485]">{candidate.detail}</span>
+              </div>
+              <span className={candidateStatusClass(candidate.status)}>
+                {candidate.status}
+              </span>
+            </div>
+          ))
+        ) : (
+          <div className="rounded-xl border border-[#243042] bg-[#050505]/72 p-4 font-mono text-[11px] uppercase leading-6 tracking-[0.12em] text-[#8c90a1]">
+            No Alpha Factory candidate artifact was parsed. Pipeline view is
+            waiting for real registry rows.
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
-function SignalHealth() {
+function SignalHealth({ signals }: { signals: AlphaLabSignalHealth[] }) {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      {signalHealth.map((signal) => (
+      {signals.map((signal) => (
         <MetricTile
           compact
-          detail={signal.detail}
+          detail={`${signal.detail} · ${formatSourceStatus(signal.sourceStatus)}`}
           key={signal.label}
           label={signal.label}
           tone={signal.tone}
           value={signal.value}
         />
+      ))}
+    </div>
+  );
+}
+
+function ArtifactSources({ sources }: { sources: AlphaLabSource[] }) {
+  return (
+    <div className="grid gap-2">
+      {sources.map((source) => (
+        <div
+          className="grid gap-3 rounded-xl border border-[#1f1f1f] bg-[#050505]/72 p-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1] sm:grid-cols-[1fr_auto]"
+          key={source.fileName}
+        >
+          <div>
+            <div className="text-[#d7dceb]">{source.fileName}</div>
+            <div className="mt-1 text-[#6f7485]">
+              Rows {source.rowCount} ·{" "}
+              {source.lastModified ? formatTimestamp(source.lastModified) : "no timestamp"}
+            </div>
+          </div>
+          <span className={sourceStatusClass(source.status)}>
+            {formatSourceStatus(source.status)}
+          </span>
+        </div>
       ))}
     </div>
   );
@@ -265,4 +354,50 @@ function DataCell({ label, value }: { label: string; value: string }) {
       <div className="mt-2 text-[#c2c6d8]">{value}</div>
     </div>
   );
+}
+
+function padMetric(value: number) {
+  return String(value).padStart(2, "0");
+}
+
+function formatSourceStatus(status: AlphaLabSourceStatus) {
+  return status.replace(/_/g, " ");
+}
+
+function formatTimestamp(timestamp: string) {
+  const parsed = new Date(timestamp);
+  if (Number.isNaN(parsed.getTime())) return timestamp;
+  return parsed.toLocaleString("en-US", {
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function sourceStatusClass(status: AlphaLabSourceStatus) {
+  const base =
+    "inline-flex items-center justify-center rounded-lg border px-2.5 py-1 text-[10px] uppercase tracking-[0.12em]";
+  if (status === "LIVE_FILE") {
+    return `${base} border-emerald-400/30 bg-emerald-400/[0.08] text-emerald-200`;
+  }
+  if (status === "STALE_FILE" || status === "LIVE_FILE_EMPTY") {
+    return `${base} border-amber-300/30 bg-amber-300/[0.08] text-amber-200`;
+  }
+  if (status === "PARSE_ERROR") {
+    return `${base} border-red-300/30 bg-red-300/[0.08] text-red-200`;
+  }
+  return `${base} border-[#243042] bg-[#0e0e0e]/82 text-[#8c90a1]`;
+}
+
+function candidateStatusClass(status: "PASS_TO_BASELINE" | "WATCHLIST" | "REJECT") {
+  const base =
+    "inline-flex items-center justify-center rounded-lg border px-2.5 py-1 text-[10px] uppercase tracking-[0.12em]";
+  if (status === "PASS_TO_BASELINE") {
+    return `${base} border-emerald-400/30 bg-emerald-400/[0.08] text-emerald-200`;
+  }
+  if (status === "WATCHLIST") {
+    return `${base} border-[var(--accent-primary)]/35 bg-[var(--accent-surface)]/80 text-[var(--accent-primary)]`;
+  }
+  return `${base} border-[#243042] bg-[#0e0e0e]/82 text-[#8c90a1]`;
 }
