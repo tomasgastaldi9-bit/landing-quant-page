@@ -33,6 +33,7 @@ export default async function ModelPortfolioPage() {
     .map((position) => enrichAllocation(position, equity));
   const summary = summarizeAllocation(allocationRows, equity);
   const freshness = deriveFreshness(equity, positions, health.lastUpdated);
+  const isFlat = summary.activeSymbols === 0 && summary.cashEstimate === 1;
   const hasLiveTelemetry =
     equity.source === "live-csv" || positions.source === "live-csv" || health.status === "LIVE_FILE";
 
@@ -48,15 +49,15 @@ export default async function ModelPortfolioPage() {
                 <StatusBadge>Demo / Testnet mode</StatusBadge>
               </div>
               <h1 className="mt-6 text-3xl font-semibold tracking-tight text-white sm:text-5xl">
-                Current model allocation
+                Model Portfolio
               </h1>
               <p className="mt-4 max-w-2xl text-base leading-7 text-[#c2c6d8]">
-                Client-facing view of the bot&apos;s current read-only telemetry:
-                what is allocated, what is flat, current exposure, and whether
-                the source data is fresh enough to interpret.
+                A client-facing view of the strategy&apos;s current read-only
+                output: whether the model is allocated, flat, or waiting for
+                the next confirmed telemetry cycle.
               </p>
             </div>
-            <div className="rounded-2xl border border-[var(--accent-border)] bg-[#050505]/76 p-4 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+            <div className="rounded-2xl border border-[#243042] bg-[#050505]/68 p-4 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
               <div className="flex items-center gap-3 text-[var(--accent-primary)]">
                 <StatusLed state={hasLiveTelemetry ? "online" : "standby"} />
                 {freshness.label}
@@ -68,10 +69,32 @@ export default async function ModelPortfolioPage() {
           </div>
         </section>
 
+        <ModelStateBanner
+          isFlat={isFlat}
+          summary={summary}
+          freshnessLabel={freshness.label}
+        />
+
+        <section>
+          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
+                Current Model Allocation
+              </div>
+              <h2 className="mt-1 text-xl font-semibold text-white">
+                What the model is saying right now
+              </h2>
+            </div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#6f7485]">
+              Read-only / no execution controls
+            </div>
+          </div>
+        </section>
+
         <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-6">
           <MetricTile
             compact
-            detail="Open model rows"
+            detail={summary.activeSymbols === 0 ? "No symbols currently selected" : "Symbols with parsed exposure"}
             emphasis
             label="Active Symbols"
             tone={allocationRows.length > 0 ? "good" : "muted"}
@@ -79,39 +102,45 @@ export default async function ModelPortfolioPage() {
           />
           <MetricTile
             compact
-            detail="Long notional / equity"
+            detail={summary.longExposure > 0 ? "Model has long exposure" : "No current long allocation"}
             label="Long Exposure"
             tone={summary.longExposure > 0 ? "good" : "muted"}
             value={formatPercent(summary.longExposure)}
           />
           <MetricTile
             compact
-            detail="Short notional / equity"
+            detail={summary.shortExposure > 0 ? "Model has short exposure" : "No current short allocation"}
             label="Short Exposure"
             tone={summary.shortExposure > 0 ? "warning" : "muted"}
             value={formatPercent(summary.shortExposure)}
           />
           <MetricTile
             compact
-            detail="Abs long + short"
+            detail={summary.grossExposure > 0 ? "Total active exposure" : "No deployed exposure"}
             label="Gross Exposure"
             value={formatPercent(summary.grossExposure)}
           />
           <MetricTile
             compact
-            detail="Long minus short"
+            detail={summary.netExposure === 0 ? "No directional bias" : "Directional model bias"}
             label="Net Exposure"
             value={formatSignedPercent(summary.netExposure)}
           />
           <MetricTile
             compact
-            detail={summary.cashEstimate === null ? "Not safely derivable" : "1 - gross exposure"}
+            detail={
+              summary.cashEstimate === null
+                ? "Not safely derivable"
+                : summary.cashEstimate === 1
+                  ? "Effectively fully flat"
+                  : "Unallocated model capital"
+            }
             label="Flat / Cash"
             value={summary.cashEstimate === null ? "Unavailable" : formatPercent(summary.cashEstimate)}
           />
         </section>
 
-        <section className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
+        <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <TerminalPanel
             action={positions.source === "live-csv" ? "Telemetry loaded" : "Fallback / unavailable"}
             eyebrow="Current Allocation"
@@ -126,6 +155,8 @@ export default async function ModelPortfolioPage() {
           </TerminalPanel>
 
           <div className="grid gap-6">
+            <WhatThisMeansPanel isFlat={isFlat} summary={summary} />
+
             <TerminalPanel action="Read-only" eyebrow="Summary" title="Portfolio Summary">
               <div className="grid gap-3">
                 <SummaryRow label="Active model rows" value={String(summary.activeSymbols)} />
@@ -137,7 +168,7 @@ export default async function ModelPortfolioPage() {
               </div>
             </TerminalPanel>
 
-            <TerminalPanel action={freshness.status} eyebrow="Freshness" title="Risk / Freshness State">
+            <TerminalPanel action={freshness.status} eyebrow="Source" title="Telemetry Freshness">
               <div className="space-y-4">
                 <FreshnessLine
                   label="Positions feed"
@@ -162,10 +193,10 @@ export default async function ModelPortfolioPage() {
         <TerminalPanel action="Client Notes" eyebrow="Interpretation" title="How to read this page">
           <div className="grid gap-4 text-sm leading-6 text-[#c2c6d8] lg:grid-cols-4">
             {[
-              "This is read-only model output derived from existing bot telemetry artifacts.",
-              "No orders can be placed from this interface; it has no execution controls.",
-              "Allocations are shown only when positions telemetry is live. Fallback/mock data is labeled and not treated as model allocation.",
-              "Demo/Testnet mode is assumed unless the deployment is explicitly configured otherwise.",
+              "This page shows read-only model output.",
+              "No orders can be placed here.",
+              "Allocations appear only when telemetry contains active model exposure.",
+              "Demo/Testnet mode unless explicitly configured otherwise.",
             ].map((copy) => (
               <div
                 className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/58 p-4"
@@ -184,6 +215,103 @@ export default async function ModelPortfolioPage() {
         </TerminalPanel>
       </div>
     </main>
+  );
+}
+
+function ModelStateBanner({
+  isFlat,
+  summary,
+  freshnessLabel,
+}: {
+  isFlat: boolean;
+  summary: ReturnType<typeof summarizeAllocation>;
+  freshnessLabel: string;
+}) {
+  if (isFlat) {
+    return (
+      <section className="rounded-[26px] border border-[var(--accent-primary)]/34 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.55),rgba(5,5,5,0.84))] p-5 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_18px_54px_rgba(0,0,0,0.24)] sm:p-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
+              Current State
+            </div>
+            <h2 className="mt-2 text-2xl font-semibold text-white">
+              The model is currently flat.
+            </h2>
+            <p className="mt-3 max-w-3xl text-sm leading-6 text-[#c2c6d8]">
+              No active allocation is being suggested from the current telemetry
+              artifacts. This can be a normal model state when the strategy is
+              waiting in cash.
+            </p>
+          </div>
+          <div className="rounded-2xl border border-[#243042] bg-[#050505]/70 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+            <div className="text-[var(--accent-primary)]">Flat / Cash</div>
+            <div className="mt-1 text-2xl font-semibold text-white">
+              {formatPercent(summary.cashEstimate)}
+            </div>
+            <div className="mt-2">{freshnessLabel}</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="rounded-[26px] border border-emerald-300/22 bg-[linear-gradient(135deg,rgba(16,185,129,0.1),rgba(5,5,5,0.84))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_18px_54px_rgba(0,0,0,0.24)] sm:p-6">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-300">
+            Current State
+          </div>
+          <h2 className="mt-2 text-2xl font-semibold text-white">
+            The model has active allocation.
+          </h2>
+          <p className="mt-3 max-w-3xl text-sm leading-6 text-[#c2c6d8]">
+            Parsed telemetry currently contains active model exposure. Review
+            the allocation table for symbols, direction, and derived weights.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-[#243042] bg-[#050505]/70 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+          <div className="text-emerald-300">Gross Exposure</div>
+          <div className="mt-1 text-2xl font-semibold text-white">
+            {formatPercent(summary.grossExposure)}
+          </div>
+          <div className="mt-2">{freshnessLabel}</div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhatThisMeansPanel({
+  isFlat,
+  summary,
+}: {
+  isFlat: boolean;
+  summary: ReturnType<typeof summarizeAllocation>;
+}) {
+  const rows = isFlat
+    ? [
+        ["No active symbols", "0"],
+        ["No long exposure", formatPercent(summary.longExposure)],
+        ["No short exposure", formatPercent(summary.shortExposure)],
+        ["Portfolio state", "Effectively 100% cash / flat based on parsed telemetry"],
+      ]
+    : [
+        ["Active symbols", String(summary.activeSymbols)],
+        ["Long exposure", formatPercent(summary.longExposure)],
+        ["Short exposure", formatPercent(summary.shortExposure)],
+        ["Portfolio state", "Allocated according to parsed telemetry"],
+      ];
+
+  return (
+    <TerminalPanel action="Plain English" eyebrow="Client View" title="What this means">
+      <div className="grid gap-3">
+        {rows.map(([label, value]) => (
+          <SummaryRow key={label} label={label} value={value} />
+        ))}
+      </div>
+    </TerminalPanel>
   );
 }
 
@@ -206,9 +334,9 @@ function AllocationTable({
               No active model allocation found
             </div>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#8c90a1]">
-              The system may currently be flat or waiting for the next trading
-              cycle. If telemetry is missing or fallback-only, this page will
-              not display mock allocations.
+              The strategy may be flat, waiting for the next trading cycle, or
+              telemetry may not contain open positions. This is not an error if
+              the system is intentionally in cash.
             </p>
             <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--accent-primary)]">
               {positions.message}
