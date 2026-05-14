@@ -57,13 +57,14 @@ export default async function ModelPortfolioPage() {
                 the next confirmed telemetry cycle.
               </p>
             </div>
-            <div className="rounded-2xl border border-[#243042] bg-[#050505]/68 p-4 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
-              <div className="flex items-center gap-3 text-[var(--accent-primary)]">
+            <div className="rounded-2xl border border-[#243042] bg-[#050505]/52 p-4 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+              <div className="text-[10px] tracking-[0.2em] text-[#6f7485]">Read-only</div>
+              <div className="mt-3 flex items-center gap-3 text-[var(--accent-primary)]">
                 <StatusLed state={hasLiveTelemetry ? "online" : "standby"} />
-                {freshness.label}
+                No trading controls
               </div>
-              <div className="mt-3 text-[#8c90a1]">
-                Last update {formatTimestamp(freshness.lastUpdate)}
+              <div className="mt-3 normal-case leading-5 tracking-normal text-[#8c90a1]">
+                Telemetry-backed model output. Freshness details stay available below for audit transparency.
               </div>
             </div>
           </div>
@@ -75,14 +76,16 @@ export default async function ModelPortfolioPage() {
           freshnessLabel={freshness.label}
         />
 
+        <WhatThisMeansPanel isFlat={isFlat} summary={summary} />
+
         <section>
           <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
-                Current Model Allocation
+                Exposure Details
               </div>
               <h2 className="mt-1 text-xl font-semibold text-white">
-                What the model is saying right now
+                Secondary telemetry metrics
               </h2>
             </div>
             <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-[#6f7485]">
@@ -155,8 +158,6 @@ export default async function ModelPortfolioPage() {
           </TerminalPanel>
 
           <div className="grid gap-6">
-            <WhatThisMeansPanel isFlat={isFlat} summary={summary} />
-
             <TerminalPanel action="Read-only" eyebrow="Summary" title="Portfolio Summary">
               <div className="grid gap-3">
                 <SummaryRow label="Active model rows" value={String(summary.activeSymbols)} />
@@ -229,27 +230,55 @@ function ModelStateBanner({
 }) {
   if (isFlat) {
     return (
-      <section className="rounded-[26px] border border-[var(--accent-primary)]/34 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.55),rgba(5,5,5,0.84))] p-5 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_18px_54px_rgba(0,0,0,0.24)] sm:p-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <section className="rounded-[30px] border border-[var(--accent-primary)]/40 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.68),rgba(5,5,5,0.9)_50%,rgba(14,26,22,0.74))] p-5 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.1),0_24px_72px_rgba(0,0,0,0.34)] sm:p-6">
+        <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-stretch">
           <div>
             <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
-              Current State
+              Current Model Stance
             </div>
-            <h2 className="mt-2 text-2xl font-semibold text-white">
-              The model is currently flat.
+            <h2 className="mt-3 font-mono text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl">
+              FLAT / CASH
             </h2>
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-[#c2c6d8]">
-              No active allocation is being suggested from the current telemetry
-              artifacts. This can be a normal model state when the strategy is
-              waiting in cash.
+            <p className="mt-3 max-w-3xl text-base leading-7 text-[#d5cfbf]">
+              No active model exposure. There is no current long or short allocation to copy.
             </p>
-          </div>
-          <div className="rounded-2xl border border-[#243042] bg-[#050505]/70 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
-            <div className="text-[var(--accent-primary)]">Flat / Cash</div>
-            <div className="mt-1 text-2xl font-semibold text-white">
-              {formatPercent(summary.cashEstimate)}
+            <div className="mt-5 grid gap-3 md:grid-cols-2">
+              <div className="rounded-2xl border border-white/8 bg-black/24 p-4">
+                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#8d8267]">
+                  Allocation to copy
+                </div>
+                <div className="mt-2 text-sm font-semibold text-white">None right now</div>
+                <p className="mt-1 text-xs leading-5 text-[#8f94a3]">
+                  The model is not publishing active long or short exposure from the parsed telemetry.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-white/8 bg-black/24 p-4">
+                <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#8d8267]">
+                  Waiting for
+                </div>
+                <div className="mt-2 text-sm font-semibold text-white">Next valid cycle</div>
+                <p className="mt-1 text-xs leading-5 text-[#8f94a3]">
+                  The strategy is standing by until telemetry contains a valid model allocation.
+                </p>
+              </div>
             </div>
-            <div className="mt-2">{freshnessLabel}</div>
+            <div className="mt-4 rounded-2xl border border-[var(--accent-primary)]/32 bg-[rgb(var(--accent-primary-rgb)/0.08)] px-4 py-3 text-sm leading-6 text-[#e6dcc4]">
+              <span className="font-semibold text-[var(--accent-primary)]">Client action:</span>{" "}
+              Stand by / remain flat. Suggested action: no model rebalance currently available.
+            </div>
+          </div>
+          <div className="flex flex-col justify-between rounded-3xl border border-[var(--accent-primary)]/24 bg-[#050505]/70 p-5 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+            <div>
+              <div className="text-[var(--accent-primary)]">Cash / Flat Estimate</div>
+              <div className="mt-3 text-4xl font-semibold tracking-[-0.06em] text-white">
+                {formatPercent(summary.cashEstimate)}
+              </div>
+            </div>
+            <div className="mt-6 grid gap-3">
+              <SummaryRow label="Active symbols" value={String(summary.activeSymbols)} />
+              <SummaryRow label="Gross exposure" value={formatPercent(summary.grossExposure)} />
+              <SummaryRow label="Freshness" value={freshnessLabel} />
+            </div>
           </div>
         </div>
       </section>
@@ -261,15 +290,19 @@ function ModelStateBanner({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-emerald-300">
-            Current State
+            Current Model Stance
           </div>
-          <h2 className="mt-2 text-2xl font-semibold text-white">
-            The model has active allocation.
+          <h2 className="mt-2 text-3xl font-semibold text-white">
+            ACTIVE / ALLOCATED
           </h2>
           <p className="mt-3 max-w-3xl text-sm leading-6 text-[#c2c6d8]">
             Parsed telemetry currently contains active model exposure. Review
             the allocation table for symbols, direction, and derived weights.
           </p>
+          <div className="mt-4 rounded-2xl border border-emerald-300/24 bg-[rgba(110,231,183,0.08)] px-4 py-3 text-sm leading-6 text-[#d8eadf]">
+            <span className="font-semibold text-emerald-300">Client action:</span>{" "}
+            Review the current allocation. No orders can be placed from this page.
+          </div>
         </div>
         <div className="rounded-2xl border border-[#243042] bg-[#050505]/70 px-4 py-3 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
           <div className="text-emerald-300">Gross Exposure</div>
@@ -305,12 +338,16 @@ function WhatThisMeansPanel({
       ];
 
   return (
-    <TerminalPanel action="Plain English" eyebrow="Client View" title="What this means">
+    <TerminalPanel action="Plain English" eyebrow="Client View" title="What this means right now">
       <div className="grid gap-3">
         {rows.map(([label, value]) => (
           <SummaryRow key={label} label={label} value={value} />
         ))}
       </div>
+      <p className="mt-5 text-xs leading-5 text-[#7d8290]">
+        This is a read-only interpretation of the parsed model state. It does not place orders,
+        infer missing allocations, or turn a flat state into a signal.
+      </p>
     </TerminalPanel>
   );
 }
@@ -334,9 +371,13 @@ function AllocationTable({
               No active model allocation found
             </div>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[#8c90a1]">
-              The strategy may be flat, waiting for the next trading cycle, or
-              telemetry may not contain open positions. This is not an error if
-              the system is intentionally in cash.
+              This is expected when the strategy is flat. The model may be waiting for the next
+              valid signal or cycle before publishing exposure.
+            </p>
+            <p className="mt-3 max-w-2xl text-xs leading-5 text-[#747987]">
+              {positions.source === "live-csv"
+                ? "Telemetry is live, so this reflects the latest parsed model state."
+                : "Telemetry is not currently live; no synthetic allocation is shown."}
             </p>
             <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--accent-primary)]">
               {positions.message}
