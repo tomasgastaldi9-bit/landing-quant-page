@@ -4,6 +4,7 @@ import {
   StatusLed,
   TerminalPanel,
 } from "@/components/dashboard/terminal-ui";
+import { LegalMicrocopy } from "@/components/legal-microcopy";
 import { getEquitySnapshot } from "@/lib/equity/csv-adapter";
 import type { EquitySnapshot } from "@/lib/equity/types";
 import { getPositionsSnapshot } from "@/lib/positions/csv-adapter";
@@ -213,6 +214,7 @@ export default async function ModelPortfolioPage() {
           >
             Inspect telemetry health
           </Link>
+          <LegalMicrocopy className="mt-5" />
         </TerminalPanel>
       </div>
     </main>

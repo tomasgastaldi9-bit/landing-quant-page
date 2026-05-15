@@ -4,11 +4,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "QuantBot Privacy Policy. Placeholder document for the private beta research terminal.",
+    "QuantBot Privacy Policy for the read-only private beta platform.",
   robots: { index: false, follow: false },
 };
 
-const lastUpdated = "May 12, 2026";
+const lastUpdated = "May 14, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -29,11 +29,12 @@ export default function PrivacyPage() {
 
         <div className="mt-8 rounded-2xl border border-[var(--accent-primary)]/35 bg-[var(--accent-soft)]/60 p-4 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)] sm:p-5">
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent-primary)]">
-            Placeholder Document
+            Beta Privacy Notice
           </p>
           <p className="mt-2 text-sm leading-6 text-[#c2c6d8]">
-            This is a placeholder. It will be replaced with the final legal
-            document, reviewed by counsel, before public launch.
+            This notice reflects the current frontend-only beta product state.
+            Login, register, and request flows are previews unless explicitly
+            connected later.
           </p>
         </div>
 
@@ -41,31 +42,34 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">1. Information We Collect</h2>
             <p className="mt-3">
-              During the private beta we collect minimal information. When you
-              request access we collect: name, email, company or affiliation,
-              and any context you choose to share in the request form. When you
-              use the Service we collect basic technical metadata: IP address,
-              browser type, and page-level usage events.
+              The current client-facing preview does not create real user
+              accounts or submit Login/Register form data to a database. If a
+              request or onboarding workflow is connected later, we may collect
+              information you choose to provide, such as name, email, company or
+              affiliation, and request context. Hosting and analytics providers
+              may process limited technical metadata such as IP address, browser
+              type, device information, and page-level events.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-white">2. How We Use Information</h2>
             <p className="mt-3">
-              We use the information to: evaluate beta access requests,
-              communicate with invited operators, improve the Service, detect
-              abuse, and comply with legal obligations. We do not sell, rent, or
-              trade personal information.
+              If personal information is collected through a connected workflow,
+              we use it to evaluate beta access requests, communicate with users,
+              improve the Service, detect abuse, and comply with legal
+              obligations. We do not sell, rent, or trade personal information.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-white">3. Cookies and Local Storage</h2>
             <p className="mt-3">
-              The Service may use cookies or local storage for session state,
-              theme preferences, and basic analytics. You can disable cookies in
-              your browser; some Service features may not work as expected if
-              you do.
+              The Service may use local storage for interface preferences such as
+              accent theme selection. Current preview Login/Register screens do
+              not create real auth sessions. Future authentication may use
+              cookies or local storage, and this notice will be updated before
+              that workflow is used for real accounts.
             </p>
           </section>
 
@@ -83,10 +87,10 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-lg font-semibold text-white">5. Data Retention</h2>
             <p className="mt-3">
-              We retain personal information only as long as needed for the
-              purposes described in this policy or as required by law. Waitlist
-              requests that are not converted into invited access are retained
-              for up to 24 months and then deleted.
+              If access workflows are connected later, we will retain personal
+              information only as long as needed for the purposes described in
+              this policy or as required by law. Preview Login/Register form data
+              is not stored as a real account record by the current frontend.
             </p>
           </section>
 

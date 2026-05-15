@@ -29,8 +29,9 @@ export function Footer() {
           </div>
         </div>
         <div className="border-t border-[#243042] pt-6 font-mono text-xs leading-6 text-[#8c90a1]">
-          For research and informational purposes. Not financial advice.
-          Performance is not guaranteed.
+          For research and informational purposes only. Not financial advice. No
+          live trading access from this interface. Past performance is not a
+          guarantee.
         </div>
       </div>
     </footer>

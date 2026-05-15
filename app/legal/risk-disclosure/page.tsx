@@ -4,11 +4,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Risk Disclosure",
   description:
-    "QuantBot Risk Disclosure. Placeholder document for the private beta research terminal.",
+    "QuantBot Risk Disclosure for read-only client and research surfaces.",
   robots: { index: false, follow: false },
 };
 
-const lastUpdated = "May 12, 2026";
+const lastUpdated = "May 14, 2026";
 
 export default function RiskDisclosurePage() {
   return (
@@ -29,11 +29,12 @@ export default function RiskDisclosurePage() {
 
         <div className="mt-8 rounded-2xl border border-[var(--accent-primary)]/35 bg-[var(--accent-soft)]/60 p-4 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)] sm:p-5">
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent-primary)]">
-            Placeholder Document
+            Beta Legal Notice
           </p>
           <p className="mt-2 text-sm leading-6 text-[#c2c6d8]">
-            This is a placeholder. It will be replaced with the final legal
-            document, reviewed by counsel, before public launch.
+            This notice reflects the current frontend-only, read-only beta
+            product state. It is not a substitute for counsel-reviewed legal
+            documents before a broader commercial launch.
           </p>
         </div>
 
@@ -64,7 +65,8 @@ export default function RiskDisclosurePage() {
               Charts, equity curves, position panels, alpha labs, and risk
               telemetry shown in the Service may be derived from simulated,
               backtested, paper, or testnet sources. Such data is provided to
-              illustrate the workflow and does not represent real trading results.
+              illustrate the workflow and may differ materially from real
+              execution with live capital.
             </p>
           </section>
 
@@ -96,8 +98,9 @@ export default function RiskDisclosurePage() {
             <p className="mt-3">
               The Service does not custody user funds, does not connect to live
               trading accounts in any capacity, and does not route orders to real
-              markets. Any future expansion of scope will be announced separately
-              and will require explicit user consent and updated disclosures.
+              markets. No orders can be placed from the client-facing interface.
+              Any future expansion of scope will be announced separately and will
+              require explicit user consent and updated disclosures.
             </p>
           </section>
 
@@ -118,7 +121,8 @@ export default function RiskDisclosurePage() {
               By using the Service, you acknowledge that you have read and
               understood this Risk Disclosure and accept full responsibility for
               any decisions you make based on information obtained through the
-              Service.
+              Service. Users remain responsible for their own trading,
+              investment, and operational decisions.
             </p>
           </section>
 

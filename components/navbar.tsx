@@ -5,20 +5,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const navGroups = [
+type DrawerTab = "Client" | "Operator" | "Research";
+
+const navGroups: Array<{
+  label: DrawerTab;
+  microcopy: string;
+  items: Array<{
+    label: string;
+    href: string;
+    description: string;
+    badge?: string;
+  }>;
+}> = [
   {
-    label: "Terminal",
+    label: "Client",
+    microcopy: "model output",
     items: [
-      {
-        label: "Dashboard",
-        href: "/dashboard",
-        description: "Operator workspace and read-only terminal demo.",
-      },
-      {
-        label: "Positions",
-        href: "/dashboard#positions",
-        description: "Active positions, exposure, and testnet state.",
-      },
       {
         label: "Model Portfolio",
         href: "/model-portfolio",
@@ -26,39 +28,54 @@ const navGroups = [
         badge: "MODEL",
       },
       {
+        label: "Signals",
+        href: "/signals",
+        description: "Signal and rebalance history when artifacts are available.",
+      },
+      {
+        label: "Performance",
+        href: "/performance",
+        description: "Read-only performance view from telemetry history.",
+      },
+      {
+        label: "Risk Summary",
+        href: "/risk-summary",
+        description: "Client-facing exposure and risk interpretation.",
+        badge: "RISK",
+      },
+      {
+        label: "Reports",
+        href: "/reports",
+        description: "Prepared client report workspace.",
+      },
+    ],
+  },
+  {
+    label: "Operator",
+    microcopy: "system telemetry",
+    items: [
+      {
+        label: "Dashboard",
+        href: "/dashboard",
+        description: "Operator workspace and read-only terminal demo.",
+        badge: "READ",
+      },
+      {
+        label: "Positions",
+        href: "/dashboard#positions",
+        description: "Active positions, exposure, and testnet state.",
+      },
+      {
         label: "Monitoring",
         href: "/monitoring",
         description: "Equity, logs, alerts, and system health.",
+        badge: "OPS",
       },
-    ],
-  },
-  {
-    label: "Research",
-    items: [
-      {
-        label: "Alpha Lab",
-        href: "/alpha-lab",
-        description: "Research workspace for candidates, regimes, and validation.",
-      },
-      {
-        label: "Alpha Engine",
-        href: "/alpha-engine",
-        description: "Multi-alpha sleeves, regimes, and research pipeline.",
-      },
-      {
-        label: "Methodology",
-        href: "/methodology",
-        description: "Research-first validation and deployment discipline.",
-      },
-    ],
-  },
-  {
-    label: "Risk & Monitoring",
-    items: [
       {
         label: "Risk Layer",
         href: "/risk-layer",
         description: "Position sizing, exposure controls, and execution safety.",
+        badge: "RISK",
       },
       {
         label: "Execution",
@@ -68,35 +85,68 @@ const navGroups = [
     ],
   },
   {
-    label: "Account",
+    label: "Research",
+    microcopy: "alpha validation",
     items: [
       {
-        label: "Login",
-        href: "/login",
-        description: "Authentication preview. No account is created.",
+        label: "Alpha Lab",
+        href: "/alpha-lab",
+        description: "Research workspace for candidates, regimes, and validation.",
+        badge: "LAB",
       },
       {
-        label: "Register",
-        href: "/register",
-        description: "Private beta registration preview.",
+        label: "Alpha Engine",
+        href: "/alpha-engine",
+        description: "Multi-alpha sleeves, regimes, and research pipeline.",
+        badge: "R&D",
       },
       {
-        label: "Settings",
-        href: "/settings",
-        description: "Mock workspace preferences and controls.",
-      },
-      {
-        label: "Request Access",
-        href: "/request-access",
-        description: "Join the private beta research waitlist.",
+        label: "Methodology",
+        href: "/methodology",
+        description: "Research-first validation and deployment discipline.",
       },
     ],
   },
 ];
 
+const footerLinks = [
+  { label: "Login", href: "/login" },
+  { label: "Register", href: "/register" },
+  { label: "Settings", href: "/settings" },
+  { label: "Request Access", href: "/request-access" },
+  { label: "Terms", href: "/legal/terms" },
+  { label: "Risk Disclosure", href: "/legal/risk-disclosure" },
+  { label: "Privacy", href: "/legal/privacy" },
+];
+
+function getTabForPath(pathname: string): DrawerTab {
+  if (
+    pathname.startsWith("/model-portfolio") ||
+    pathname.startsWith("/signals") ||
+    pathname.startsWith("/performance") ||
+    pathname.startsWith("/risk-summary") ||
+    pathname.startsWith("/reports")
+  ) {
+    return "Client";
+  }
+
+  if (
+    pathname.startsWith("/alpha-lab") ||
+    pathname.startsWith("/alpha-engine") ||
+    pathname.startsWith("/methodology")
+  ) {
+    return "Research";
+  }
+
+  return "Operator";
+}
+
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<DrawerTab>(() => getTabForPath("/"));
   const pathname = usePathname();
+  const selectedGroup =
+    navGroups.find((group) => group.label === activeTab) ?? navGroups[0];
 
   useEffect(() => {
     if (!isOpen) return;
@@ -120,6 +170,11 @@ export function Navbar() {
 
   function closeMenu() {
     setIsOpen(false);
+  }
+
+  function openMenu() {
+    setActiveTab(getTabForPath(pathname));
+    setIsOpen(true);
   }
 
   function openCommandPalette() {
@@ -148,7 +203,7 @@ export function Navbar() {
             type="button"
             aria-expanded={isOpen}
             aria-controls="primary-navigation-drawer"
-            onClick={() => setIsOpen(true)}
+            onClick={openMenu}
             className="inline-flex items-center gap-2 rounded-xl border border-[#243042] bg-[linear-gradient(180deg,rgba(16,16,16,0.94),rgba(8,8,8,0.86))] px-3 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_12px_34px_rgba(0,0,0,0.2)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] sm:px-4"
           >
             <span className="flex size-4 flex-col justify-center gap-1">
@@ -192,114 +247,164 @@ export function Navbar() {
             aria-label="Primary navigation"
             role="dialog"
             aria-modal="true"
-            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,360px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-hidden border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.97))] bg-[size:32px_32px,32px_32px,auto] p-3 shadow-[18px_0_54px_rgba(0,0,0,0.36)] will-change-transform sm:w-[360px] sm:px-3.5 sm:py-4"
+            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,360px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-y-auto border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.97))] bg-[size:32px_32px,32px_32px,auto] px-2.5 py-2.5 shadow-[18px_0_54px_rgba(0,0,0,0.36)] will-change-transform sm:w-[360px] sm:overflow-hidden sm:px-3 sm:py-3"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.65),transparent)]" />
-            <div className="flex items-center justify-between gap-3 border-b border-[#243042] pb-4">
-              <Link href="/" aria-label="QuantBot home" onClick={closeMenu}>
+            <div className="pointer-events-none absolute bottom-3 left-0 top-3 w-px bg-[#243042]/70" />
+            <div className="flex items-center justify-between gap-2.5 border-b border-[#243042] pb-1.5">
+              <Link
+                href="/"
+                aria-label="QuantBot home"
+                onClick={closeMenu}
+                className="origin-left scale-[0.82] sm:scale-[0.86]"
+              >
                 <BrandMark size="drawer" />
               </Link>
               <button
                 type="button"
                 aria-label="Close navigation menu"
                 onClick={closeMenu}
-                className="rounded-xl border border-[#243042] bg-[#050505]/90 px-3 py-2 font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
+                className="rounded-lg border border-[#243042] bg-[#050505]/90 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-150 hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)]"
               >
                 Close
               </button>
             </div>
 
-            <nav className="mt-4 grid gap-2.5 overflow-y-auto overscroll-contain rounded-2xl pr-1">
-              {navGroups.map((group) => (
-                <div
-                  key={group.label}
-                  className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/42 p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.025)]"
-                >
-                  <div className="px-2 pb-1.5 font-mono text-[10px] uppercase tracking-[0.2em] text-[#8c90a1]">
-                    {group.label}
-                  </div>
-                  <div className="grid gap-1">
-                    {group.items.map((item) => {
-                      const routeHref = item.href.split("#")[0];
-                      const isHashLink = item.href.includes("#");
-                      const isActive =
-                        !isHashLink &&
-                        (pathname === routeHref ||
-                          (routeHref !== "/" &&
-                            pathname.startsWith(`${routeHref}/`)));
+            <div className="mt-2 grid grid-cols-3 gap-1 rounded-xl border border-[#1f1f1f] bg-[#050505]/72 p-1">
+              {navGroups.map((group) => {
+                const isSelected = activeTab === group.label;
 
-                      return (
-                        <Link
-                          key={`${group.label}-${item.label}`}
-                          href={item.href}
-                          onClick={closeMenu}
-                          className={`group rounded-xl border px-2.5 py-2.5 transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)]/55 hover:bg-[var(--accent-soft)]/72 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06),0_14px_32px_rgba(0,0,0,0.2)] ${
+                return (
+                  <button
+                    key={group.label}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => setActiveTab(group.label)}
+                    className={`rounded-lg border px-2 py-2 text-left transition-[background-color,border-color,color] duration-150 ${
+                      isSelected
+                        ? "border-[var(--accent-primary)]/45 bg-[#0d1518] text-[var(--accent-primary)]"
+                        : "border-transparent text-[#8c90a1] hover:bg-[#0d1115] hover:text-[#d7dceb]"
+                    }`}
+                  >
+                    <span className="block font-mono text-[10px] uppercase tracking-[0.13em]">
+                      {group.label}
+                    </span>
+                    <span className="mt-0.5 block truncate text-[9px] text-[#6f7485]">
+                      {group.microcopy}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Keep blur/glow/masks outside this low-paint navigation layer. */}
+            <nav
+              className="drawerLowPaint mt-2 min-h-0 flex-1 pl-2 pr-1"
+              data-performance="low-paint"
+              aria-label={`${selectedGroup.label} navigation`}
+            >
+              <div className="flex items-center gap-2 px-1.5 pb-1 font-mono text-[9px] uppercase tracking-[0.18em] text-[#6f7485]">
+                <span
+                  className="size-1 rounded-full bg-[var(--accent-primary)]/55"
+                  aria-hidden="true"
+                />
+                {selectedGroup.label} Workspace
+              </div>
+              <div className="grid gap-1">
+                {selectedGroup.items.map((item) => {
+                  const routeHref = item.href.split("#")[0];
+                  const isHashLink = item.href.includes("#");
+                  const isActive =
+                    !isHashLink &&
+                    (pathname === routeHref ||
+                      (routeHref !== "/" && pathname.startsWith(`${routeHref}/`)));
+
+                  return (
+                    <Link
+                      key={`${selectedGroup.label}-${item.label}`}
+                      href={item.href}
+                      onClick={closeMenu}
+                      title={item.description}
+                      className={`drawer-nav-link group relative flex min-h-9 items-center justify-between gap-2.5 rounded-lg border border-transparent px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.12em] transition-[background-color,border-color,color] duration-150 hover:bg-[#0d1115] hover:text-[var(--accent-primary)] sm:min-h-8 sm:py-0.5 ${
+                        isActive
+                          ? "border-[#243042] bg-[#0d1518] text-[var(--accent-primary)]"
+                          : "text-[#d7dceb]"
+                      }`}
+                    >
+                      <span
+                        className={`absolute left-0 top-1/2 h-5 w-px -translate-y-1/2 rounded-full transition-colors duration-150 ${
+                          isActive
+                            ? "bg-[var(--accent-primary)]"
+                            : "bg-transparent group-hover:bg-[var(--accent-primary)]/40"
+                        }`}
+                        aria-hidden="true"
+                      />
+                      <span className="truncate">{item.label}</span>
+                      <span className="ml-auto flex items-center gap-1.5">
+                        {item.badge ? (
+                          <span className="hidden rounded border border-[#243042] bg-[#050505] px-1 py-px text-[7px] tracking-[0.1em] text-[#8c90a1] group-hover:border-[var(--accent-primary)]/35 group-hover:text-[var(--accent-muted)] sm:inline">
+                            {item.badge}
+                          </span>
+                        ) : null}
+                        <span
+                          className={`text-[10px] transition-colors duration-150 ${
                             isActive
-                              ? "border-[var(--accent-primary)]/45 bg-[var(--accent-soft)]/70"
-                              : "border-transparent bg-[linear-gradient(180deg,rgba(14,14,14,0.74),rgba(7,7,7,0.58))]"
+                              ? "text-[var(--accent-primary)]"
+                              : "text-[#6f7485] group-hover:text-[var(--accent-primary)]"
                           }`}
+                          aria-hidden="true"
                         >
-                          <span className="flex items-center justify-between gap-4">
-                            <span
-                              className={`font-mono text-[13px] uppercase tracking-[0.12em] ${
-                                isActive
-                                  ? "text-[var(--accent-primary)]"
-                                  : "text-white"
-                              }`}
-                            >
-                              {item.label}
-                            </span>
-                            <span className="font-mono text-xs text-[var(--accent-primary)] transition-transform duration-200 group-hover:translate-x-1">
-                              -&gt;
-                            </span>
-                          </span>
-                          <span className="mt-1.5 block text-xs leading-5 text-[#8c90a1]">
-                            {item.description}
-                          </span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
+                          /
+                        </span>
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
             </nav>
 
-            <div className="mt-4 font-mono text-[10px] uppercase tracking-[0.22em] text-[#8c90a1]">
-              Preview Workspace
-            </div>
-            <div className="mt-2.5 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.82))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_12px_30px_rgba(0,0,0,0.2)]">
+            <div className="mt-2 rounded-xl border border-[#1f1f1f] bg-[#070707]/86 px-2.5 py-2">
+              <div className="mb-1.5 flex items-center justify-between gap-3 font-mono text-[8px] uppercase tracking-[0.16em] text-[#6f7485]">
+                <span>QuantBot Terminal</span>
+                <span className="rounded border border-[var(--accent-primary)]/35 px-1.5 py-0.5 text-[var(--accent-primary)]">
+                  Read-Only Ops
+                </span>
+              </div>
               <div className="flex items-center gap-2.5">
                 <div
                   aria-hidden="true"
-                  className="grid size-9 place-items-center rounded-xl border border-[var(--accent-primary)]/45 bg-[var(--accent-soft)] font-mono text-xs font-semibold text-[var(--accent-primary)]"
+                  className="grid size-8 place-items-center rounded-lg border border-[var(--accent-primary)]/35 bg-[#0b1114] font-mono text-[10px] font-semibold text-[var(--accent-primary)]"
                 >
                   DO
                 </div>
                 <div className="min-w-0">
-                  <div className="truncate text-sm font-semibold text-white">
+                  <div className="truncate text-[13px] font-semibold leading-tight text-white">
                     Demo Operator
                   </div>
-                  <div className="truncate font-mono text-xs text-[#8c90a1]">
-                    demo@quantbot.local
+                  <div className="mt-0.5 truncate font-mono text-[9px] uppercase tracking-[0.11em] text-[#8c90a1]">
+                    Testnet Workspace
                   </div>
                 </div>
-                <span className="ml-auto rounded-lg border border-[var(--accent-primary)]/60 bg-[var(--accent-soft)] px-2 py-1 font-mono text-[9px] uppercase tracking-[0.14em] text-[var(--accent-primary)]">
+                <span className="ml-auto rounded border border-[#243042] bg-[#050505] px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-[0.12em] text-[#8c90a1]">
                   Preview
                 </span>
               </div>
-              <div className="mt-2.5 flex flex-wrap gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em]">
-                <span className="rounded-lg border border-[var(--accent-secondary)]/55 bg-[var(--accent-soft)] px-2 py-1 text-[var(--accent-muted)]">
-                  Private Beta
-                </span>
-                <span className="rounded-lg border border-[#424655] bg-[#050505]/82 px-2 py-1 text-[#8c90a1]">
-                  Mock User
-                </span>
+              <p className="mt-2 border-t border-[#1f1f1f] pt-1.5 font-mono text-[9px] uppercase leading-4 tracking-[0.1em] text-[#6f7485]">
+                Mock user preview. No active account session.
+              </p>
+              <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[#1f1f1f] pt-1.5">
+                {footerLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={closeMenu}
+                    className="truncate rounded-md px-1.5 py-1 font-mono text-[8px] uppercase tracking-[0.1em] text-[#8c90a1] transition-colors duration-150 hover:bg-[#0d1115] hover:text-[var(--accent-primary)]"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </div>
             </div>
-            <p className="mt-2 rounded-xl border border-[#1f1f1f] bg-[#050505]/70 p-2.5 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1]">
-              This is a mock workspace. No real account is created and no
-              session is active.
-            </p>
           </aside>
         </div>
       ) : null}

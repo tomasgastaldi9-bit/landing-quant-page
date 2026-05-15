@@ -4,11 +4,11 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "QuantBot Terms of Service. Placeholder document for the private beta research terminal.",
+    "QuantBot Terms of Service for the read-only private beta platform.",
   robots: { index: false, follow: false },
 };
 
-const lastUpdated = "May 12, 2026";
+const lastUpdated = "May 14, 2026";
 
 export default function TermsPage() {
   return (
@@ -29,11 +29,12 @@ export default function TermsPage() {
 
         <div className="mt-8 rounded-2xl border border-[var(--accent-primary)]/35 bg-[var(--accent-soft)]/60 p-4 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)] sm:p-5">
           <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent-primary)]">
-            Placeholder Document
+            Beta Legal Notice
           </p>
           <p className="mt-2 text-sm leading-6 text-[#c2c6d8]">
-            This is a placeholder. It will be replaced with the final legal
-            document, reviewed by counsel, before public launch.
+            These beta terms reflect the current frontend-only, read-only
+            product state. They are not a substitute for final counsel-reviewed
+            commercial terms before a broader launch.
           </p>
         </div>
 
@@ -43,19 +44,20 @@ export default function TermsPage() {
             <p className="mt-3">
               By accessing or using QuantBot (the &ldquo;Service&rdquo;), you agree to be
               bound by these Terms of Service. If you do not agree, do not use the
-              Service. QuantBot is currently offered as a private beta research
-              terminal for invited operators and research teams.
+              Service. QuantBot is currently offered as a private beta client,
+              research, and operator workspace.
             </p>
           </section>
 
           <section>
             <h2 className="text-lg font-semibold text-white">2. Nature of the Service</h2>
             <p className="mt-3">
-              QuantBot is a read-only research and monitoring terminal for
-              demo/testnet operations. It does not execute trades with real capital,
-              does not custody assets, and does not provide brokerage services.
-              All data displayed within the Service may be simulated, mock, or
-              testnet-derived.
+              QuantBot is a read-only platform for model portfolio visibility,
+              signal and rebalance history, performance context, risk summaries,
+              research artifacts, and operator telemetry. It does not execute
+              trades with real capital, does not custody assets, does not provide
+              brokerage services, and does not create managed accounts. No orders
+              can be placed from the client-facing interface.
             </p>
           </section>
 
@@ -75,7 +77,8 @@ export default function TermsPage() {
               Access to the private beta is by invitation only. We reserve the right
               to grant, deny, or revoke access at our sole discretion. You represent
               that you are at least 18 years old and legally permitted to use the
-              Service in your jurisdiction.
+              Service in your jurisdiction. Current Login and Register screens are
+              access previews only and do not create real account sessions.
             </p>
           </section>
 

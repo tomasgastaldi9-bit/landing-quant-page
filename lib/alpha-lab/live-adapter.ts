@@ -169,7 +169,7 @@ export async function getAlphaLabSnapshot(): Promise<AlphaLabSnapshot> {
     sourceStatus: summarizeStatus(sources),
     sources,
     overview: {
-      activePipelines: registry.filter((entry) => entry.activity !== "Inactive").length,
+      activePipelines: registry.filter(hasParsedEvidence).length,
       candidatesInReview: registry.length,
       validationStages: pipeline.candidates.length > 0 ? 4 : 0,
       deploymentCandidates: pipeline.candidates.filter(
@@ -238,19 +238,30 @@ function buildRegistry({
       tradeRow ? tradeByAlpha.status : "MISSING_FILE",
       performanceRow ? performance.status : "MISSING_FILE",
     ]);
+    const hasArtifactMatch = sourceStatus !== "MISSING_FILE";
+    const hasRecentLiveEvidence =
+      hasArtifactMatch && lastActivity !== null && Date.now() - new Date(lastActivity).getTime() < 24 * 60 * 60 * 1000;
 
     return {
       name: known.name,
       slug: known.slug,
       family: known.family,
-      status: activity === "Inactive" ? "Observed / inactive" : "Observed",
-      stage: tradeCount > 0 ? "Paper/Testnet" : "Research",
-      readiness: tradeCount > 0 ? "Evidence logged" : "Needs samples",
-      stability: stabilityFromRows(performanceRow, tradeRow),
-      activity,
+      status: hasArtifactMatch
+        ? hasRecentLiveEvidence
+          ? "Live evidence"
+          : "Paper/research evidence"
+        : "No artifact match",
+      stage: hasArtifactMatch ? (tradeCount > 0 ? "Paper/Testnet" : "Research") : "Awaiting artifact",
+      readiness: hasArtifactMatch
+        ? tradeCount > 0
+          ? "Evidence logged"
+          : "Needs samples"
+        : "No live evidence",
+      stability: hasArtifactMatch ? stabilityFromRows(performanceRow, tradeRow) : "Unavailable",
+      activity: hasArtifactMatch ? activity : "No parsed rows",
       lastActivity,
       sourceStatus,
-      source: sourceStatus === "MOCK_FALLBACK" ? "static fallback" : "research artifacts",
+      source: hasArtifactMatch ? "research artifacts" : "no matching artifact",
     } satisfies AlphaLabRegistryEntry;
   });
 
@@ -260,9 +271,9 @@ function buildRegistry({
     .map((row) => ({
       name: getFirstValue(row, ["name"]) || "Watchlist Candidate",
       family: getFirstValue(row, ["family"]) || "Alpha Factory",
-      status: "Watchlist",
+      status: "Watchlist candidate",
       stage: "Research",
-      readiness: "Monitor and paper validate",
+      readiness: "Research only",
       stability: factoryStability(row),
       activity: `${getFirstValue(row, ["regime_scope"]) || "all"} regime scope`,
       lastActivity: factory.lastModified,
@@ -521,6 +532,16 @@ function pickBestStatus(statuses: AlphaLabSourceStatus[]): AlphaLabSourceStatus 
 
 function summarizeStatus(sources: AlphaLabSource[]): AlphaLabSourceStatus {
   return pickBestStatus(sources.map((source) => source.status));
+}
+
+function hasParsedEvidence(entry: AlphaLabRegistryEntry) {
+  return (
+    entry.sourceStatus !== "MISSING_FILE" &&
+    entry.sourceStatus !== "MOCK_FALLBACK" &&
+    entry.activity !== "Inactive" &&
+    entry.activity !== "No parsed rows" &&
+    entry.status !== "Watchlist candidate"
+  );
 }
 
 function formatTime(timestamp: string) {

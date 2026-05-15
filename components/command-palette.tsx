@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 type CommandItem = {
   group:
+    | "Client"
     | "Navigation"
     | "Research"
     | "Risk"
@@ -37,11 +38,39 @@ const baseCommands: CommandItem[] = [
     shortcut: "P",
   },
   {
-    group: "Navigation",
+    group: "Client",
     href: "/model-portfolio",
     label: "Model Portfolio",
     meta: "Client-facing current model allocation",
     aliases: ["/mp", "model portfolio", "allocation", "model allocation", "weights"],
+  },
+  {
+    group: "Client",
+    href: "/signals",
+    label: "Signals",
+    meta: "Signal and rebalance history when artifacts are available",
+    aliases: ["/signals", "/signal", "signals", "signal history", "rebalance history"],
+  },
+  {
+    group: "Client",
+    href: "/performance",
+    label: "Performance",
+    meta: "Read-only performance view from telemetry history",
+    aliases: ["/perf", "performance", "equity performance", "returns"],
+  },
+  {
+    group: "Client",
+    href: "/risk-summary",
+    label: "Risk Summary",
+    meta: "Client-facing exposure and risk interpretation",
+    aliases: ["/risk-summary", "risk summary", "client risk", "exposure summary"],
+  },
+  {
+    group: "Client",
+    href: "/reports",
+    label: "Reports",
+    meta: "Prepared client report workspace",
+    aliases: ["/reports", "reports", "client reports", "reporting"],
   },
   {
     group: "Research",
@@ -109,6 +138,7 @@ const candidateCommands: CommandItem[] = alphaCandidates.map((candidate) => ({
 
 const commands = [...baseCommands, ...candidateCommands];
 const groupOrder: CommandItem["group"][] = [
+  "Client",
   "Navigation",
   "Research",
   "Risk",

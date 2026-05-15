@@ -77,6 +77,7 @@ export default async function AlphaLabPage() {
         </section>
 
         <OverviewMetrics snapshot={snapshot} />
+        <SemanticGuide />
 
         <section className="mt-4 grid grid-cols-1 gap-3 xl:grid-cols-[0.8fr_1.2fr]">
           <TerminalPanel
@@ -233,10 +234,14 @@ function AlphaRegistry({ entries }: { entries: AlphaLabRegistryEntry[] }) {
                   {alpha.name}
                 </h2>
               </div>
-              <StatusLed state={alpha.activity !== "Inactive" ? "online" : "standby"} />
+              <StatusLed state={hasParsedEvidence(alpha) ? "online" : "standby"} />
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2 font-mono text-[10px] uppercase tracking-[0.12em]">
-              <DataCell label="Status" value={alpha.status} />
+              <DataCell
+                label="Status"
+                value={alpha.status}
+                valueClassName={registryStatusClass(alpha.status)}
+              />
               <DataCell label="Stage" value={alpha.stage} />
               <DataCell label="Readiness" value={alpha.readiness} />
               <DataCell label="Stability" value={alpha.stability} />
@@ -246,6 +251,9 @@ function AlphaRegistry({ entries }: { entries: AlphaLabRegistryEntry[] }) {
               <span className="text-[var(--accent-primary)]">{alpha.activity}</span>
               <span className="mt-1 block text-[#6f7485]">
                 {formatSourceStatus(alpha.sourceStatus)} · {alpha.source}
+              </span>
+              <span className="mt-2 block border-t border-[#1f1f1f] pt-2 text-[#6f7485]">
+                {registryStatusExplanation(alpha)}
               </span>
             </div>
           </>
@@ -288,7 +296,9 @@ function ValidationPipeline({ snapshot }: { snapshot: AlphaLabSnapshot }) {
             >
               <div>
                 <span className="text-[#d7dceb]">{candidate.name}</span>
-                <span className="mt-1 block text-[#6f7485]">{candidate.detail}</span>
+                <span className="mt-1 block text-[#6f7485]">
+                  {candidate.detail} · {candidateStatusExplanation(candidate.status)}
+                </span>
               </div>
               <span className={candidateStatusClass(candidate.status)}>
                 {candidate.status}
@@ -347,11 +357,51 @@ function ArtifactSources({ sources }: { sources: AlphaLabSource[] }) {
   );
 }
 
-function DataCell({ label, value }: { label: string; value: string }) {
+function SemanticGuide() {
+  const items = [
+    {
+      label: "Observed",
+      detail: "Real artifact rows exist for the alpha or candidate.",
+    },
+    {
+      label: "Awaiting artifact",
+      detail: "Known alpha, but no parsed evidence was found yet.",
+    },
+    {
+      label: "No live evidence",
+      detail: "No current live row proves activity; this is not a failure state.",
+    },
+    {
+      label: "WATCHLIST / REJECT",
+      detail: "Research filter states only; neither implies live trading.",
+    },
+  ];
+
+  return (
+    <section className="mt-3 grid gap-2 rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/72 p-3 font-mono text-[10px] uppercase tracking-[0.12em] text-[#8c90a1] md:grid-cols-4">
+      {items.map((item) => (
+        <div className="rounded-xl border border-[#1f1f1f] bg-[#0a0a0a]/72 p-3" key={item.label}>
+          <div className="text-[#d7dceb]">{item.label}</div>
+          <div className="mt-2 leading-5 text-[#6f7485]">{item.detail}</div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function DataCell({
+  label,
+  value,
+  valueClassName = "text-[#c2c6d8]",
+}: {
+  label: string;
+  value: string;
+  valueClassName?: string;
+}) {
   return (
     <div className="rounded-xl border border-[#1f1f1f] bg-[#050505]/72 p-3">
       <div className="text-[#6f7485]">{label}</div>
-      <div className="mt-2 text-[#c2c6d8]">{value}</div>
+      <div className={`mt-2 ${valueClassName}`}>{value}</div>
     </div>
   );
 }
@@ -400,4 +450,46 @@ function candidateStatusClass(status: "PASS_TO_BASELINE" | "WATCHLIST" | "REJECT
     return `${base} border-[var(--accent-primary)]/35 bg-[var(--accent-surface)]/80 text-[var(--accent-primary)]`;
   }
   return `${base} border-[#243042] bg-[#0e0e0e]/82 text-[#8c90a1]`;
+}
+
+function registryStatusClass(status: string) {
+  if (status === "Live evidence") return "text-emerald-200";
+  if (status === "Paper/research evidence") return "text-[var(--accent-primary)]";
+  if (status === "Watchlist candidate") return "text-amber-200";
+  if (status === "No artifact match") return "text-[#8c90a1]";
+  return "text-[#c2c6d8]";
+}
+
+function registryStatusExplanation(alpha: AlphaLabRegistryEntry) {
+  if (alpha.status === "Live evidence") {
+    return "Live evidence means current artifact rows were parsed; it does not imply UI trading control.";
+  }
+  if (alpha.status === "Paper/research evidence") {
+    return "Paper/research evidence comes from research, attribution, or analyzer artifacts.";
+  }
+  if (alpha.status === "Watchlist candidate") {
+    return "Watchlist means under research review, not a live-trading sleeve.";
+  }
+  if (alpha.status === "No artifact match") {
+    return "Awaiting artifact: this known alpha has no parsed evidence in the current artifact set.";
+  }
+  if (alpha.readiness === "No live evidence") {
+    return "No live evidence means no current live row proves activity; it is not a failure signal.";
+  }
+  return "Status is derived from read-only local artifacts.";
+}
+
+function candidateStatusExplanation(status: "PASS_TO_BASELINE" | "WATCHLIST" | "REJECT") {
+  if (status === "PASS_TO_BASELINE") return "eligible for baseline research review";
+  if (status === "WATCHLIST") return "under research review, not live trading";
+  return "filtered out by research criteria, not a system failure";
+}
+
+function hasParsedEvidence(alpha: AlphaLabRegistryEntry) {
+  return (
+    alpha.sourceStatus !== "MISSING_FILE" &&
+    alpha.sourceStatus !== "MOCK_FALLBACK" &&
+    alpha.activity !== "Inactive" &&
+    alpha.activity !== "No parsed rows"
+  );
 }
