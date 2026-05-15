@@ -1,152 +1,25 @@
 "use client";
 
 import { BrandMark } from "./brand-mark";
+import {
+  type DrawerTab,
+  footerNavigationRoutes,
+  getDrawerTabForPath,
+  primaryDrawerGroups,
+} from "@/lib/navigation/routes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-type DrawerTab = "Client" | "Operator" | "Research";
-
-const navGroups: Array<{
-  label: DrawerTab;
-  microcopy: string;
-  items: Array<{
-    label: string;
-    href: string;
-    description: string;
-    badge?: string;
-  }>;
-}> = [
-  {
-    label: "Client",
-    microcopy: "model output",
-    items: [
-      {
-        label: "Model Portfolio",
-        href: "/model-portfolio",
-        description: "Client-facing model allocation from live telemetry.",
-        badge: "MODEL",
-      },
-      {
-        label: "Signals",
-        href: "/signals",
-        description: "Signal and rebalance history when artifacts are available.",
-      },
-      {
-        label: "Performance",
-        href: "/performance",
-        description: "Read-only performance view from telemetry history.",
-      },
-      {
-        label: "Risk Summary",
-        href: "/risk-summary",
-        description: "Client-facing exposure and risk interpretation.",
-        badge: "RISK",
-      },
-      {
-        label: "Reports",
-        href: "/reports",
-        description: "Prepared client report workspace.",
-      },
-    ],
-  },
-  {
-    label: "Operator",
-    microcopy: "system telemetry",
-    items: [
-      {
-        label: "Dashboard",
-        href: "/dashboard",
-        description: "Operator workspace and read-only terminal demo.",
-        badge: "READ",
-      },
-      {
-        label: "Positions",
-        href: "/dashboard#positions",
-        description: "Active positions, exposure, and testnet state.",
-      },
-      {
-        label: "Monitoring",
-        href: "/monitoring",
-        description: "Equity, logs, alerts, and system health.",
-        badge: "OPS",
-      },
-      {
-        label: "Risk Layer",
-        href: "/risk-layer",
-        description: "Position sizing, exposure controls, and execution safety.",
-        badge: "RISK",
-      },
-      {
-        label: "Execution",
-        href: "/demo-testnet",
-        description: "No real capital, testnet execution, and validation scope.",
-      },
-    ],
-  },
-  {
-    label: "Research",
-    microcopy: "alpha validation",
-    items: [
-      {
-        label: "Alpha Lab",
-        href: "/alpha-lab",
-        description: "Research workspace for candidates, regimes, and validation.",
-        badge: "LAB",
-      },
-      {
-        label: "Alpha Engine",
-        href: "/alpha-engine",
-        description: "Multi-alpha sleeves, regimes, and research pipeline.",
-        badge: "R&D",
-      },
-      {
-        label: "Methodology",
-        href: "/methodology",
-        description: "Research-first validation and deployment discipline.",
-      },
-    ],
-  },
-];
-
-const footerLinks = [
-  { label: "Login", href: "/login" },
-  { label: "Register", href: "/register" },
-  { label: "Settings", href: "/settings" },
-  { label: "Request Access", href: "/request-access" },
-  { label: "Terms", href: "/legal/terms" },
-  { label: "Risk Disclosure", href: "/legal/risk-disclosure" },
-  { label: "Privacy", href: "/legal/privacy" },
-];
-
-function getTabForPath(pathname: string): DrawerTab {
-  if (
-    pathname.startsWith("/model-portfolio") ||
-    pathname.startsWith("/signals") ||
-    pathname.startsWith("/performance") ||
-    pathname.startsWith("/risk-summary") ||
-    pathname.startsWith("/reports")
-  ) {
-    return "Client";
-  }
-
-  if (
-    pathname.startsWith("/alpha-lab") ||
-    pathname.startsWith("/alpha-engine") ||
-    pathname.startsWith("/methodology")
-  ) {
-    return "Research";
-  }
-
-  return "Operator";
-}
-
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<DrawerTab>(() => getTabForPath("/"));
+  const [activeTab, setActiveTab] = useState<DrawerTab>(() =>
+    getDrawerTabForPath("/"),
+  );
   const pathname = usePathname();
   const selectedGroup =
-    navGroups.find((group) => group.label === activeTab) ?? navGroups[0];
+    primaryDrawerGroups.find((group) => group.label === activeTab) ??
+    primaryDrawerGroups[0];
 
   useEffect(() => {
     if (!isOpen) return;
@@ -173,7 +46,7 @@ export function Navbar() {
   }
 
   function openMenu() {
-    setActiveTab(getTabForPath(pathname));
+    setActiveTab(getDrawerTabForPath(pathname));
     setIsOpen(true);
   }
 
@@ -271,7 +144,7 @@ export function Navbar() {
             </div>
 
             <div className="mt-2 grid grid-cols-3 gap-1 rounded-xl border border-[#1f1f1f] bg-[#050505]/72 p-1">
-              {navGroups.map((group) => {
+              {primaryDrawerGroups.map((group) => {
                 const isSelected = activeTab === group.label;
 
                 return (
@@ -393,7 +266,7 @@ export function Navbar() {
                 Mock user preview. No active account session.
               </p>
               <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[#1f1f1f] pt-1.5">
-                {footerLinks.map((link) => (
+                {footerNavigationRoutes.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}

@@ -1,132 +1,37 @@
 "use client";
 
 import { alphaCandidates } from "@/lib/alpha-lab/candidates";
+import {
+  type NavigationGroup,
+  type NavigationRoute,
+  navigationRoutes,
+} from "@/lib/navigation/routes";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type CommandItem = {
-  group:
-    | "Client"
-    | "Navigation"
-    | "Research"
-    | "Risk"
-    | "Monitoring"
-    | "Account"
-    | "Candidates";
+  group: NavigationGroup | "Candidates";
   href: string;
   label: string;
   meta: string;
   aliases?: string[];
+  keywords?: string[];
   shortcut?: string;
 };
 
-const baseCommands: CommandItem[] = [
-  {
-    group: "Navigation",
-    href: "/dashboard",
-    label: "Dashboard",
-    meta: "Operator workspace and terminal overview",
-    aliases: ["/d", "dashboard", "terminal", "operator"],
-    shortcut: "D",
-  },
-  {
-    group: "Navigation",
-    href: "/dashboard#positions",
-    label: "Positions",
-    meta: "Active positions table",
-    aliases: ["/p", "positions", "position", "exposure"],
-    shortcut: "P",
-  },
-  {
-    group: "Client",
-    href: "/model-portfolio",
-    label: "Model Portfolio",
-    meta: "Client-facing current model allocation",
-    aliases: ["/mp", "model portfolio", "allocation", "model allocation", "weights"],
-  },
-  {
-    group: "Client",
-    href: "/signals",
-    label: "Signals",
-    meta: "Signal and rebalance history when artifacts are available",
-    aliases: ["/signals", "/signal", "signals", "signal history", "rebalance history"],
-  },
-  {
-    group: "Client",
-    href: "/performance",
-    label: "Performance",
-    meta: "Read-only performance view from telemetry history",
-    aliases: ["/perf", "performance", "equity performance", "returns"],
-  },
-  {
-    group: "Client",
-    href: "/risk-summary",
-    label: "Risk Summary",
-    meta: "Client-facing exposure and risk interpretation",
-    aliases: ["/risk-summary", "risk summary", "client risk", "exposure summary"],
-  },
-  {
-    group: "Client",
-    href: "/reports",
-    label: "Reports",
-    meta: "Prepared client report workspace",
-    aliases: ["/reports", "reports", "client reports", "reporting"],
-  },
-  {
-    group: "Research",
-    href: "/alpha-lab",
-    label: "Alpha Lab",
-    meta: "Research workspace and candidate registry",
-    aliases: ["/a", "alpha", "alpha lab", "research"],
-    shortcut: "A",
-  },
-  {
-    group: "Research",
-    href: "/alpha-engine",
-    label: "Alpha Engine",
-    meta: "Multi-alpha architecture explainer",
-    aliases: ["alpha engine", "engine"],
-  },
-  {
-    group: "Risk",
-    href: "/risk-layer",
-    label: "Risk Layer",
-    meta: "Policy engine and exposure controls",
-    aliases: ["/r", "risk", "risk layer", "policy"],
-    shortcut: "R",
-  },
-  {
-    group: "Monitoring",
-    href: "/monitoring",
-    label: "Monitoring",
-    meta: "System health and observability",
-    aliases: ["/m", "monitoring", "monitor", "observability", "health"],
-    shortcut: "M",
-  },
-  {
-    group: "Monitoring",
-    href: "/dashboard#execution-logs",
-    label: "Execution Logs",
-    meta: "Read-only event stream",
-    aliases: ["/l", "logs", "execution logs", "events", "event stream"],
-    shortcut: "L",
-  },
-  {
-    group: "Navigation",
-    href: "/request-access",
-    label: "Request Access",
-    meta: "Private beta onboarding",
-    aliases: ["/access", "/request", "access", "request", "waitlist"],
-  },
-  {
-    group: "Account",
-    href: "/settings",
-    label: "Workspace Settings",
-    meta: "Mock preferences, data mode, and read-only access controls",
-    aliases: ["/s", "settings", "workspace settings", "preferences"],
-    shortcut: "S",
-  },
-];
+function routeToCommand(route: NavigationRoute): CommandItem {
+  return {
+    group: route.group,
+    href: route.href,
+    label: route.label,
+    meta: route.description,
+    aliases: route.aliases,
+    keywords: route.keywords,
+    shortcut: route.shortcut,
+  };
+}
+
+const baseCommands: CommandItem[] = navigationRoutes.map(routeToCommand);
 
 const candidateCommands: CommandItem[] = alphaCandidates.map((candidate) => ({
   group: "Candidates",
@@ -134,16 +39,16 @@ const candidateCommands: CommandItem[] = alphaCandidates.map((candidate) => ({
   label: candidate.name,
   meta: `${candidate.family} / ${candidate.stage}`,
   aliases: [candidate.slug, candidate.name.toLowerCase(), candidate.family.toLowerCase()],
+  keywords: ["alpha candidate", "research", "validation", candidate.stage],
 }));
 
 const commands = [...baseCommands, ...candidateCommands];
 const groupOrder: CommandItem["group"][] = [
   "Client",
-  "Navigation",
+  "Operator",
   "Research",
-  "Risk",
-  "Monitoring",
   "Account",
+  "Legal",
   "Candidates",
 ];
 
@@ -155,6 +60,7 @@ function getCommandSearchText(command: CommandItem) {
     command.href,
     command.shortcut,
     ...(command.aliases ?? []),
+    ...(command.keywords ?? []),
   ]
     .filter(Boolean)
     .join(" ")
@@ -339,7 +245,7 @@ export function CommandPalette() {
         <div className="max-h-[62vh] overflow-y-auto p-3">
           {groupedCommands.length === 0 ? (
             <div className="rounded-2xl border border-[#243042] bg-[#050505]/76 p-6 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-[#8c90a1]">
-              No matching command.
+              No matching route or command found.
             </div>
           ) : (
             <div className="grid gap-3">
