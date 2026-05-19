@@ -149,6 +149,16 @@ export default async function SignalsPage() {
                   Raw artifact names remain visible for audit transparency, but the
                   interface cannot place orders.
                 </p>
+                <div className="rounded-2xl border border-[#1f1f1f] bg-[#050505]/70 p-4 text-[#8c90a1]">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-[#c2c6d8]">
+                    Status legend
+                  </div>
+                  <ul className="mt-3 space-y-2 text-xs leading-5">
+                    <li>Decision = model or risk decision event.</li>
+                    <li>Submitted = order submitted, not final fill confirmation.</li>
+                    <li>Filled / Executed = confirmed execution status from artifact.</li>
+                  </ul>
+                </div>
                 <p className="rounded-2xl border border-[#1f1f1f] bg-[#050505]/70 p-4 text-[#8c90a1]">
                   Read-only model history. Informational/research use only. Past
                   signals do not guarantee future results.

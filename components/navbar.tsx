@@ -102,7 +102,7 @@ export function Navbar() {
             href="/dashboard"
             className="whitespace-nowrap rounded-xl border border-[var(--accent-primary)]/70 bg-[linear-gradient(135deg,var(--accent-primary),var(--accent-secondary))] px-3 py-3 text-center text-xs font-semibold text-[#050505] shadow-[0_0_16px_rgb(var(--accent-primary-rgb)/0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110 sm:px-5 sm:text-sm"
           >
-            Open Demo Terminal
+            Open Workspace
           </Link>
         </div>
       </div>
@@ -160,9 +160,9 @@ export function Navbar() {
                     }`}
                   >
                     <span className="block font-mono text-[10px] uppercase tracking-[0.13em]">
-                      {group.label}
+                      {group.label.toUpperCase()}
                     </span>
-                    <span className="mt-0.5 block truncate text-[9px] text-[#6f7485]">
+                    <span className="mt-0.5 block truncate font-mono text-[8px] uppercase tracking-[0.1em] text-[#6f7485]">
                       {group.microcopy}
                     </span>
                   </button>
@@ -265,16 +265,27 @@ export function Navbar() {
               <p className="mt-2 border-t border-[#1f1f1f] pt-1.5 font-mono text-[9px] uppercase leading-4 tracking-[0.1em] text-[#6f7485]">
                 Mock user preview. No active account session.
               </p>
-              <div className="mt-2 grid grid-cols-2 gap-1 border-t border-[#1f1f1f] pt-1.5">
-                {footerNavigationRoutes.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={closeMenu}
-                    className="truncate rounded-md px-1.5 py-1 font-mono text-[8px] uppercase tracking-[0.1em] text-[#8c90a1] transition-colors duration-150 hover:bg-[#0d1115] hover:text-[var(--accent-primary)]"
-                  >
-                    {link.label}
-                  </Link>
+              <div className="mt-2 grid gap-1.5 border-t border-[#1f1f1f] pt-1.5">
+                {(["Account", "Legal"] as const).map((group) => (
+                  <div className="grid gap-1" key={group}>
+                    <div className="font-mono text-[7px] uppercase tracking-[0.18em] text-[#565b69]">
+                      {group}
+                    </div>
+                    <div className="flex flex-wrap gap-x-2 gap-y-1">
+                      {footerNavigationRoutes
+                        .filter((link) => link.group === group)
+                        .map((link) => (
+                          <Link
+                            key={link.href}
+                            href={link.href}
+                            onClick={closeMenu}
+                            className="rounded-md px-1 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-[#8c90a1] transition-colors duration-150 hover:bg-[#0d1115] hover:text-[var(--accent-primary)]"
+                          >
+                            {link.label}
+                          </Link>
+                        ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>

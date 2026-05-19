@@ -34,7 +34,16 @@ export default async function ModelPortfolioPage() {
     .map((position) => enrichAllocation(position, equity));
   const summary = summarizeAllocation(allocationRows, equity);
   const freshness = deriveFreshness(equity, positions, health.lastUpdated);
-  const isFlat = summary.activeSymbols === 0 && summary.cashEstimate === 1;
+  const hasReliableModelState =
+    equity.source === "live-csv" &&
+    positions.source === "live-csv" &&
+    equity.sourceStatus === "LIVE_FILE" &&
+    (positions.sourceStatus === "LIVE_FILE" || positions.sourceStatus === "LIVE_FILE_EMPTY") &&
+    freshness.status !== "parse-error" &&
+    freshness.status !== "missing" &&
+    freshness.status !== "stale";
+  const isFlat =
+    hasReliableModelState && summary.activeSymbols === 0 && summary.cashEstimate === 1;
   const hasLiveTelemetry =
     equity.source === "live-csv" || positions.source === "live-csv" || health.status === "LIVE_FILE";
 
@@ -72,12 +81,17 @@ export default async function ModelPortfolioPage() {
         </section>
 
         <ModelStateBanner
+          hasReliableModelState={hasReliableModelState}
           isFlat={isFlat}
           summary={summary}
           freshnessLabel={freshness.label}
         />
 
-        <WhatThisMeansPanel isFlat={isFlat} summary={summary} />
+        <WhatThisMeansPanel
+          hasReliableModelState={hasReliableModelState}
+          isFlat={isFlat}
+          summary={summary}
+        />
 
         <section>
           <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
@@ -222,14 +236,55 @@ export default async function ModelPortfolioPage() {
 }
 
 function ModelStateBanner({
+  hasReliableModelState,
   isFlat,
   summary,
   freshnessLabel,
 }: {
+  hasReliableModelState: boolean;
   isFlat: boolean;
   summary: ReturnType<typeof summarizeAllocation>;
   freshnessLabel: string;
 }) {
+  if (!hasReliableModelState) {
+    return (
+      <section className="rounded-[30px] border border-amber-200/24 bg-[linear-gradient(135deg,rgba(251,191,36,0.1),rgba(5,5,5,0.9))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_24px_70px_rgba(0,0,0,0.28)] sm:p-6">
+        <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-stretch">
+          <div>
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-200">
+              Current Model Stance
+            </div>
+            <h2 className="mt-3 font-mono text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl">
+              DATA UNAVAILABLE
+            </h2>
+            <p className="mt-3 max-w-3xl text-base leading-7 text-[#d7dceb]">
+              Current model state cannot be confirmed because live telemetry artifacts are unavailable,
+              stale, or not parseable.
+            </p>
+            <div className="mt-4 rounded-2xl border border-amber-200/24 bg-amber-200/[0.08] px-4 py-3 text-sm leading-6 text-[#e8dcc5]">
+              <span className="font-semibold text-amber-200">Client action:</span>{" "}
+              Wait for telemetry refresh. QuantBot is not publishing a confirmed flat/cash stance from
+              fallback data.
+            </div>
+          </div>
+          <div className="flex flex-col justify-between rounded-3xl border border-[#243042] bg-[#050505]/70 p-5 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+            <div>
+              <div className="text-amber-200">Model State</div>
+              <div className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white">
+                Unconfirmed
+              </div>
+            </div>
+            <div className="mt-6 grid gap-3">
+              <SummaryRow label="Active symbols" value="Unavailable" />
+              <SummaryRow label="Gross exposure" value="Unavailable" />
+              <SummaryRow label="Freshness" value={freshnessLabel} />
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (isFlat) {
     return (
       <section className="rounded-[30px] border border-[var(--accent-primary)]/40 bg-[linear-gradient(135deg,rgb(var(--accent-soft-rgb)/0.68),rgba(5,5,5,0.9)_50%,rgba(14,26,22,0.74))] p-5 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.1),0_24px_72px_rgba(0,0,0,0.34)] sm:p-6">
@@ -319,13 +374,22 @@ function ModelStateBanner({
 }
 
 function WhatThisMeansPanel({
+  hasReliableModelState,
   isFlat,
   summary,
 }: {
+  hasReliableModelState: boolean;
   isFlat: boolean;
   summary: ReturnType<typeof summarizeAllocation>;
 }) {
-  const rows = isFlat
+  const rows = !hasReliableModelState
+    ? [
+        ["Model state", "Unavailable from current live telemetry"],
+        ["Allocation to copy", "Unavailable"],
+        ["Portfolio state", "Not confirmed from fallback/mock data"],
+        ["Client action", "Wait for telemetry refresh"],
+      ]
+    : isFlat
     ? [
         ["No active symbols", "0"],
         ["No long exposure", formatPercent(summary.longExposure)],

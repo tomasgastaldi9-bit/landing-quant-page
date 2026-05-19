@@ -207,7 +207,7 @@ function summarizeSignalRows(rows: SignalHistoryRow[]): SignalHistorySnapshot["s
 
 function isExecuted(status: string) {
   const normalized = status.toLowerCase();
-  return ["filled", "executed", "closed", "success", "submitted"].some((token) =>
+  return ["filled", "executed", "closed", "success"].some((token) =>
     normalized.includes(token),
   );
 }
@@ -216,7 +216,7 @@ function isPlanned(status: string, eventType: SignalHistoryRow["eventType"]) {
   const normalized = status.toLowerCase();
   return (
     eventType === "Decision" ||
-    ["planned", "pending", "signal", "decision", "evaluated"].some((token) =>
+    ["planned", "pending", "submitted", "signal", "decision", "evaluated"].some((token) =>
       normalized.includes(token),
     )
   );
