@@ -2,9 +2,11 @@
 
 import { alphaCandidates } from "@/lib/alpha-lab/candidates";
 import {
+  getNavigationSearchText,
+  getRouteAudience,
   type NavigationGroup,
   type NavigationRoute,
-  navigationRoutes,
+  searchableNavigationRoutes,
 } from "@/lib/navigation/routes";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -14,9 +16,11 @@ type CommandItem = {
   href: string;
   label: string;
   meta: string;
+  audience?: string;
   aliases?: string[];
   keywords?: string[];
   shortcut?: string;
+  searchText?: string;
 };
 
 function routeToCommand(route: NavigationRoute): CommandItem {
@@ -25,13 +29,15 @@ function routeToCommand(route: NavigationRoute): CommandItem {
     href: route.href,
     label: route.label,
     meta: route.description,
+    audience: getRouteAudience(route),
     aliases: route.aliases,
     keywords: route.keywords,
     shortcut: route.shortcut,
+    searchText: getNavigationSearchText(route),
   };
 }
 
-const baseCommands: CommandItem[] = navigationRoutes.map(routeToCommand);
+const baseCommands: CommandItem[] = searchableNavigationRoutes.map(routeToCommand);
 
 const candidateCommands: CommandItem[] = alphaCandidates.map((candidate) => ({
   group: "Candidates",
@@ -57,6 +63,7 @@ function getCommandSearchText(command: CommandItem) {
     command.label,
     command.meta,
     command.group,
+    command.audience,
     command.href,
     command.shortcut,
     ...(command.aliases ?? []),
@@ -80,7 +87,7 @@ function getCommandScore(command: CommandItem, query: string) {
   if (normalizedLabel === query || normalizedHref === query) return 80;
   if (normalizedLabel.startsWith(query)) return 70;
   if (normalizedAliases.some((alias) => alias.includes(query))) return 65;
-  if (getCommandSearchText(command).includes(query)) return 40;
+  if ((command.searchText ?? getCommandSearchText(command)).includes(query)) return 40;
 
   return 0;
 }
@@ -237,7 +244,7 @@ export function CommandPalette() {
             </kbd>
           </div>
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[#6f7485]">
-            <span>Global operator command surface</span>
+            <span>Search QuantBot workspace</span>
             <span>Cmd/Ctrl K</span>
           </div>
         </div>

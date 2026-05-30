@@ -1,5 +1,11 @@
 export type NavigationGroup = "Client" | "Operator" | "Research" | "Account" | "Legal";
 export type DrawerTab = Extract<NavigationGroup, "Client" | "Operator" | "Research">;
+export type NavigationAudience =
+  | "client"
+  | "operator"
+  | "research"
+  | "account"
+  | "legal";
 
 export type NavigationRoute = {
   label: string;
@@ -8,11 +14,28 @@ export type NavigationRoute = {
   description: string;
   aliases: string[];
   keywords: string[];
+  audience?: NavigationAudience;
   badge?: string;
   shortcut?: string;
-  drawer?: "primary" | "footer";
+  isSearchable?: boolean;
+  isDrawerVisible?: boolean;
+  priority?: number;
   drawerMicrocopy?: string;
   status?: "active" | "preview" | "legal";
+};
+
+const drawerMicrocopyByGroup: Record<DrawerTab, string> = {
+  Client: "Model Output",
+  Operator: "Telemetry",
+  Research: "Validation",
+};
+
+const audienceByGroup: Record<NavigationGroup, NavigationAudience> = {
+  Client: "client",
+  Operator: "operator",
+  Research: "research",
+  Account: "account",
+  Legal: "legal",
 };
 
 // Add new routes here so drawer and command palette stay in sync.
@@ -24,9 +47,11 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Client-facing current model allocation",
     aliases: ["/mp", "/portfolio", "model portfolio", "portfolio"],
     keywords: ["client", "allocation", "positions", "weights", "current stance", "model"],
+    audience: "client",
     badge: "MODEL",
-    drawer: "primary",
-    drawerMicrocopy: "model output",
+    drawerMicrocopy: "Model Output",
+    isDrawerVisible: true,
+    priority: 10,
   },
   {
     label: "Signals",
@@ -35,8 +60,10 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Signal and rebalance history when artifacts are available",
     aliases: ["/signals", "/signal", "signals", "signal history", "rebalance history"],
     keywords: ["client", "rebalance", "orders", "decisions", "model events"],
-    drawer: "primary",
-    drawerMicrocopy: "model output",
+    audience: "client",
+    drawerMicrocopy: "Model Output",
+    isDrawerVisible: true,
+    priority: 20,
   },
   {
     label: "Performance",
@@ -45,8 +72,10 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Read-only performance view from telemetry history",
     aliases: ["/perf", "performance", "equity performance", "returns"],
     keywords: ["client", "equity", "drawdown", "performance history", "telemetry"],
-    drawer: "primary",
-    drawerMicrocopy: "model output",
+    audience: "client",
+    drawerMicrocopy: "Model Output",
+    isDrawerVisible: true,
+    priority: 30,
   },
   {
     label: "Risk Summary",
@@ -55,9 +84,11 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Client-facing exposure and risk interpretation",
     aliases: ["/risk", "/risk-summary", "risk summary", "client risk", "exposure summary"],
     keywords: ["client", "risk", "exposure", "positions", "allocation"],
+    audience: "client",
     badge: "RISK",
-    drawer: "primary",
-    drawerMicrocopy: "model output",
+    drawerMicrocopy: "Model Output",
+    isDrawerVisible: true,
+    priority: 40,
   },
   {
     label: "Reports",
@@ -66,8 +97,10 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Prepared client report workspace",
     aliases: ["/reports", "reports", "client reports", "reporting"],
     keywords: ["client", "reports", "documents", "snapshots"],
-    drawer: "primary",
-    drawerMicrocopy: "model output",
+    audience: "client",
+    drawerMicrocopy: "Model Output",
+    isDrawerVisible: true,
+    priority: 50,
   },
   {
     label: "Dashboard",
@@ -76,10 +109,12 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Operator workspace and terminal overview",
     aliases: ["/d", "dashboard", "terminal", "operator"],
     keywords: ["operator", "dashboard", "terminal", "overview", "telemetry"],
+    audience: "operator",
     badge: "READ",
     shortcut: "D",
-    drawer: "primary",
-    drawerMicrocopy: "system telemetry",
+    drawerMicrocopy: "Telemetry",
+    isDrawerVisible: true,
+    priority: 10,
   },
   {
     label: "Positions",
@@ -88,9 +123,11 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Active positions table",
     aliases: ["/p", "/positions", "positions", "position", "exposure"],
     keywords: ["operator", "positions", "exposure", "open positions", "dashboard"],
+    audience: "operator",
     shortcut: "P",
-    drawer: "primary",
-    drawerMicrocopy: "system telemetry",
+    drawerMicrocopy: "Telemetry",
+    isDrawerVisible: true,
+    priority: 20,
   },
   {
     label: "Monitoring",
@@ -99,10 +136,12 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "System health and observability",
     aliases: ["/m", "monitoring", "monitor", "observability", "health"],
     keywords: ["operator", "telemetry", "health", "alerts", "status"],
+    audience: "operator",
     badge: "OPS",
     shortcut: "M",
-    drawer: "primary",
-    drawerMicrocopy: "system telemetry",
+    drawerMicrocopy: "Telemetry",
+    isDrawerVisible: true,
+    priority: 30,
   },
   {
     label: "Risk Layer",
@@ -111,10 +150,12 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Policy engine and exposure controls",
     aliases: ["/r", "risk layer", "policy"],
     keywords: ["operator", "risk", "controls", "policy", "exposure", "safeguards"],
+    audience: "operator",
     badge: "RISK",
     shortcut: "R",
-    drawer: "primary",
-    drawerMicrocopy: "system telemetry",
+    drawerMicrocopy: "Telemetry",
+    isDrawerVisible: true,
+    priority: 40,
   },
   {
     label: "Execution",
@@ -123,8 +164,10 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "No real capital, testnet execution, and validation scope",
     aliases: ["/execution", "execution", "testnet", "demo testnet"],
     keywords: ["operator", "execution", "orders", "demo", "testnet", "no real capital"],
-    drawer: "primary",
-    drawerMicrocopy: "system telemetry",
+    audience: "operator",
+    drawerMicrocopy: "Telemetry",
+    isDrawerVisible: true,
+    priority: 50,
   },
   {
     label: "Alpha Lab",
@@ -133,10 +176,12 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Research workspace and candidate registry",
     aliases: ["/a", "alpha", "alpha lab", "research"],
     keywords: ["research", "candidates", "regime", "validation", "alpha"],
+    audience: "research",
     badge: "LAB",
     shortcut: "A",
-    drawer: "primary",
-    drawerMicrocopy: "alpha validation",
+    drawerMicrocopy: "Validation",
+    isDrawerVisible: true,
+    priority: 10,
   },
   {
     label: "Alpha Engine",
@@ -145,9 +190,11 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Multi-alpha architecture explainer",
     aliases: ["alpha engine", "engine"],
     keywords: ["research", "sleeves", "multi-alpha", "architecture"],
+    audience: "research",
     badge: "R&D",
-    drawer: "primary",
-    drawerMicrocopy: "alpha validation",
+    drawerMicrocopy: "Validation",
+    isDrawerVisible: true,
+    priority: 20,
   },
   {
     label: "Methodology",
@@ -156,8 +203,10 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Research-first validation and deployment discipline",
     aliases: ["methodology", "research methodology", "validation"],
     keywords: ["research", "backtest", "walk-forward", "paper", "validation"],
-    drawer: "primary",
-    drawerMicrocopy: "alpha validation",
+    audience: "research",
+    drawerMicrocopy: "Validation",
+    isDrawerVisible: true,
+    priority: 30,
   },
   {
     label: "Login",
@@ -166,7 +215,9 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Authentication preview. No account is created.",
     aliases: ["login", "sign in", "access"],
     keywords: ["account", "auth preview", "client access"],
-    drawer: "footer",
+    audience: "account",
+    isDrawerVisible: true,
+    priority: 10,
     status: "preview",
   },
   {
@@ -176,7 +227,9 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Private beta registration preview",
     aliases: ["register", "sign up", "create account"],
     keywords: ["account", "auth preview", "beta access"],
-    drawer: "footer",
+    audience: "account",
+    isDrawerVisible: true,
+    priority: 20,
     status: "preview",
   },
   {
@@ -186,8 +239,10 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Mock preferences, data mode, and read-only access controls",
     aliases: ["/s", "settings", "workspace settings", "preferences"],
     keywords: ["account", "workspace", "theme", "preferences"],
+    audience: "account",
     shortcut: "S",
-    drawer: "footer",
+    isDrawerVisible: true,
+    priority: 30,
     status: "preview",
   },
   {
@@ -197,7 +252,9 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Private beta onboarding",
     aliases: ["/access", "/request", "access", "request", "waitlist"],
     keywords: ["account", "private beta", "onboarding", "request access"],
-    drawer: "footer",
+    audience: "account",
+    isDrawerVisible: true,
+    priority: 40,
     status: "preview",
   },
   {
@@ -207,7 +264,9 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "QuantBot terms and service boundaries",
     aliases: ["terms", "terms of service"],
     keywords: ["legal", "terms", "service", "boundaries"],
-    drawer: "footer",
+    audience: "legal",
+    isDrawerVisible: true,
+    priority: 10,
     status: "legal",
   },
   {
@@ -217,8 +276,10 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Research, demo, and trading risk disclosure",
     aliases: ["risk disclosure", "disclosure", "legal risk"],
     keywords: ["legal", "risk", "disclosure", "crypto", "not financial advice"],
+    audience: "legal",
     badge: "LEGAL",
-    drawer: "footer",
+    isDrawerVisible: true,
+    priority: 20,
     status: "legal",
   },
   {
@@ -228,26 +289,65 @@ export const navigationRoutes: NavigationRoute[] = [
     description: "Privacy notice for the current beta product state",
     aliases: ["privacy", "privacy policy"],
     keywords: ["legal", "privacy", "data", "forms"],
-    drawer: "footer",
+    audience: "legal",
+    isDrawerVisible: true,
+    priority: 30,
     status: "legal",
   },
 ];
 
+function byPriority(left: NavigationRoute, right: NavigationRoute) {
+  return (left.priority ?? 100) - (right.priority ?? 100);
+}
+
+export function getRouteAudience(route: NavigationRoute) {
+  return route.audience ?? audienceByGroup[route.group];
+}
+
+export function isRouteSearchable(route: NavigationRoute) {
+  return route.isSearchable !== false;
+}
+
+export function isRouteDrawerVisible(route: NavigationRoute) {
+  return route.isDrawerVisible !== false;
+}
+
+export function getNavigationSearchText(route: NavigationRoute) {
+  return [
+    route.label,
+    route.href,
+    route.group,
+    getRouteAudience(route),
+    route.description,
+    route.shortcut,
+    ...(route.aliases ?? []),
+    ...(route.keywords ?? []),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+}
+
+export const searchableNavigationRoutes = navigationRoutes
+  .filter(isRouteSearchable)
+  .sort(byPriority);
+
+export const drawerNavigationRoutes = navigationRoutes
+  .filter(isRouteDrawerVisible)
+  .sort(byPriority);
+
 export const primaryDrawerGroups = (["Client", "Operator", "Research"] as const).map(
   (group) => ({
     label: group,
-    microcopy:
-      navigationRoutes.find(
-        (route) => route.group === group && route.drawer === "primary",
-      )?.drawerMicrocopy ?? "",
-    items: navigationRoutes.filter(
-      (route) => route.group === group && route.drawer === "primary",
+    microcopy: drawerMicrocopyByGroup[group],
+    items: drawerNavigationRoutes.filter(
+      (route) => route.group === group && getRouteAudience(route) === audienceByGroup[group],
     ),
   }),
 );
 
-export const footerNavigationRoutes = navigationRoutes.filter(
-  (route) => route.drawer === "footer",
+export const footerNavigationRoutes = drawerNavigationRoutes.filter(
+  (route) => route.group === "Account" || route.group === "Legal",
 );
 
 export function getDrawerTabForPath(pathname: string): DrawerTab {
