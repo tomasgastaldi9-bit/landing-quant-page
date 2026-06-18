@@ -52,7 +52,7 @@ export function BrandMark({
   const logoSize =
     size === "drawer"
       ? "h-10 w-[174px] sm:h-11 sm:w-[192px]"
-      : "h-11 w-[190px] sm:h-[52px] sm:w-[226px]";
+      : "h-10 w-[128px] min-[420px]:w-[150px] sm:h-11 sm:w-[178px] md:h-[52px] md:w-[226px]";
 
   return (
     <div className={`relative min-w-0 shrink-0 ${logoSize}`}>
@@ -61,7 +61,11 @@ export function BrandMark({
         alt="QuantBot"
         fill
         priority
-        sizes={size === "drawer" ? "192px" : "(min-width: 640px) 226px, 190px"}
+        sizes={
+          size === "drawer"
+            ? "192px"
+            : "(min-width: 768px) 226px, (min-width: 640px) 178px, (min-width: 420px) 150px, 128px"
+        }
         className="z-0 object-contain object-left"
       />
       <AccentMask src={logoAccentMaskSrc} />

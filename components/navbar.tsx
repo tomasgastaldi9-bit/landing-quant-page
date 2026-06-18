@@ -55,9 +55,13 @@ export function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/94 shadow-[0_1px_0_rgba(255,255,255,0.03)] backdrop-blur-md">
-      <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between gap-3 px-3 sm:h-24 sm:px-8">
-        <Link className="min-w-0" href="/" aria-label="QuantBot home">
+    <header className="sticky top-0 z-50 border-b border-[#243042] bg-[#0b0b0b]/96 shadow-[0_1px_0_rgba(255,255,255,0.03)]">
+      <div className="mx-auto flex h-[88px] max-w-7xl items-center justify-between gap-2 px-3 sm:h-24 sm:gap-3 sm:px-8">
+        <Link
+          className="min-w-0 max-w-[42vw] overflow-hidden min-[420px]:max-w-[46vw] sm:max-w-none"
+          href="/"
+          aria-label="QuantBot home"
+        >
           <BrandMark />
         </Link>
 
@@ -65,10 +69,10 @@ export function Navbar() {
           <button
             type="button"
             onClick={openCommandPalette}
-            className="hidden items-center gap-3 rounded-xl border border-[#243042] bg-[#0e0e0e]/70 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] md:inline-flex"
+            className="hidden items-center gap-3 rounded-xl border border-[#243042] bg-[#0e0e0e]/72 px-4 py-3.5 font-mono text-xs uppercase tracking-[0.09em] text-[#d7dceb] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors duration-200 hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] md:inline-flex"
           >
             <span>Search</span>
-            <kbd className="rounded-md border border-[#424655] bg-[#050505]/80 px-1.5 py-0.5 text-[9px] text-[#8c90a1]">
+            <kbd className="rounded-md border border-[#424655] bg-[#050505]/80 px-1.5 py-0.5 text-[10px] text-[#8c90a1]">
               Ctrl K
             </kbd>
           </button>
@@ -77,7 +81,7 @@ export function Navbar() {
             aria-expanded={isOpen}
             aria-controls="primary-navigation-drawer"
             onClick={openMenu}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#243042] bg-[linear-gradient(180deg,rgba(16,16,16,0.94),rgba(8,8,8,0.86))] px-3 py-3 font-mono text-[11px] uppercase tracking-[0.12em] text-[#c2c6d8] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_12px_34px_rgba(0,0,0,0.2)] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] sm:px-4"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#243042] bg-[linear-gradient(180deg,rgba(16,16,16,0.94),rgba(8,8,8,0.86))] px-3 py-3.5 font-mono text-xs uppercase tracking-[0.1em] text-[#d7dceb] shadow-[inset_0_1px_0_rgba(255,255,255,0.035)] transition-colors duration-200 hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] sm:px-4"
           >
             <span className="flex size-4 flex-col justify-center gap-1">
               <span className="h-px w-full bg-current" />
@@ -88,19 +92,19 @@ export function Navbar() {
           </button>
           <Link
             href="/login"
-            className="hidden rounded-xl border border-[#243042] bg-[#0e0e0e]/70 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-[#c2c6d8] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] md:inline-flex"
+            className="hidden rounded-xl border border-[#243042] bg-[#0e0e0e]/72 px-4 py-3.5 font-mono text-xs uppercase tracking-[0.09em] text-[#d7dceb] transition-colors duration-200 hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] md:inline-flex"
           >
             Login
           </Link>
           <Link
             href="/register"
-            className="hidden rounded-xl border border-[#424655] bg-[#050505]/82 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-[#e2e2e2] transition duration-200 hover:-translate-y-px hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] lg:inline-flex"
+            className="hidden rounded-xl border border-[#424655] bg-[#050505]/84 px-4 py-3.5 font-mono text-xs uppercase tracking-[0.09em] text-[#e2e2e2] transition-colors duration-200 hover:border-[var(--accent-primary)] hover:text-[var(--accent-primary)] lg:inline-flex"
           >
             Register
           </Link>
           <Link
             href="/dashboard"
-            className="whitespace-nowrap rounded-xl border border-[var(--accent-primary)]/70 bg-[linear-gradient(135deg,var(--accent-primary),var(--accent-secondary))] px-3 py-3 text-center text-xs font-semibold text-[#050505] shadow-[0_0_16px_rgb(var(--accent-primary-rgb)/0.22)] transition duration-200 hover:-translate-y-px hover:brightness-110 sm:px-5 sm:text-sm"
+            className="hidden whitespace-nowrap rounded-xl border border-[var(--accent-primary)]/70 bg-[linear-gradient(135deg,var(--accent-primary),var(--accent-secondary))] px-3 py-3.5 text-center text-xs font-semibold text-[#050505] shadow-[0_0_8px_rgb(var(--accent-primary-rgb)/0.14)] transition duration-200 hover:brightness-110 min-[390px]:inline-flex min-[480px]:px-3.5 min-[480px]:text-sm sm:px-5"
           >
             Open Workspace
           </Link>
@@ -120,7 +124,7 @@ export function Navbar() {
             aria-label="Primary navigation"
             role="dialog"
             aria-modal="true"
-            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,360px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-y-auto border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.024)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.97))] bg-[size:32px_32px,32px_32px,auto] px-2.5 py-2.5 shadow-[18px_0_54px_rgba(0,0,0,0.36)] will-change-transform sm:w-[360px] sm:overflow-hidden sm:px-3 sm:py-3"
+            className="absolute left-0 top-0 flex h-dvh w-[min(92vw,360px)] animate-[drawerIn_180ms_ease-out] flex-col overflow-y-auto border-r border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.018)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.97))] bg-[size:36px_36px,36px_36px,auto] px-2.5 py-2.5 shadow-[12px_0_34px_rgba(0,0,0,0.28)] will-change-transform sm:w-[360px] sm:overflow-hidden sm:px-3 sm:py-3"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.65),transparent)]" />
             <div className="pointer-events-none absolute bottom-3 left-0 top-3 w-px bg-[#243042]/70" />
@@ -236,8 +240,8 @@ export function Navbar() {
               </div>
             </nav>
 
-            <div className="mt-2 rounded-xl border border-[#1f1f1f] bg-[#070707]/86 px-2.5 py-2">
-              <div className="mb-1.5 flex items-center justify-between gap-3 font-mono text-[8px] uppercase tracking-[0.16em] text-[#6f7485]">
+            <div className="mt-2 rounded-xl border border-[#1f1f1f] bg-[#070707]/88 px-2.5 py-2.5">
+              <div className="mb-2 flex items-center justify-between gap-3 font-mono text-[8px] uppercase tracking-[0.16em] text-[#6f7485]">
                 <span>QuantBot Terminal</span>
                 <span className="rounded border border-[var(--accent-primary)]/35 px-1.5 py-0.5 text-[var(--accent-primary)]">
                   Read-Only Ops
@@ -262,16 +266,16 @@ export function Navbar() {
                   Preview
                 </span>
               </div>
-              <p className="mt-2 border-t border-[#1f1f1f] pt-1.5 font-mono text-[9px] uppercase leading-4 tracking-[0.1em] text-[#6f7485]">
-                Mock user preview. No active account session.
-              </p>
-              <div className="mt-2 grid gap-1.5 border-t border-[#1f1f1f] pt-1.5">
+              <div className="mt-2 border-t border-[#1f1f1f] pt-2 font-mono text-[8px] uppercase leading-3 tracking-[0.1em] text-[#6f7485]">
+                Preview workspace / no active account session
+              </div>
+              <div className="mt-2 grid gap-1.5 border-t border-[#1f1f1f] pt-2">
                 {(["Account", "Legal"] as const).map((group) => (
                   <div className="grid gap-1" key={group}>
                     <div className="font-mono text-[7px] uppercase tracking-[0.18em] text-[#565b69]">
                       {group}
                     </div>
-                    <div className="flex flex-wrap gap-x-2 gap-y-1">
+                    <div className="flex flex-wrap gap-x-1.5 gap-y-1">
                       {footerNavigationRoutes
                         .filter((link) => link.group === group)
                         .map((link) => (
@@ -279,7 +283,7 @@ export function Navbar() {
                             key={link.href}
                             href={link.href}
                             onClick={closeMenu}
-                            className="rounded-md px-1 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-[#8c90a1] transition-colors duration-150 hover:bg-[#0d1115] hover:text-[var(--accent-primary)]"
+                            className="rounded-md border border-transparent bg-[#050505]/40 px-1.5 py-0.5 font-mono text-[8px] uppercase tracking-[0.1em] text-[#8c90a1] transition-colors duration-150 hover:border-[#243042] hover:bg-[#0d1115] hover:text-[var(--accent-primary)]"
                           >
                             {link.label}
                           </Link>

@@ -167,7 +167,7 @@ export function MetricsSection() {
       id="metrics"
       className="relative overflow-hidden border-b border-[#243042] bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:32px_32px]"
     >
-      <div className="pointer-events-none absolute left-[5%] top-[18%] hidden h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-secondary-rgb)/0.08),transparent_68%)] blur-2xl md:block" />
+      <div className="pointer-events-none absolute left-[5%] top-[18%] hidden h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(var(--accent-secondary-rgb)/0.04),transparent_68%)] md:block" />
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-8 lg:py-20">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -187,7 +187,7 @@ export function MetricsSection() {
             <Link
               key={metric.label}
               href={metric.href}
-              className="group relative overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.018)_42%,rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_18px_50px_rgba(0,0,0,0.22)] transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/50 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08),0_18px_48px_rgba(0,0,0,0.24)] sm:p-5"
+              className="group relative overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.045),rgba(255,255,255,0.018)_42%,rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_28px_rgba(0,0,0,0.16)] transition-colors duration-200 hover:border-[var(--accent-primary)]/50 sm:p-5"
             >
               <div className="absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,rgb(var(--accent-primary-rgb)/0.42),transparent)] opacity-60 transition-opacity group-hover:opacity-100" />
               <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-[#c2c6d8]">
@@ -221,7 +221,7 @@ export function MetricsSection() {
               <Link
                 key={item.title}
                 href={item.href}
-                className={`group relative min-h-[200px] overflow-hidden rounded-2xl border border-[#243042]/70 bg-[radial-gradient(circle_at_18%_0%,rgb(var(--accent-primary-rgb)/0.08),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/50 hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.07),0_18px_48px_rgba(0,0,0,0.24)] sm:p-5 ${
+                className={`group relative min-h-[200px] overflow-hidden rounded-2xl border border-[#243042]/70 bg-[radial-gradient(circle_at_18%_0%,rgb(var(--accent-primary-rgb)/0.045),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_30px_rgba(0,0,0,0.16)] transition-colors duration-200 hover:border-[var(--accent-primary)]/50 sm:p-5 ${
                   item.wide ? "lg:col-span-2" : ""
                 }`}
               >
@@ -244,7 +244,7 @@ export function MetricsSection() {
 
         <div className="mt-14 border-t border-[#1f1f1f]/90 pt-10 sm:mt-20 sm:pt-12">
           <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
-            <div className="sticky top-28 rounded-[28px] border border-[#243042]/80 bg-[radial-gradient(circle_at_20%_0%,rgb(var(--accent-primary-rgb)/0.1),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.045),rgba(5,5,5,0.76))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_22px_70px_rgba(0,0,0,0.24)] sm:p-5">
+            <div className="sticky top-28 rounded-[28px] border border-[#243042]/80 bg-[radial-gradient(circle_at_20%_0%,rgb(var(--accent-primary-rgb)/0.055),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.045),rgba(5,5,5,0.76))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_12px_34px_rgba(0,0,0,0.16)] sm:p-5">
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
                 Research Lifecycle
               </div>
@@ -267,7 +267,7 @@ export function MetricsSection() {
             <div className="grid gap-3">
               {lifecycle.map((item, index) => (
                 <Link
-                  className="group relative overflow-hidden rounded-2xl border border-[#243042]/72 bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_18px_50px_rgba(0,0,0,0.2)] transition duration-300 hover:-translate-y-1 hover:border-[var(--accent-primary)]/50 hover:bg-[linear-gradient(180deg,rgb(var(--accent-soft-rgb)/0.22),rgba(5,5,5,0.78))] hover:shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.07),0_24px_64px_rgba(0,0,0,0.26)]"
+                  className="group relative overflow-hidden rounded-2xl border border-[#243042]/72 bg-[linear-gradient(180deg,rgba(14,14,14,0.88),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_28px_rgba(0,0,0,0.16)] transition-colors duration-200 hover:border-[var(--accent-primary)]/50 hover:bg-[linear-gradient(180deg,rgb(var(--accent-soft-rgb)/0.18),rgba(5,5,5,0.78))]"
                   href={item.href}
                   key={item.title}
                 >
@@ -295,7 +295,7 @@ export function MetricsSection() {
           </div>
         </div>
 
-        <div className="mt-14 rounded-[32px] border border-[#243042]/80 bg-[radial-gradient(circle_at_82%_16%,rgb(var(--accent-primary-rgb)/0.11),transparent_34%),linear-gradient(180deg,rgba(14,14,14,0.92),rgba(5,5,5,0.82))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_22px_64px_rgba(0,0,0,0.24)] sm:mt-20 sm:p-5 lg:p-6">
+        <div className="mt-14 rounded-[32px] border border-[#243042]/80 bg-[radial-gradient(circle_at_82%_16%,rgb(var(--accent-primary-rgb)/0.055),transparent_34%),linear-gradient(180deg,rgba(14,14,14,0.92),rgba(5,5,5,0.82))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_12px_34px_rgba(0,0,0,0.16)] sm:mt-20 sm:p-5 lg:p-6">
           <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
             <div>
               <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-[var(--accent-primary)]">
@@ -357,7 +357,7 @@ export function MetricsSection() {
           <div className="mt-6 grid gap-3.5 lg:grid-cols-3">
             {telemetryPanels.map((panel, index) => (
               <Link
-                className="group overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_50px_rgba(0,0,0,0.22)] transition duration-200 hover:-translate-y-1 hover:border-[var(--accent-primary)]/45"
+                className="group overflow-hidden rounded-2xl border border-[#243042]/75 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(5,5,5,0.72))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_28px_rgba(0,0,0,0.16)] transition-colors duration-200 hover:border-[var(--accent-primary)]/45"
                 href={panel.href}
                 key={panel.label}
               >

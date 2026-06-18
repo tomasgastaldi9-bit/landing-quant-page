@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Navbar } from "@/components/navbar";
 import { CommandPalette } from "@/components/command-palette";
+import { DynamicFavicon } from "@/components/theme/dynamic-favicon";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -114,6 +115,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <CommandPalette />
+        <DynamicFavicon />
         <ThemeSwitcher />
       </body>
     </html>

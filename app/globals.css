@@ -59,16 +59,17 @@
 }
 
 .ambient-drift {
-  animation: ambientDrift 18s ease-in-out infinite;
-  will-change: opacity, transform;
+  animation: ambientDrift 32s ease-in-out infinite;
+  opacity: 0.7;
+  will-change: auto;
 }
 
 .terminal-scan::after {
-  animation: terminalScan 14s linear infinite;
+  animation: terminalScan 24s linear infinite;
   background: linear-gradient(
     180deg,
     transparent,
-    rgb(var(--accent-primary-rgb) / 0.038),
+    rgb(var(--accent-primary-rgb) / 0.024),
     transparent
   );
   content: "";
@@ -79,14 +80,14 @@
 }
 
 .status-pulse {
-  animation: statusPulse 3.8s ease-in-out infinite;
-  box-shadow: 0 0 0 3px rgb(var(--accent-primary-rgb) / 0.06),
-    0 0 14px rgb(var(--accent-primary-rgb) / 0.16);
+  animation: statusPulse 5.6s ease-in-out infinite;
+  box-shadow: 0 0 0 2px rgb(var(--accent-primary-rgb) / 0.045),
+    0 0 8px rgb(var(--accent-primary-rgb) / 0.1);
 }
 
 .trace-draw {
-  animation: traceDraw 5.5s linear infinite;
-  stroke-dasharray: 16 16;
+  animation: traceDraw 10s linear infinite;
+  stroke-dasharray: 18 18;
 }
 
 .reveal-on-scroll {

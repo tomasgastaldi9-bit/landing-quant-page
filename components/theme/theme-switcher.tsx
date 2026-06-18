@@ -1,15 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { accentThemes, applyAccentTheme } from "@/components/theme/accent-themes";
+import {
+  accentThemes,
+  applyAccentTheme,
+  findAccentTheme,
+  initializeStoredAccentTheme,
+} from "@/components/theme/accent-themes";
 
 export function ThemeSwitcher() {
   const [activeTheme, setActiveTheme] = useState("Cyan");
 
+  useEffect(() => {
+    function handleThemeEvent(event: Event) {
+      const themeName = (event as CustomEvent<{ themeName?: string }>).detail
+        ?.themeName;
+
+      if (themeName) {
+        const theme = findAccentTheme(themeName);
+
+        if (theme) {
+          setActiveTheme(theme.name);
+        }
+      }
+    }
+
+    window.addEventListener("quantbot:accent-theme-change", handleThemeEvent);
+    initializeStoredAccentTheme({ notify: true });
+
+    return () => {
+      window.removeEventListener(
+        "quantbot:accent-theme-change",
+        handleThemeEvent,
+      );
+    };
+  }, []);
+
   function handleThemeChange(theme: (typeof accentThemes)[number]) {
     applyAccentTheme(theme);
-    setActiveTheme(theme.name);
   }
 
   return (

@@ -92,11 +92,16 @@ function getCommandScore(command: CommandItem, query: string) {
   return 0;
 }
 
+function getCommandId(command: CommandItem) {
+  return `${command.group}:${command.href}:${command.label}`;
+}
+
 export function CommandPalette() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const commandRefs = useRef(new Map<string, HTMLButtonElement>());
   const router = useRouter();
 
   const filteredCommands = useMemo(() => {
@@ -124,6 +129,15 @@ export function CommandPalette() {
         .filter((group) => group.items.length > 0),
     [filteredCommands],
   );
+
+  const selectableCommands = useMemo(
+    () => groupedCommands.flatMap((group) => group.items),
+    [groupedCommands],
+  );
+  const safeActiveIndex =
+    selectableCommands.length === 0
+      ? 0
+      : Math.min(activeIndex, selectableCommands.length - 1);
 
   useEffect(() => {
     function openPalette() {
@@ -173,6 +187,17 @@ export function CommandPalette() {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen || selectableCommands.length === 0) return;
+
+    const activeCommand = selectableCommands[safeActiveIndex];
+    if (!activeCommand) return;
+
+    commandRefs.current
+      .get(getCommandId(activeCommand))
+      ?.scrollIntoView({ block: "nearest" });
+  }, [isOpen, safeActiveIndex, selectableCommands]);
+
   function closePalette() {
     setIsOpen(false);
     setQuery("");
@@ -189,22 +214,22 @@ export function CommandPalette() {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       setActiveIndex((index) =>
-        filteredCommands.length === 0 ? 0 : (index + 1) % filteredCommands.length,
+        selectableCommands.length === 0 ? 0 : (index + 1) % selectableCommands.length,
       );
     }
 
     if (event.key === "ArrowUp") {
       event.preventDefault();
       setActiveIndex((index) =>
-        filteredCommands.length === 0
+        selectableCommands.length === 0
           ? 0
-          : (index - 1 + filteredCommands.length) % filteredCommands.length,
+          : (index - 1 + selectableCommands.length) % selectableCommands.length,
       );
     }
 
     if (event.key === "Enter") {
       event.preventDefault();
-      navigateTo(filteredCommands[activeIndex]);
+      navigateTo(selectableCommands[safeActiveIndex]);
     }
   }
 
@@ -214,18 +239,18 @@ export function CommandPalette() {
     <div className="fixed inset-0 z-[70]">
       <button
         aria-label="Close command palette"
-        className="absolute inset-0 cursor-default bg-[radial-gradient(circle_at_50%_18%,rgb(var(--accent-primary-rgb)/0.1),transparent_30%),rgba(0,0,0,0.78)] backdrop-blur-sm"
+        className="absolute inset-0 cursor-default bg-[rgba(0,0,0,0.78)]"
         onClick={closePalette}
         type="button"
       />
       <div
         aria-label="Command palette"
         aria-modal="true"
-        className="absolute left-1/2 top-20 w-[min(94vw,760px)] -translate-x-1/2 overflow-hidden rounded-3xl border border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.028)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:28px_28px,28px_28px,auto] shadow-[0_30px_110px_rgba(0,0,0,0.56)]"
+        className="absolute left-1/2 top-20 w-[min(94vw,760px)] -translate-x-1/2 overflow-hidden rounded-3xl border border-[#243042] bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(180deg,rgba(14,14,14,0.98),rgba(5,5,5,0.96))] bg-[size:32px_32px,32px_32px,auto] shadow-[0_12px_34px_rgba(0,0,0,0.34)]"
         role="dialog"
       >
         <div className="border-b border-[#243042] p-4">
-          <div className="flex items-center gap-3 rounded-2xl border border-[#243042] bg-[#050505]/88 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
+          <div className="flex items-center gap-3 rounded-2xl border border-[#243042] bg-[#050505]/88 px-4 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
             <span className="font-mono text-[var(--accent-primary)]">/</span>
             <input
               aria-label="Search commands"
@@ -263,26 +288,35 @@ export function CommandPalette() {
                   </div>
                   <div className="grid gap-1">
                     {group.items.map((command) => {
-                      const commandIndex = filteredCommands.findIndex(
-                        (item) => item.href === command.href,
+                      const commandId = getCommandId(command);
+                      const commandIndex = selectableCommands.findIndex(
+                        (item) => getCommandId(item) === commandId,
                       );
-                      const isActive = commandIndex === activeIndex;
+                      const isActive = commandIndex === safeActiveIndex;
 
                       return (
                         <button
                           className={`group grid w-full grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border px-3 py-3 text-left transition duration-150 ${
                             isActive
-                              ? "border-[var(--accent-primary)]/50 bg-[var(--accent-soft)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)]"
+                              ? "border-[var(--accent-primary)]/50 bg-[var(--accent-soft)] shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.06)]"
                               : "border-transparent bg-[#050505]/46 hover:border-[#243042] hover:bg-[#0e0e0e]/80"
                           }`}
-                          key={command.href}
+                          key={commandId}
                           onClick={() => navigateTo(command)}
+                          onMouseEnter={() => setActiveIndex(commandIndex)}
+                          ref={(element) => {
+                            if (element) {
+                              commandRefs.current.set(commandId, element);
+                            } else {
+                              commandRefs.current.delete(commandId);
+                            }
+                          }}
                           type="button"
                         >
                           <span
                             className={`size-2 rounded-full ${
                               isActive
-                                ? "bg-[var(--accent-primary)] shadow-[0_0_16px_rgb(var(--accent-primary-rgb)/0.28)]"
+                                ? "bg-[var(--accent-primary)] shadow-[0_0_8px_rgb(var(--accent-primary-rgb)/0.18)]"
                                 : "bg-[#424655]"
                             }`}
                           />

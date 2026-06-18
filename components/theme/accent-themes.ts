@@ -153,7 +153,31 @@ export const accentThemes = [
 
 export type AccentTheme = (typeof accentThemes)[number];
 
-export function applyAccentTheme(theme: AccentTheme) {
+export const accentThemeStorageKey = "quantbot-accent-theme";
+
+export function findAccentTheme(themeName: string | null) {
+  return accentThemes.find((theme) => theme.name === themeName);
+}
+
+export function getStoredAccentTheme() {
+  if (typeof window === "undefined") {
+    return undefined;
+  }
+
+  try {
+    return findAccentTheme(window.localStorage.getItem(accentThemeStorageKey));
+  } catch {
+    return undefined;
+  }
+}
+
+export function applyAccentTheme(
+  theme: AccentTheme,
+  options: { persist?: boolean; notify?: boolean } = {},
+) {
+  const persist = options.persist ?? true;
+  const notify = options.notify ?? true;
+
   Object.entries(theme.variables).forEach(([name, value]) => {
     document.documentElement.style.setProperty(name, value);
   });
@@ -165,4 +189,36 @@ export function applyAccentTheme(theme: AccentTheme) {
     "--accent-glow",
     "rgb(var(--accent-primary-rgb) / 0.12)",
   );
+  document.documentElement.dataset.accentTheme = theme.name;
+
+  if (persist) {
+    try {
+      window.localStorage.setItem(accentThemeStorageKey, theme.name);
+    } catch {
+      // Theme switching should still work when storage is unavailable.
+    }
+  }
+
+  if (notify) {
+    window.dispatchEvent(
+      new CustomEvent("quantbot:accent-theme-change", {
+        detail: { themeName: theme.name },
+      }),
+    );
+  }
+}
+
+export function initializeStoredAccentTheme(
+  options: { notify?: boolean } = {},
+) {
+  const storedTheme = getStoredAccentTheme();
+
+  if (storedTheme) {
+    applyAccentTheme(storedTheme, {
+      notify: options.notify ?? false,
+      persist: false,
+    });
+  }
+
+  return storedTheme;
 }

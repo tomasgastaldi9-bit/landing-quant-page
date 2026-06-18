@@ -18,13 +18,13 @@ const exposureMetrics = [
   {
     label: "Gross Exposure",
     value: "$1.24M",
-    detail: "Demo notional",
+    detail: "Static demo notional",
     href: "/risk-layer",
   },
   {
     label: "Net Exposure",
     value: "$182K",
-    detail: "Long bias",
+    detail: "Demo policy bias",
     href: "/risk-layer",
   },
   {
@@ -36,7 +36,7 @@ const exposureMetrics = [
   {
     label: "Open Risk",
     value: "Low",
-    detail: "Within limits",
+    detail: "Demo policy state",
     href: "/risk-layer",
   },
 ];
@@ -297,6 +297,11 @@ export function DashboardShell({
               <EquityChart points={equitySnapshot.points} />
             </TerminalPanel>
             <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-2xl border border-[#243042] bg-[#050505]/72 p-4 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1] sm:col-span-2 xl:col-span-4">
+                <span className="text-[var(--accent-primary)]">Static risk preview:</span>{" "}
+                exposure and policy tiles below are demo infrastructure signals, not current
+                client-facing live exposure.
+              </div>
               {exposureMetrics.map((metric) => (
                 <MetricTile key={metric.label} {...metric} />
               ))}
@@ -765,7 +770,7 @@ function AlphaEngineStatus() {
       {alphaModules.map((module) => (
         <div
           key={module.name}
-          className="grid grid-cols-[1fr_auto] gap-3 rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors hover:border-[#424655]"
+          className="grid grid-cols-[1fr_auto] gap-3 rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors duration-200 hover:border-[var(--accent-primary)]/35"
         >
           <div>
             <div className="font-mono text-sm text-white">{module.name}</div>
@@ -804,9 +809,15 @@ function SystemHealth({
         </span>
         Telemetry source: <span className="text-[var(--accent-primary)]">{statusLabel}</span>
       </div>
+      {healthSourceStatus !== "LIVE_FILE" ? (
+        <div className="rounded-xl border border-[#243042] bg-[#050505]/78 p-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1]">
+          Demo fallback health indicators are shown because live health artifacts are unavailable.
+          Not current live telemetry.
+        </div>
+      ) : null}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {health.map((item) => (
-          <div key={item.label} className="rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors hover:border-[#424655]">
+          <div key={item.label} className="rounded-xl border border-[#243042] bg-[#050505]/92 p-4 transition-colors duration-200 hover:border-[var(--accent-primary)]/35">
             <div className="flex items-center justify-between gap-3">
               <div className="font-mono text-xs uppercase tracking-[0.12em] text-[#c2c6d8]">
                 {item.label}
@@ -834,6 +845,7 @@ function ExecutionLogs({
   const logs = events.length > 0 ? events : mockLogs;
   const sourceLabel =
     events.length > 0 ? formatSourceStatus(sourceStatus) : "MOCK_FALLBACK";
+  const isFallbackEvents = events.length === 0;
 
   if (logs.length === 0) {
     return (
@@ -849,7 +861,7 @@ function ExecutionLogs({
       <div className="flex flex-col gap-3 rounded-2xl border border-[#1f1f1f] bg-[#050505]/72 p-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--accent-primary)]">
-            Latest event
+            {isFallbackEvents ? "Demo fallback events" : "Latest event"}
           </div>
           <div className="mt-1 font-mono text-xs text-[#c2c6d8]">
             {logs[0].time} / {logs[0].source}
@@ -859,6 +871,12 @@ function ExecutionLogs({
           Source: {sourceLabel}
         </div>
       </div>
+      {isFallbackEvents ? (
+        <div className="rounded-2xl border border-[#243042] bg-[#050505]/78 p-3 font-mono text-[10px] uppercase leading-5 tracking-[0.12em] text-[#8c90a1]">
+          Fallback sample events shown because live order, decision, or alert artifacts are
+          unavailable. These rows are not current live telemetry.
+        </div>
+      ) : null}
 
       <div className="flex gap-2 overflow-x-auto pb-1 font-mono text-[10px] uppercase tracking-[0.14em]">
         {filters.map((filter, index) => (
@@ -884,7 +902,7 @@ function ExecutionLogs({
           return (
             <div
               key={getLogRowKey(log, index)}
-              className={`group grid grid-cols-[4px_84px_70px_1fr] gap-3 overflow-hidden rounded-xl border bg-[#050505]/92 pr-3 font-mono text-xs transition duration-200 hover:-translate-y-px hover:border-[#424655] hover:bg-[#101820] ${
+              className={`group grid grid-cols-[4px_84px_70px_1fr] gap-3 overflow-hidden rounded-xl border bg-[#050505]/92 pr-3 font-mono text-xs transition-colors duration-200 hover:border-[var(--accent-primary)]/35 hover:bg-[#101820] ${
                 isLatest
                   ? "border-[var(--accent-primary)]/45 shadow-[inset_0_1px_0_rgb(var(--accent-primary-rgb)/0.08)]"
                   : "border-[#1f1f1f]"

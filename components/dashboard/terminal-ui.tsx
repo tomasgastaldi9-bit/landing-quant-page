@@ -19,7 +19,7 @@ export function TerminalPanel({
 }) {
   const priorityClass =
     priority === "primary"
-      ? "border-[var(--accent-primary)]/32 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_24px_70px_rgba(0,0,0,0.34)]"
+      ? "border-[#1f1f1f]/90 shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_9px_24px_rgba(0,0,0,0.16)]"
       : priority === "passive"
         ? "border-[#1f1f1f]/70 opacity-[0.96]"
         : "border-[#1f1f1f]/90";
@@ -27,7 +27,7 @@ export function TerminalPanel({
   return (
     <article
       id={id}
-      className={`group overflow-hidden rounded-2xl border bg-[linear-gradient(180deg,rgba(16,16,16,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_55px_rgba(0,0,0,0.24)] backdrop-blur-sm transition-all duration-200 hover:border-[#2f3b52] hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.045),0_22px_65px_rgba(0,0,0,0.3)] ${priorityClass} ${className}`}
+      className={`overflow-hidden rounded-2xl border bg-[linear-gradient(180deg,rgba(16,16,16,0.9),rgba(7,7,7,0.84))] shadow-[inset_0_1px_0_rgba(255,255,255,0.03),0_8px_22px_rgba(0,0,0,0.14)] ${priorityClass} ${className}`}
     >
       <div className="flex items-center justify-between gap-4 border-b border-[#1f1f1f]/80 bg-[linear-gradient(90deg,rgba(14,14,14,0.76),rgba(5,5,5,0.42))] px-4 py-3">
         <div>
@@ -39,7 +39,7 @@ export function TerminalPanel({
           </h2>
         </div>
         {action ? (
-          <div className="hidden rounded-lg border border-[#243042] bg-[#050505]/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] transition-colors group-hover:border-[#424655] sm:block">
+          <div className="hidden rounded-lg border border-[#243042] bg-[#050505]/90 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#8c90a1] sm:block">
             {action}
           </div>
         ) : null}
@@ -75,12 +75,13 @@ export function MetricTile({
           ? "text-[#c2c6d8]"
           : "text-white";
   const borderClass = emphasis
-    ? "border-[var(--accent-primary)]/38 bg-[linear-gradient(180deg,rgb(var(--accent-soft-rgb)/0.45),rgba(7,7,7,0.86))]"
+    ? "border-[#263142] bg-[linear-gradient(180deg,rgb(var(--accent-soft-rgb)/0.12),rgba(7,7,7,0.86))]"
     : "border-[#1f1f1f]/90";
+  const detailClass = emphasis ? "text-[var(--accent-primary)]" : "text-[#8c90a1]";
 
   const card = (
     <article
-      className={`rounded-2xl border bg-[linear-gradient(180deg,rgba(14,14,14,0.92),rgba(7,7,7,0.86))] shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_16px_45px_rgba(0,0,0,0.22)] transition-all duration-200 hover:-translate-y-px hover:border-[#2f3b52] ${borderClass} ${
+      className={`rounded-2xl border bg-[linear-gradient(180deg,rgba(14,14,14,0.9),rgba(7,7,7,0.84))] shadow-[inset_0_1px_0_rgba(255,255,255,0.025),0_6px_18px_rgba(0,0,0,0.12)] transition-[border-color,background-color,box-shadow] duration-200 hover:border-[var(--accent-primary)]/38 hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_8px_22px_rgba(0,0,0,0.15)] ${borderClass} ${
         compact ? "p-4" : "p-5"
       }`}
     >
@@ -94,7 +95,7 @@ export function MetricTile({
       >
         {value}
       </div>
-      <div className="mt-2 font-mono text-xs text-[var(--accent-primary)]">
+      <div className={`mt-2 font-mono text-xs ${detailClass}`}>
         {detail}
       </div>
     </article>
@@ -118,7 +119,7 @@ export function StatusBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center rounded-xl border px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] shadow-[inset_0_1px_0_rgba(255,255,255,0.035),0_10px_30px_rgba(0,0,0,0.18)] transition-colors ${
+      className={`inline-flex items-center rounded-xl border px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-colors ${
         tone === "accent"
           ? "border-[var(--accent-primary)]/60 bg-[var(--accent-surface)]/90 text-[var(--accent-primary)] hover:border-[var(--accent-primary)]"
           : "border-[#243042] bg-[#0e0e0e]/82 text-[#c2c6d8] hover:border-[#424655]"
@@ -155,8 +156,8 @@ export function StatusLed({ state }: { state: "online" | "standby" }) {
     <span
       className={`relative size-3 rounded-full ${
         state === "online"
-          ? "bg-emerald-300/80 shadow-[0_0_0_3px_rgba(110,231,183,0.08),0_0_16px_rgba(110,231,183,0.22)]"
-          : "bg-[#8c90a1]/70 shadow-[0_0_0_3px_rgba(140,144,161,0.08),0_0_12px_rgba(140,144,161,0.12)]"
+          ? "bg-emerald-300/80 shadow-[0_0_0_2px_rgba(110,231,183,0.06),0_0_8px_rgba(110,231,183,0.14)]"
+          : "bg-[#8c90a1]/70 shadow-[0_0_0_2px_rgba(140,144,161,0.06),0_0_7px_rgba(140,144,161,0.1)]"
       } before:absolute before:inset-[3px] before:rounded-full before:bg-white/35`}
     />
   );

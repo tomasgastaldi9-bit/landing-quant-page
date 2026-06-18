@@ -248,10 +248,10 @@ function ModelStateBanner({
 }) {
   if (!hasReliableModelState) {
     return (
-      <section className="rounded-[30px] border border-amber-200/24 bg-[linear-gradient(135deg,rgba(251,191,36,0.1),rgba(5,5,5,0.9))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_24px_70px_rgba(0,0,0,0.28)] sm:p-6">
+      <section className="rounded-[28px] border border-[var(--accent-border)] bg-[linear-gradient(135deg,rgb(var(--accent-primary-rgb)/0.05),rgba(5,5,5,0.92)_58%,rgba(10,10,10,0.86))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_18px_48px_rgba(0,0,0,0.24)] sm:p-6">
         <div className="grid gap-6 lg:grid-cols-[1fr_340px] lg:items-stretch">
           <div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-200">
+            <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--accent-primary)]">
               Current Model Stance
             </div>
             <h2 className="mt-3 font-mono text-4xl font-semibold tracking-[-0.06em] text-white sm:text-5xl">
@@ -261,15 +261,15 @@ function ModelStateBanner({
               Current model state cannot be confirmed because live telemetry artifacts are unavailable,
               stale, or not parseable.
             </p>
-            <div className="mt-4 rounded-2xl border border-amber-200/24 bg-amber-200/[0.08] px-4 py-3 text-sm leading-6 text-[#e8dcc5]">
-              <span className="font-semibold text-amber-200">Client action:</span>{" "}
+            <div className="mt-4 rounded-2xl border border-[var(--accent-border)] bg-[var(--accent-soft)] px-4 py-3 text-sm leading-6 text-[#d7dceb]">
+              <span className="font-semibold text-[var(--accent-primary)]">Client action:</span>{" "}
               Wait for telemetry refresh. QuantBot is not publishing a confirmed flat/cash stance from
               fallback data.
             </div>
           </div>
-          <div className="flex flex-col justify-between rounded-3xl border border-[#243042] bg-[#050505]/70 p-5 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+          <div className="flex flex-col justify-between rounded-3xl border border-[var(--accent-border)] bg-[#050505]/72 p-5 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
             <div>
-              <div className="text-amber-200">Model State</div>
+              <div className="text-[var(--accent-primary)]">Model State</div>
               <div className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-white">
                 Unconfirmed
               </div>

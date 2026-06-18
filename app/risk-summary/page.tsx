@@ -529,14 +529,14 @@ function riskStanceContent(stance: RiskStance) {
       title: "Stale Risk Data",
       copy: "Telemetry appears stale; the displayed risk state may be outdated.",
       clientReadout: "Telemetry is stale; risk state may be outdated.",
-      panelClass: "border-amber-200/24 bg-[linear-gradient(135deg,rgba(251,191,36,0.1),rgba(5,5,5,0.9))]",
+      panelClass: "border-[var(--accent-primary)]/30 bg-[linear-gradient(135deg,rgb(var(--accent-primary-rgb)/0.06),rgba(5,5,5,0.92)_58%,rgba(10,10,10,0.86))]",
     };
   }
   return {
     title: "Risk Data Unavailable",
     copy: "Current risk state cannot be derived from available telemetry.",
     clientReadout: "Data is unavailable, so QuantBot cannot publish a client-facing risk stance.",
-    panelClass: "border-[#243042] bg-[linear-gradient(135deg,rgba(36,48,66,0.38),rgba(5,5,5,0.9))]",
+    panelClass: "border-[var(--accent-border)] bg-[linear-gradient(135deg,rgb(var(--accent-primary-rgb)/0.04),rgba(5,5,5,0.92)_58%,rgba(10,10,10,0.86))]",
   };
 }
 
@@ -594,7 +594,7 @@ function directionClass(side: string) {
 
 function statusClass(status: RiskSourceStatus) {
   if (status === "LIVE_FILE") return "text-emerald-300";
-  if (status === "STALE_FILE" || status === "LIVE_FILE_EMPTY") return "text-amber-200";
+  if (status === "STALE_FILE" || status === "LIVE_FILE_EMPTY") return "text-[var(--accent-primary)]";
   if (status === "PARSE_ERROR") return "text-rose-300";
   return "text-[#8c90a1]";
 }

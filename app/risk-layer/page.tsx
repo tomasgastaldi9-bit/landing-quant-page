@@ -16,7 +16,7 @@ const overview = [
   {
     label: "Risk State",
     value: "Armed",
-    detail: "Policy engine active",
+    detail: "Mock policy view",
     tone: "good" as const,
     emphasis: true,
   },
@@ -29,13 +29,13 @@ const overview = [
   {
     label: "Leverage",
     value: "1.8x",
-    detail: "Cap 3.0x",
+    detail: "Static policy cap",
     tone: "good" as const,
   },
   {
     label: "Drawdown Guard",
     value: "On",
-    detail: "Research mode",
+    detail: "Demo risk guard",
     tone: "good" as const,
   },
   {
@@ -128,17 +128,24 @@ export default function RiskLayerPage() {
                 Risk Layer
               </h1>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-[#c2c6d8] sm:text-base">
-                A mock hedge-fund-style risk workspace for observing exposure
-                controls, leverage policy, safeguards, drawdown state, and
-                operational risk telemetry before any live deployment.
+                An internal demo risk infrastructure workspace for observing
+                exposure controls, leverage policy, safeguards, drawdown state,
+                and operational risk telemetry before any live deployment. This
+                is not the current client risk state.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <StatusBadge tone="accent">Policy Engine</StatusBadge>
+              <StatusBadge tone="accent">Mock Policy View</StatusBadge>
+              <StatusBadge>Demo Risk Infrastructure</StatusBadge>
               <StatusBadge>Read-only</StatusBadge>
-              <StatusBadge>Mock Data</StatusBadge>
+              <StatusBadge>Not Client Exposure</StatusBadge>
               <StatusBadge>No Live Capital</StatusBadge>
             </div>
+          </div>
+          <div className="mt-6 rounded-2xl border border-[var(--accent-primary)]/30 bg-[var(--accent-soft)]/50 px-4 py-3 font-mono text-[10px] uppercase leading-5 tracking-[0.13em] text-[#c2c6d8]">
+            <span className="text-[var(--accent-primary)]">Operator validation only.</span>{" "}
+            Values on this page are static risk policy previews and mock/testnet observability
+            states. Use Risk Summary for client-facing telemetry-backed exposure.
           </div>
           <div className="mt-6 flex flex-col gap-3 border-t border-[#243042] pt-5 sm:flex-row">
             <Link
@@ -163,19 +170,19 @@ export default function RiskLayerPage() {
         </section>
 
         <section className="mt-4 grid grid-cols-1 gap-3 xl:grid-cols-[0.8fr_1.2fr]">
-          <TerminalPanel eyebrow="Policy" title="Policy Engine" action="Armed" priority="primary">
+          <TerminalPanel eyebrow="Policy" title="Policy Engine" action="Mock policy view" priority="primary">
             <PolicyEngine />
           </TerminalPanel>
-          <TerminalPanel eyebrow="Exposure" title="Exposure Monitoring" action="Mock telemetry" priority="primary">
+          <TerminalPanel eyebrow="Exposure" title="Exposure Monitoring" action="Not live client exposure" priority="primary">
             <ExposureMonitoring />
           </TerminalPanel>
         </section>
 
         <section className="mt-3 grid grid-cols-1 gap-3 xl:grid-cols-[1fr_0.85fr]">
-          <TerminalPanel eyebrow="Constraints" title="Operational Constraints" action="Policy table">
+          <TerminalPanel eyebrow="Constraints" title="Operational Constraints" action="Static preview">
             <Constraints />
           </TerminalPanel>
-          <TerminalPanel eyebrow="Drawdown" title="Drawdown Control" action="Guardrail state">
+          <TerminalPanel eyebrow="Drawdown" title="Drawdown Control" action="Demo guardrail">
             <DrawdownControl />
           </TerminalPanel>
         </section>
@@ -184,7 +191,7 @@ export default function RiskLayerPage() {
           <TerminalPanel eyebrow="Capital" title="Capital Utilization" action="Demo capital">
             <CapitalUtilization />
           </TerminalPanel>
-          <TerminalPanel eyebrow="Events" title="Risk Events" action="Read-only stream" priority="passive">
+          <TerminalPanel eyebrow="Events" title="Risk Events" action="Mock event stream" priority="passive">
             <RiskEvents />
           </TerminalPanel>
         </section>

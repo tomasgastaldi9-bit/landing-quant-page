@@ -28,7 +28,7 @@ export default async function SignalsPage() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-[#050505] bg-[linear-gradient(rgba(255,255,255,0.026)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.026)_1px,transparent_1px)] bg-[size:32px_32px] px-4 pb-16 pt-28 text-[#e2e2e2] sm:px-6 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-6">
+      <div className="mx-auto grid max-w-7xl gap-5">
         <section className="overflow-hidden rounded-[30px] border border-[#243042] bg-[radial-gradient(circle_at_18%_0%,rgb(var(--accent-primary-rgb)/0.1),transparent_30%),linear-gradient(180deg,rgba(14,14,14,0.94),rgba(5,5,5,0.84))] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_24px_70px_rgba(0,0,0,0.28)] sm:p-8">
           <div className="flex flex-wrap gap-2">
             <StatusBadge tone="accent">Client View</StatusBadge>
@@ -75,7 +75,7 @@ export default async function SignalsPage() {
           </TerminalPanel>
         )}
 
-        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
           <MetricTile
             compact
             detail={hasRows ? "Parsed artifact rows" : "Unavailable from current artifacts"}
@@ -110,7 +110,7 @@ export default async function SignalsPage() {
 
         {recentRows.length > 0 ? <RecentModelEvents rows={recentRows} /> : null}
 
-        <section className="grid gap-6 xl:grid-cols-[1.45fr_0.55fr]">
+        <section className="grid gap-5 xl:grid-cols-[1.45fr_0.55fr]">
           <TerminalPanel
             action={hasRows ? "Artifact-backed" : "No usable rows"}
             eyebrow="Detailed History"
@@ -188,7 +188,7 @@ function LatestSignalPanel({ row }: { row: SignalHistoryRow }) {
       priority="primary"
       title="Latest Signal"
     >
-      <div className="grid gap-5 lg:grid-cols-[1fr_340px]">
+      <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <span className={`rounded-xl border px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] ${interpretation.badgeClass}`}>
@@ -199,21 +199,21 @@ function LatestSignalPanel({ row }: { row: SignalHistoryRow }) {
             </span>
           </div>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-4 grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
             <SignalFact label="Timestamp" value={formatTimestamp(row.timestamp)} />
             <SignalFact label="Symbol" value={row.symbol} strong />
             <SignalFact label="Action / Side" value={row.action} accent />
             <SignalFact label="Status" value={row.status} />
           </div>
 
-          <div className="mt-5 rounded-2xl border border-[#243042] bg-[#050505]/70 p-5">
+          <div className="mt-4 rounded-2xl border border-[#243042] bg-[linear-gradient(180deg,rgba(9,14,18,0.88),rgba(5,5,5,0.74))] p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
             <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--accent-primary)]">
               Client Interpretation
             </div>
-            <p className="mt-3 text-base leading-7 text-white">
+            <p className="mt-2 text-base leading-7 text-white">
               {interpretation.copy}
             </p>
-            <p className="mt-4 rounded-2xl border border-[var(--accent-primary)]/32 bg-[rgb(var(--accent-primary-rgb)/0.08)] px-4 py-3 text-sm leading-6 text-[#d7dceb]">
+            <p className="mt-3 rounded-xl border border-[var(--accent-primary)]/28 bg-[rgb(var(--accent-primary-rgb)/0.07)] px-4 py-3 text-sm leading-6 text-[#d7dceb]">
               <span className="font-semibold text-[var(--accent-primary)]">
                 Client action:
               </span>{" "}
@@ -226,11 +226,11 @@ function LatestSignalPanel({ row }: { row: SignalHistoryRow }) {
           </div>
         </div>
 
-        <aside className="rounded-2xl border border-[#1f1f1f] bg-[#050505]/62 p-5">
+        <aside className="rounded-2xl border border-[#1f1f1f] bg-[#050505]/62 p-4">
           <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#6f7485]">
             Source Context
           </div>
-          <div className="mt-4 grid gap-3">
+          <div className="mt-3 grid gap-2.5">
             <SignalFact label="Source / Sleeve" value={row.sourceSleeve} />
             <SignalFact label="Previous State" value={row.previousState} />
             <SignalFact label="New / Target" value={row.newState} />
@@ -249,12 +249,12 @@ function RecentModelEvents({ rows }: { rows: SignalHistoryRow[] }) {
       eyebrow="Recent Model Events"
       title="Plain-English Event Summary"
     >
-      <div className="grid gap-3">
+      <div className="grid gap-2.5">
         {rows.map((row) => {
           const interpretation = interpretSignal(row);
           return (
             <div
-              className="rounded-2xl border border-[#1f1f1f] bg-[#050505]/58 p-4"
+              className="rounded-2xl border border-[#1f1f1f] bg-[#050505]/58 p-3.5"
               key={row.id}
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -396,7 +396,7 @@ function SignalFact({
   strong?: boolean;
 }) {
   return (
-    <div className="rounded-2xl border border-[#1f1f1f] bg-[#050505]/58 p-4">
+    <div className="rounded-xl border border-[#1f1f1f] bg-[#050505]/58 p-3.5">
       <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#6f7485]">
         {label}
       </div>
@@ -447,7 +447,7 @@ function formatTimestamp(timestamp: string | null | undefined) {
 
 function statusClass(status: SignalHistorySourceStatus) {
   if (status === "LIVE_FILE") return "text-emerald-300";
-  if (status === "STALE_FILE" || status === "LIVE_FILE_EMPTY") return "text-amber-200";
+  if (status === "STALE_FILE" || status === "LIVE_FILE_EMPTY") return "text-[var(--accent-primary)]";
   if (status === "PARSE_ERROR") return "text-rose-300";
   return "text-[#8c90a1]";
 }
@@ -481,7 +481,7 @@ function interpretSignal(row: SignalHistoryRow) {
       copy: "Model reduced or changed exposure based on this parsed event.",
       clientAction: "Review current model allocation.",
       badgeClass:
-        "border-rose-300/35 bg-rose-300/10 text-rose-300",
+        "border-[var(--accent-border)] bg-[var(--accent-soft)] text-[var(--accent-primary)]",
     };
   }
 

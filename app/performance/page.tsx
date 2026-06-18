@@ -446,7 +446,7 @@ function getReturnTone(value: number | null) {
 
 function statusClass(status: PerformanceSourceStatus) {
   if (status === "LIVE_FILE") return "text-emerald-300";
-  if (status === "STALE_FILE" || status === "LIVE_FILE_EMPTY") return "text-amber-200";
+  if (status === "STALE_FILE" || status === "LIVE_FILE_EMPTY") return "text-[var(--accent-primary)]";
   if (status === "PARSE_ERROR") return "text-rose-300";
   return "text-[#8c90a1]";
 }

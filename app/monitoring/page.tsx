@@ -146,7 +146,7 @@ export default async function MonitoringPage() {
                 system inspection surface.
               </p>
             </div>
-            <div className="rounded-2xl border border-[var(--accent-border)] bg-[#050505]/72 p-4 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
+            <div className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/72 p-4 font-mono text-xs uppercase tracking-[0.12em] text-[#8c90a1]">
               <div className="flex items-center gap-3 text-[var(--accent-primary)]">
                 <StatusLed state={isHealthyStatus(health.status) ? "online" : "standby"} />
                 {formatSourceStatus(health.status)}
@@ -349,7 +349,7 @@ export default async function MonitoringPage() {
 
 function FeedHealthRow({ feed }: { feed: FeedRow }) {
   return (
-    <div className="grid gap-3 rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/58 p-4 font-mono text-xs md:grid-cols-[1fr_auto_auto] md:items-center">
+    <div className="grid gap-3 rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/58 p-4 font-mono text-xs transition-colors duration-200 hover:border-[var(--accent-primary)]/35 md:grid-cols-[1fr_auto_auto] md:items-center">
       <div>
         <div className="flex items-center gap-3">
           <StatusLed state={isHealthyStatus(feed.status) ? "online" : "standby"} />
@@ -357,7 +357,7 @@ function FeedHealthRow({ feed }: { feed: FeedRow }) {
         </div>
         <div className="mt-2 truncate text-[#8c90a1]">{feed.source}</div>
       </div>
-      <div className="rounded-xl border border-[#243042] bg-[#0e0e0e]/82 px-3 py-2 uppercase tracking-[0.12em] text-[var(--accent-primary)]">
+      <div className="rounded-xl border border-[#1f1f1f]/90 bg-[#0e0e0e]/82 px-3 py-2 uppercase tracking-[0.12em] text-[var(--accent-primary)]">
         {formatSourceStatus(feed.status)}
       </div>
       <div className="text-right text-[#8c90a1]">
@@ -378,7 +378,7 @@ function RuntimeRow({
   value: string;
 }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/58 p-4">
+    <div className="flex items-center justify-between gap-4 rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/58 p-4 transition-colors duration-200 hover:border-[var(--accent-primary)]/35">
       <div className="flex min-w-0 items-center gap-3">
         <StatusLed state={isHealthyStatus(status) ? "online" : "standby"} />
         <span className="truncate font-mono text-xs uppercase tracking-[0.12em] text-white">
@@ -402,7 +402,7 @@ function ArtifactCard({
   rowCount: number;
 }) {
   return (
-    <article className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/58 p-4">
+    <article className="rounded-2xl border border-[#1f1f1f]/90 bg-[#050505]/58 p-4 transition-colors duration-200 hover:border-[var(--accent-primary)]/35">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <div className="truncate font-mono text-xs uppercase tracking-[0.12em] text-white">
@@ -415,7 +415,7 @@ function ArtifactCard({
         <StatusLed state={isHealthyStatus(status) ? "online" : "standby"} />
       </div>
       <div className="mt-4 flex items-center justify-between gap-3 font-mono text-[10px] uppercase tracking-[0.12em]">
-        <span className="rounded-lg border border-[#243042] bg-[#0e0e0e]/82 px-2 py-1 text-[#8c90a1]">
+        <span className="rounded-lg border border-[#1f1f1f]/90 bg-[#0e0e0e]/82 px-2 py-1 text-[#8c90a1]">
           {formatSourceStatus(status)}
         </span>
         <span className="text-[var(--accent-primary)]">
